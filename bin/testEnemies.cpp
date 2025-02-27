@@ -7,7 +7,9 @@
 #include <cmath>
 #include <vector>
 #include "roach.h"
+#include "projectile.h"
 
+using namespace std;
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1024;
@@ -18,6 +20,27 @@ void csci437_error(const std::string& msg)
 {
   std::cerr << msg << " (" << SDL_GetError() << ")" << std::endl;
   exit(0);
+}
+
+void projectileCollision(Projectile* ball){
+
+    int radius = ball->getRadius();
+    // check for collision with top of screen
+    if (ball->getYpos() - radius <= 0){
+        ball->bounceY(0 + radius);
+    }
+    // check for collision with bottom of the screen
+    else if(ball->getYpos() + radius >= SCREEN_HEIGHT){
+        ball->bounceY(SCREEN_HEIGHT - radius);
+    }
+    // check for collision with left of screen
+    if (ball->getXpos() - radius <= 0){
+        ball->bounceX(0 + radius);
+    }
+    // check for collision with right of the screen
+    else if(ball->getXpos() + radius >= SCREEN_WIDTH){
+        ball->bounceX(SCREEN_WIDTH - radius);
+    }
 }
 
 int main(int argc, char** argv)
@@ -39,8 +62,15 @@ int main(int argc, char** argv)
   SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
   if (renderer == NULL) csci437_error("Unable to create renderer!");
 
+  vector<GameObject*> objectList;
   
-  Roach roach1(100,100);
+  Roach roach1(100, 100);
+
+  Projectile ball1(0, 0, 3, 3);
+
+  objectList.push_back(&roach1);
+  objectList.push_back(&ball1);
+
 
 
   /*** Main Loop ***/
@@ -68,7 +98,7 @@ int main(int argc, char** argv)
             case SDLK_q:
                 running = false;
                 break;
-            case SDLK_UP:
+            /*case SDLK_UP:
                 roach1.UpdateAI(roach1.getXpos(), 100);
                 break;
             case SDLK_DOWN:
@@ -79,7 +109,7 @@ int main(int argc, char** argv)
                 break;
             case SDLK_LEFT:
                 roach1.UpdateAI(100, roach1.getYpos());
-                break;
+                break;*/
         }
 
       }
@@ -88,12 +118,20 @@ int main(int argc, char** argv)
 
       }
     }
-    roach1.Update(1);
+
+    for(int i = 0; i < objectList.size(); i++){
+        objectList[i]->Update(1);
+    }
+    roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
+
+    projectileCollision(&ball1);
 
     // draw screen
     SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
     SDL_RenderClear( renderer );
-    roach1.Render( renderer );
+    for(int i = 0; i < objectList.size(); i++){
+        objectList[i]->Render( renderer );
+    }
     SDL_RenderPresent( renderer );
 
     // delta time calculation
