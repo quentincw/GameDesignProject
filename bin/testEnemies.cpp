@@ -7,6 +7,7 @@
 #include <cmath>
 #include <vector>
 #include "roach.h"
+#include "spitter.h"
 #include "projectile.h"
 
 using namespace std;
@@ -68,8 +69,12 @@ int main(int argc, char** argv)
 
   Projectile ball1(0, 0, 3, 3);
 
+  Spitter spitter1(200,200);
+
   objectList.push_back(&roach1);
   objectList.push_back(&ball1);
+  objectList.push_back(&spitter1);
+
 
 
 
@@ -123,6 +128,11 @@ int main(int argc, char** argv)
         objectList[i]->Update(1);
     }
     roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
+    spitter1.UpdateAI(ball1.getXpos(), ball1.getYpos());
+
+    if(spitter1.hasChildren()){
+        objectList.push_back(spitter1.getChildren());
+    }
 
     projectileCollision(&ball1);
 
