@@ -49,23 +49,30 @@ void Spitter::UpdateAI(int pX, int pY) {
     player_x = pX;
     player_y = pY;
 
-    if(xPos - pX > -200){
-        xSpeed = -2.0;
-    }
-    else if(xPos - pX < 200){
-        xSpeed = 2.0;
-    }
-    else{
-        xSpeed = 0;
+    // calculate vector
+    float dx = player_x - xPos;
+    float dy = player_y - yPos;
+
+    // normalize
+    float length = sqrt((dx * dx) + (dy * dy));
+
+    if(length != 0) {
+        dx = dx / length;
+        dy = dy / length;
     }
 
-    if(yPos - pY > -200){
-        ySpeed = -2.0;
+    // set the speed based on speed
+    xSpeed = dx * 3;
+    ySpeed = dy * 3;
+
+    // if the player is too close, reverse
+    if(length <= 250){
+        xSpeed = -xSpeed;
+        ySpeed = -ySpeed;
     }
-    else if(yPos - pY < 200){
-        ySpeed = 2.0;
-    }
-    else{
+    // buffer to stop stuttering when on the boundary of too close/far to player
+    else if(length < 300){
+        xSpeed = 0;
         ySpeed = 0;
     }
 }

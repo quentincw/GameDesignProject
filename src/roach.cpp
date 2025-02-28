@@ -30,26 +30,21 @@ void Roach::Render(SDL_Renderer* renderer) {
 // updates the ai based on the player's position
 void Roach::UpdateAI(int pX, int pY) {
 
-    // updates the xSpeed to reach the player
-    if(xPos < pX) {
-        xSpeed = 2.0;
+    // calculate vector
+    float dx = pX - xPos;
+    float dy = pY - yPos;
+
+    // normalize
+    float length = sqrt((dx * dx) + (dy * dy));
+
+    if(length != 0) {
+        dx = dx / length;
+        dy = dy / length;
     }
-    else if(xPos > pX) {
-        xSpeed = -2.0;
-    }
-    else {
-        xSpeed = 0;
-    }
-    // updates the ySpeed to reach the player
-    if(yPos < pY) {
-        ySpeed = 2.0;
-    }
-    else if(yPos > pY) {
-        ySpeed = -2.0;
-    }
-    else {
-        ySpeed = 0;
-    }
+
+    // set the speed based on speed
+    xSpeed = dx * 3;
+    ySpeed = dy * 3;
 }
 
 

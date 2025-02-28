@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 
   Projectile ball1(0, 0, 3, 3);
 
-  Spitter spitter1(200,200);
+  Spitter spitter1(200,500);
 
   objectList.push_back(&roach1);
   objectList.push_back(&ball1);
