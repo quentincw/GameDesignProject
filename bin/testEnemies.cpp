@@ -7,8 +7,8 @@
 #include <cmath>
 #include <vector>
 #include "roach.h"
-#include "spitter.h"
-#include "projectile.h"
+//#include "spitter.h"
+//#include "projectile.h"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ void csci437_error(const std::string& msg)
   std::cerr << msg << " (" << SDL_GetError() << ")" << std::endl;
   exit(0);
 }
-
+/*
 void projectileCollision(Projectile* ball){
 
     int radius = ball->getRadius();
@@ -42,7 +42,7 @@ void projectileCollision(Projectile* ball){
     else if(ball->getXpos() + radius >= SCREEN_WIDTH){
         ball->bounceX(SCREEN_WIDTH - radius);
     }
-}
+}*/
 
 int main(int argc, char** argv)
 {
@@ -63,17 +63,17 @@ int main(int argc, char** argv)
   SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
   if (renderer == NULL) csci437_error("Unable to create renderer!");
 
-  vector<GameObject*> objectList;
+  vector<Process*> objectList;
   
-  Roach roach1(100, 100);
+  Roach roach1(1000, 700);
 
-  Projectile ball1(0, 0, 3, 3);
+  //Projectile ball1(0, 0, 3, 3);
 
-  Spitter spitter1(200,500);
+  //Spitter spitter1(200,500);
 
   objectList.push_back(&roach1);
-  objectList.push_back(&ball1);
-  objectList.push_back(&spitter1);
+  //objectList.push_back(&ball1);
+  //objectList.push_back(&spitter1);
 
 
 
@@ -127,14 +127,16 @@ int main(int argc, char** argv)
     for(int i = 0; i < objectList.size(); i++){
         objectList[i]->Update(1);
     }
-    roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
-    spitter1.UpdateAI(ball1.getXpos(), ball1.getYpos());
-
+    //roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
+    roach1.UpdateAI(0, 0);
+    //spitter1.UpdateAI(ball1.getXpos(), ball1.getYpos());
+    /*
     if(spitter1.hasChildren()){
         objectList.push_back(spitter1.getChildren());
     }
+        */
 
-    projectileCollision(&ball1);
+    //projectileCollision(&ball1);
 
     // draw screen
     SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
