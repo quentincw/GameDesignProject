@@ -22,7 +22,7 @@ void PlayerProjectile::Update(float deltaTime) {
 
 // draws the object
 void PlayerProjectile::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 0, 255, 0, 255);
+    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 0, 0, 255, 255);
 }
 
 // projectile collided with top/bottom of obstacle

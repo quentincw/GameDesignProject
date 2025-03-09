@@ -8,7 +8,7 @@
 #include <vector>
 #include "gameProcess.h"
 #include "roach.h"
-//#include "spitter.h"
+#include "spitter.h"
 #include "playerProjectile.h"
 
 using namespace std;
@@ -74,11 +74,11 @@ int main(int argc, char** argv)
 
   PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
 
-  //Spitter spitter1(200,500);
+  Spitter spitter1(200,500);
 
   objectList.push_back(&roach1);
   objectList.push_back(&ball1);
-  //objectList.push_back(&spitter1);
+  objectList.push_back(&spitter1);
 
 
 
@@ -134,12 +134,12 @@ int main(int argc, char** argv)
     }
     //roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
     roach1.UpdateAI(ball1.getHitbox());
-    //spitter1.UpdateAI(ball1.getXpos(), ball1.getYpos());
-    /*
+    spitter1.UpdateAI(ball1.getHitbox());
+    
     if(spitter1.hasChildren()){
         objectList.push_back(spitter1.getChildren());
     }
-        */
+        
 
     projectileCollision(&ball1);
 

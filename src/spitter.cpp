@@ -1,25 +1,21 @@
-/*#include <stdlib.h>
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <cmath>
 #include "enemy.h"
 #include "spitter.h"
-#include "projectile.h"
+#include "spitterProjectile.h"
 
 
 // constructor
 Spitter::Spitter(int x, int y) : Enemy(x, y) {
-    xPos = x;
-    yPos = y;
+
     health = 150;
-    radius = 15;
+    hitbox.radius = 15;
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
-    alive = true;
     hasChild = false;
-    player_x = 0;
-    player_y = 0;
     cooldown = 240;
     windup = 0;
     spit = nullptr;
@@ -28,30 +24,27 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void Spitter::Update(float deltaTime) {
-    xPos = xPos + xSpeed;
-    yPos = yPos + ySpeed;
+    hitbox.x = hitbox.x + xSpeed;
+    hitbox.y = hitbox.y + ySpeed;
     cooldown = cooldown - 1;
 }
 
 // draws the object
 void Spitter::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, xPos, yPos, radius, 255, 255, 0, 255);
+    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 255, 255, 0, 255);
 }
 
 // updates the ai based on the player's position
-void Spitter::UpdateAI(int pX, int pY) {
+void Spitter::UpdateAI(Circle phitbox) {
 
     if(cooldown <= 0){
-        spitProjectile();
+        spitProjectile(phitbox);
         cooldown = 240;
     }
 
-    player_x = pX;
-    player_y = pY;
-
     // calculate vector
-    float dx = player_x - xPos;
-    float dy = player_y - yPos;
+    float dx = phitbox.x - hitbox.x;
+    float dy = phitbox.y - hitbox.y;
 
     // normalize
     float length = sqrt((dx * dx) + (dy * dy));
@@ -89,11 +82,11 @@ Projectile* Spitter::getChildren() {
 }
 
 // creates a projectile object
-void Spitter::spitProjectile() {
+void Spitter::spitProjectile(Circle phitbox) {
 
     // calculate vector
-    float dx = player_x - xPos;
-    float dy = player_y - yPos;
+    float dx = phitbox.x - hitbox.x;
+    float dy = phitbox.y - hitbox.y;
 
     // normalize
     float length = sqrt((dx * dx) + (dy * dy));
@@ -108,11 +101,11 @@ void Spitter::spitProjectile() {
     float projYspeed = dy * spitSpeed;
 
     // create spit at spitter's location w/ calculated speeds
-    spit = new Projectile(xPos, yPos, projXspeed, projYspeed);
+    spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
     
     // set the flag for child to true
     hasChild = true;
-}*/
+}
 
 
 

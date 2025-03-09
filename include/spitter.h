@@ -1,4 +1,4 @@
-/*#ifndef SPITTER_H
+#ifndef SPITTER_H
 #define SPITTER_H
 
 #include <stdlib.h>
@@ -23,7 +23,7 @@ class Spitter : public Enemy {
         void Render(SDL_Renderer* renderer);
 
         // updates the ai based on the player's position
-        void UpdateAI(int pX, int pY);
+        void UpdateAI(Circle phitbox);
 
         // returns whether the spitter has a child or not
         bool hasChildren() const;
@@ -34,8 +34,6 @@ class Spitter : public Enemy {
 
 
     private:
-        // the player's position, used to aim projectiles
-        int player_x, player_y;
 
         // time inbetween spitting, time the spitter is stationary while spitting
         float cooldown, windup;
@@ -50,7 +48,7 @@ class Spitter : public Enemy {
         Projectile* spit;
 
         // creates a projectile object
-        void spitProjectile();
+        void spitProjectile(Circle phitbox);
 
 
 
@@ -59,4 +57,4 @@ class Spitter : public Enemy {
 };
 
 
-#endif*/
+#endif
