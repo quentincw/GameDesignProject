@@ -15,10 +15,10 @@ class Projectile : public GameProcess {
         Projectile(int x, int y, float startXSpeed, float startYSpeed);
 
         // updates the object
-        void Update(float deltaTime);
+        virtual void Update(float deltaTime) = 0;
 
         // draws the object
-        void Render(SDL_Renderer* renderer);
+        virtual void Render(SDL_Renderer* renderer) = 0;
 
         // get the circle representing the hitbox of the projectile
         Circle getHitbox() const;
