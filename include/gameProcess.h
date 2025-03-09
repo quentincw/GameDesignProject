@@ -1,5 +1,5 @@
-#ifndef PROCESS_H
-#define PROCESS_H
+#ifndef GPROCESS_H
+#define GPROCESS_H
 
 #include <stdlib.h>
 #include <SDL.h>
@@ -9,12 +9,12 @@
 #include <bits/stdc++.h>
 
 
-class Process {
+class GameProcess {
 
     public:
 
         // constructor for process
-        Process(std::vector<std::string> taglist);
+        GameProcess(std::vector<std::string> taglist);
 
         // updates the object
         virtual void Update(float deltaTime) = 0;

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <vector>
-#include "process.h"
+#include "gameProcess.h"
 #include "roach.h"
 //#include "spitter.h"
 //#include "projectile.h"
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
   SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
   if (renderer == NULL) csci437_error("Unable to create renderer!");
 
-  vector<Process*> objectList;
+  vector<GameProcess*> objectList;
   
   Roach roach1(1000, 700);
 

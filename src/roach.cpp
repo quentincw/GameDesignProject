@@ -1,4 +1,4 @@
-/*#include <stdlib.h>
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <string>
@@ -24,7 +24,7 @@ void Roach::Update(float deltaTime) {
 
 // draws the object
 void Roach::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, hitbox.x, hitbox.y, radius, 255, 0, 0, 255);
+    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 255, 0, 0, 255);
 }
 
 // updates the ai based on the player's position
@@ -45,7 +45,7 @@ void Roach::UpdateAI(int pX, int pY) {
     // set the speed based on speed
     xSpeed = dx * 3;
     ySpeed = dy * 3;
-}*/
+}
 
 
 

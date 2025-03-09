@@ -1,11 +1,12 @@
-/*#include <stdlib.h>
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include "entity.h"
+#include "gameProcess.h"
 
 
-Entity::Entity() : Process({"Wall"}) {
+Entity::Entity() : GameProcess({"Wall"}) {
     health = 0;
     maxHealth = 0;
     isAlive = true;
@@ -34,4 +35,4 @@ void Entity::adjustHealth(int healthDamage) {
 // gets the circle of the entity
 Circle Entity::getHitbox() const {
     return hitbox;
-}*/
+}

@@ -1,11 +1,11 @@
-/*#ifndef ENTITY_H
+#ifndef ENTITY_H
 #define ENTITY_H
 
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
-#include "process.h"
+#include "gameProcess.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ struct Circle {
 };
 
 
-class Entity : public Process {
+class Entity : public GameProcess {
 
     public:
 
@@ -64,4 +64,4 @@ class Entity : public Process {
 };
 
 
-#endif*/
+#endif

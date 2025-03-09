@@ -1,4 +1,4 @@
-/*#ifndef ROACH_H
+#ifndef ROACH_H
 #define ROACH_H
 
 #include <stdlib.h>
@@ -26,4 +26,4 @@ class Roach : public Enemy {
 };
 
 
-#endif*/
+#endif
