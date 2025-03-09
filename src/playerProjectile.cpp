@@ -3,6 +3,7 @@
 #include <SDL2_gfxPrimitives.h>
 #include "gameProcess.h"
 #include "projectile.h"
+#include "playerProjectile.h"
 
 // constructor
 PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {

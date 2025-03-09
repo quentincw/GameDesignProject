@@ -9,7 +9,7 @@
 #include "gameProcess.h"
 #include "roach.h"
 //#include "spitter.h"
-//#include "projectile.h"
+#include "playerProjectile.h"
 
 using namespace std;
 
@@ -23,27 +23,31 @@ void csci437_error(const std::string& msg)
   std::cerr << msg << " (" << SDL_GetError() << ")" << std::endl;
   exit(0);
 }
-/*
-void projectileCollision(Projectile* ball){
 
-    int radius = ball->getRadius();
+void projectileCollision(PlayerProjectile* ball){
+
+    
+    Circle hitbox = ball->getHitbox();
+    int radius = hitbox.radius;
+    int x = hitbox.x;
+    int y = hitbox.y;
     // check for collision with top of screen
-    if (ball->getYpos() - radius <= 0){
+    if (y - radius <= 0){
         ball->bounceY(0 + radius);
     }
     // check for collision with bottom of the screen
-    else if(ball->getYpos() + radius >= SCREEN_HEIGHT){
+    else if(y + radius >= SCREEN_HEIGHT){
         ball->bounceY(SCREEN_HEIGHT - radius);
     }
     // check for collision with left of screen
-    if (ball->getXpos() - radius <= 0){
+    if (x - radius <= 0){
         ball->bounceX(0 + radius);
     }
     // check for collision with right of the screen
-    else if(ball->getXpos() + radius >= SCREEN_WIDTH){
+    else if(x + radius >= SCREEN_WIDTH){
         ball->bounceX(SCREEN_WIDTH - radius);
     }
-}*/
+}
 
 int main(int argc, char** argv)
 {
@@ -68,12 +72,12 @@ int main(int argc, char** argv)
   
   Roach roach1(1000, 700);
 
-  //Projectile ball1(0, 0, 3, 3);
+  PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
 
   //Spitter spitter1(200,500);
 
   objectList.push_back(&roach1);
-  //objectList.push_back(&ball1);
+  objectList.push_back(&ball1);
   //objectList.push_back(&spitter1);
 
 
@@ -129,7 +133,7 @@ int main(int argc, char** argv)
         objectList[i]->Update(1);
     }
     //roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
-    //roach1.UpdateAI();
+    roach1.UpdateAI(ball1.getHitbox());
     //spitter1.UpdateAI(ball1.getXpos(), ball1.getYpos());
     /*
     if(spitter1.hasChildren()){
@@ -137,7 +141,7 @@ int main(int argc, char** argv)
     }
         */
 
-    //projectileCollision(&ball1);
+    projectileCollision(&ball1);
 
     // draw screen
     SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
