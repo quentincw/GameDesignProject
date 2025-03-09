@@ -6,7 +6,7 @@
 #include "gameProcess.h"
 
 
-Entity::Entity() : GameProcess({"Wall"}) {
+Entity::Entity() : GameProcess() {
     health = 0;
     maxHealth = 0;
     isAlive = true;

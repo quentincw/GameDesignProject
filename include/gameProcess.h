@@ -9,12 +9,18 @@
 #include <bits/stdc++.h>
 
 
+struct Circle {
+    int x;
+    int y;
+    int radius;
+};
+
 class GameProcess {
 
     public:
 
         // constructor for process
-        GameProcess(std::vector<std::string> taglist);
+        GameProcess();
 
         // updates the object
         virtual void Update(float deltaTime) = 0;

@@ -20,7 +20,7 @@ class Enemy : public Entity {
         virtual void Render(SDL_Renderer* renderer) = 0;
 
         // updates the ai based on the player's position
-        virtual void UpdateAI(int pX, int pY) = 0;
+        virtual void UpdateAI(Circle phitbox) = 0;
 
         int getDamage() const;
 

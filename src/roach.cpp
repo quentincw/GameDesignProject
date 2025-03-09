@@ -28,11 +28,11 @@ void Roach::Render(SDL_Renderer* renderer) {
 }
 
 // updates the ai based on the player's position
-void Roach::UpdateAI(int pX, int pY) {
+void Roach::UpdateAI(Circle phitbox) {
 
     // calculate vector
-    float dx = pX - hitbox.x;
-    float dy = pY - hitbox.y;
+    float dx = phitbox.x - hitbox.x;
+    float dy = phitbox.y - hitbox.y;
 
     // normalize
     float length = sqrt((dx * dx) + (dy * dy));

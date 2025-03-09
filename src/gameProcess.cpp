@@ -8,8 +8,8 @@
 
 
 // constructor
-GameProcess::GameProcess(std::vector<std::string> taglist) {
-    tags = taglist;
+GameProcess::GameProcess() : tags{} {
+    tags.push_back("Wall");
     deleteFlag = false;
 }
 

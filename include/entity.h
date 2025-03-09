@@ -9,12 +9,6 @@
 
 using namespace std;
 
-struct Circle {
-    int x;
-    int y;
-    int radius;
-};
-
 
 class Entity : public GameProcess {
 

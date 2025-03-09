@@ -129,7 +129,7 @@ int main(int argc, char** argv)
         objectList[i]->Update(1);
     }
     //roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
-    roach1.UpdateAI(0, 0);
+    //roach1.UpdateAI();
     //spitter1.UpdateAI(ball1.getXpos(), ball1.getYpos());
     /*
     if(spitter1.hasChildren()){

@@ -20,7 +20,7 @@ class Roach : public Enemy {
         void Render(SDL_Renderer* renderer);
 
         // updates the ai based on the player's position
-        void UpdateAI(int pX, int pY);
+        void UpdateAI(Circle phitbox);
 
 
 };
