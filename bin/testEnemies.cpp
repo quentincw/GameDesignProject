@@ -72,6 +72,11 @@ int main(int argc, char** argv)
   
   Roach roach1(1000, 700);
 
+  vector<string> tags = roach1.getTags();
+  for(int i = 0; i < tags.size(); i++){
+    cout << tags[i];
+}
+
   PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
 
   Spitter spitter1(200,500);
