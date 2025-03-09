@@ -1,4 +1,4 @@
-#include <stdlib.h>
+/*#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "gameObject.h"
@@ -55,4 +55,4 @@ void Projectile::bounceX(int newX){
 void Projectile::bounceY(int newY){
     ySpeed = -ySpeed;
     yPos = newY;
-}
+}*/

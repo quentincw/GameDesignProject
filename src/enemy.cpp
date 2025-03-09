@@ -1,4 +1,4 @@
-#include <stdlib.h>
+/*#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "enemy.h"
@@ -14,5 +14,5 @@ Enemy::Enemy(int x, int y) : Entity() {
 // get the damage the enemy causes to the player on contact
 int Enemy::getDamage() const {
     return damage;
-}
+}*/
 

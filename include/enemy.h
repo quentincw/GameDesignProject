@@ -1,4 +1,4 @@
-#ifndef ENEMY_H
+/*#ifndef ENEMY_H
 #define ENEMY_H
 
 #include <stdlib.h>
@@ -32,4 +32,4 @@ class Enemy : public Entity {
 };
 
 
-#endif
+#endif*/

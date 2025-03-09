@@ -1,4 +1,4 @@
-#include <stdlib.h>
+/*#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <string>
@@ -45,7 +45,7 @@ void Roach::UpdateAI(int pX, int pY) {
     // set the speed based on speed
     xSpeed = dx * 3;
     ySpeed = dy * 3;
-}
+}*/
 
 
 

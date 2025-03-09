@@ -1,4 +1,4 @@
-#include <stdlib.h>
+/*#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <cmath>
@@ -112,7 +112,7 @@ void Spitter::spitProjectile() {
     
     // set the flag for child to true
     hasChild = true;
-}
+}*/
 
 
 

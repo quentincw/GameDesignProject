@@ -1,4 +1,4 @@
-#ifndef PROJECTILE_H
+/*#ifndef PROJECTILE_H
 #define PROJECTILE_H
 
 #include <stdlib.h>
@@ -55,4 +55,4 @@ class Projectile : public GameObject {
 };
 
 
-#endif
+#endif*/

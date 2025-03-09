@@ -1,4 +1,4 @@
-#ifndef ENTITY_H
+/*#ifndef ENTITY_H
 #define ENTITY_H
 
 #include <stdlib.h>
@@ -64,4 +64,4 @@ class Entity : public Process {
 };
 
 
-#endif
+#endif*/

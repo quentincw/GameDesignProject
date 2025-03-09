@@ -1,4 +1,4 @@
-#ifndef SPITTER_H
+/*#ifndef SPITTER_H
 #define SPITTER_H
 
 #include <stdlib.h>
@@ -59,4 +59,4 @@ class Spitter : public Enemy {
 };
 
 
-#endif
+#endif*/

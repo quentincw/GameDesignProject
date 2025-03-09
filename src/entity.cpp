@@ -1,4 +1,4 @@
-#include <stdlib.h>
+/*#include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
@@ -34,4 +34,4 @@ void Entity::adjustHealth(int healthDamage) {
 // gets the circle of the entity
 Circle Entity::getHitbox() const {
     return hitbox;
-}
+}*/

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <vector>
+#include "process.h"
 #include "roach.h"
 //#include "spitter.h"
 //#include "projectile.h"

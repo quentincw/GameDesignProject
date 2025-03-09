@@ -8,15 +8,13 @@
 #include <string>
 #include <bits/stdc++.h>
 
-using namespace std;
-
 
 class Process {
 
     public:
 
         // constructor for process
-        Process(vector<string> taglist);
+        Process(std::vector<std::string> taglist);
 
         // updates the object
         virtual void Update(float deltaTime) = 0;
@@ -31,17 +29,17 @@ class Process {
         bool getMarkForDeletion() const;
 
         // returns the vector of tags of the process
-        vector<string> getTags() const;
+        std::vector<std::string> getTags() const;
 
 
 
     protected:
 
         // list of tags the process can interact with
-        vector<string> tags;
+        std::vector<std::string> tags;
 
         // map of all possible interactions a process can have
-        map<string, int> interactions;
+        //map<string, int> interactions;
 
         // mark for deletion flag
         bool deleteFlag;
