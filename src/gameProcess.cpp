@@ -11,11 +11,17 @@
 GameProcess::GameProcess() : tags{} {
     tags.push_back("Wall");
     deleteFlag = false;
+    children = false;
 }
 
 // marks process for deletion by changing delete flag (boolean)
 void GameProcess::markForDeletion() {
     deleteFlag = true;
+}
+
+// returns whether the process has children
+bool GameProcess::hasChildren() const {
+    return children;
 }
 
 // returns whether the process is marked for deletion

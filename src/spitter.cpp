@@ -15,7 +15,6 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
-    hasChild = false;
     cooldown = 240;
     windup = 0;
     spit = nullptr;
@@ -70,14 +69,9 @@ void Spitter::UpdateAI(Circle phitbox) {
     }
 }
 
-// returns whether the spitter has a child or not
-bool Spitter::hasChildren() const {
-    return hasChild;
-}
-
 // gets the projectile the spitter created
 Projectile* Spitter::getChildren() {
-    hasChild = false;
+    children = false;
     return spit;
 }
 
@@ -104,7 +98,7 @@ void Spitter::spitProjectile(Circle phitbox) {
     spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
     
     // set the flag for child to true
-    hasChild = true;
+    children = true;
 }
 
 

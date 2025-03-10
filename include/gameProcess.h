@@ -34,6 +34,9 @@ class GameProcess {
         // returns whether the process is marked for deletion
         bool getMarkForDeletion() const;
 
+        // returns whether the process has children
+        bool hasChildren() const;
+
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
 
@@ -49,6 +52,9 @@ class GameProcess {
 
         // mark for deletion flag
         bool deleteFlag;
+
+        // flag for if a process has children
+        bool children;
 
 
 

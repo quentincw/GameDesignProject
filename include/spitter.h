@@ -25,9 +25,6 @@ class Spitter : public Enemy {
         // updates the ai based on the player's position
         void UpdateAI(Circle phitbox);
 
-        // returns whether the spitter has a child or not
-        bool hasChildren() const;
-
         // gets the projectile the spitter created
         Projectile* getChildren();
 
@@ -40,9 +37,6 @@ class Spitter : public Enemy {
 
         // how fast the projectile will be
         float spitSpeed;
-
-        // whether the spitter has a projectile
-        bool hasChild;
 
         // the projectile the spitter created
         Projectile* spit;
