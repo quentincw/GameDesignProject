@@ -13,9 +13,6 @@ Entity::Entity() : GameProcess() {
     speed = 0;
     xSpeed = 0;
     ySpeed = 0;
-    hitbox.x = 0;
-    hitbox.y = 0;
-    hitbox.radius = 0;
 
 }
 
@@ -30,9 +27,4 @@ void Entity::adjustHealth(int healthDamage) {
     if (health <= 0) {
         isAlive = false;
     }
-}
-
-// gets the circle of the entity
-Circle Entity::getHitbox() const {
-    return hitbox;
 }

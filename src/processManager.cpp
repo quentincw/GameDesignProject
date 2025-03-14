@@ -38,7 +38,7 @@ void ProcessManager::updateProcesses(float deltaTime) {
     findChildren();
 
     // remove marked processes
-    //removeMarkedProcesses();
+    removeMarkedProcesses();
 
 }
 

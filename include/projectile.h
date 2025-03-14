@@ -20,15 +20,10 @@ class Projectile : public GameProcess {
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
 
-        // get the circle representing the hitbox of the projectile
-        Circle getHitbox() const;
-
         // get the damage the projectile causes to the player on contact
         int getDamage() const;
 
     protected:
-        // the x,y, and radius of the projectile
-        Circle hitbox;
         
         // the current speed of the projectile
         float xSpeed, ySpeed;

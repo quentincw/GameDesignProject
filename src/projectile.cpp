@@ -25,7 +25,3 @@ int Projectile::getDamage() const {
     return damage;
 }
 
-// get the hitbox of the projectile
-Circle Projectile::getHitbox() const {
-    return hitbox;
-}

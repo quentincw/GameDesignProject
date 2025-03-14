@@ -75,7 +75,13 @@ int main(int argc, char** argv)
 
     // create process manager
     ProcessManager manager(&ball1);
-    
+    // vector of current processes to check collisions/ oob
+    vector<GameProcess*> curProcesses;
+    // pointer to the current game process
+    GameProcess* curProcess;
+    // current circle
+    Circle curCircle;
+
     // create roach
     Roach roach1(1000, 700);
 
@@ -138,6 +144,19 @@ int main(int argc, char** argv)
         manager.updateProcesses(1);
 
         projectileCollision(&ball1);
+
+        curProcesses = manager.getProcessList();
+        
+        for(int i = 0; i < curProcesses.size(); i++){
+            curProcess = curProcesses[i];
+            curCircle = curProcess->getHitbox();
+            if((curCircle.x - curCircle.radius <= 0) || (curCircle.y - curCircle.radius <= 0)){
+                curProcess->markForDeletion();
+            }
+            else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
+                curProcess->markForDeletion();
+            }
+        }
 
         // draw screen
         SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );

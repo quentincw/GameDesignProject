@@ -29,9 +29,6 @@ class Entity : public GameProcess {
         // subtracts the health damage from the current health
         void adjustHealth(int healthDamage);
 
-        // gets the circle of the entity
-        Circle getHitbox() const;
-
 
 
     protected:
@@ -50,10 +47,6 @@ class Entity : public GameProcess {
 
         // the speed of the entity
         float xSpeed, ySpeed;
-
-        // the circle hitbox of the entity
-        Circle hitbox;
-
 
 };
 
