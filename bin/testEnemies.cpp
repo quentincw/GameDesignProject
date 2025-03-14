@@ -93,6 +93,19 @@ int main(int argc, char** argv)
     manager.addProcess(&spitter1);
     //manager.addProcess(&ball1);
 
+    // storage for "room" process lists
+    vector<GameProcess*> room1;
+    vector<GameProcess*> room2;
+    bool curRoom = true;
+
+    Spitter spitter2(30, 30);
+    Spitter spitter3(400, 400);
+    Spitter spitter4(1000, 30);
+
+    room2.push_back(&spitter2);
+    room2.push_back(&spitter3);
+    room2.push_back(&spitter4);
+
 
 
 
@@ -121,6 +134,19 @@ int main(int argc, char** argv)
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         running = false;
+                        break;
+                    case SDLK_s:
+                        // check which list is active (true = room1)
+                        if(curRoom){
+                            room1 = manager.getProcessList();
+                            manager.loadProcessList(room2);
+                            curRoom = false;
+                        }
+                        else{
+                            room2 = manager.getProcessList();
+                            manager.loadProcessList(room1);
+                            curRoom = true;
+                        }
                         break;
                     /*case SDLK_UP:
                         roach1.UpdateAI(roach1.getXpos(), 100);
