@@ -8,7 +8,7 @@
 
 
 // constructor
-GameProcess::GameProcess() : tags{} {
+GameProcess::GameProcess() : tags{}, childrenList{} {
     tags.push_back("Wall");
     deleteFlag = false;
     children = false;
@@ -27,6 +27,18 @@ bool GameProcess::hasChildren() const {
 // returns whether the process is marked for deletion
 bool GameProcess::getMarkForDeletion() const {
     return deleteFlag;
+}
+
+// returns a vector of all the children of a process
+std::vector<GameProcess*> GameProcess::getChildren(){
+    children = false;
+    return childrenList;
+}
+
+// returns the child of a process
+GameProcess* GameProcess::getChild(){
+    children = false;
+    return child;
 }
 
 

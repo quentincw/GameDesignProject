@@ -10,6 +10,7 @@
 #include "roach.h"
 #include "spitter.h"
 #include "playerProjectile.h"
+#include "processManager.h"
 
 using namespace std;
 
@@ -68,17 +69,24 @@ int main(int argc, char** argv)
     SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
     if (renderer == NULL) csci437_error("Unable to create renderer!");
 
-    vector<GameProcess*> objectList;
-  
-    Roach roach1(1000, 700);
 
+    // create "player"
     PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
 
+    // create process manager
+    ProcessManager manager(&ball1);
+    
+    // create roach
+    Roach roach1(1000, 700);
+
+    // create spitter
     Spitter spitter1(200,500);
 
-    objectList.push_back(&roach1);
-    objectList.push_back(&ball1);
-    objectList.push_back(&spitter1);
+    // add processes to process manager
+    manager.addProcess(&roach1);
+    manager.addProcess(&spitter1);
+    //manager.addProcess(&ball1);
+
 
 
 
@@ -127,26 +135,14 @@ int main(int argc, char** argv)
             }
         }
 
-        for(int i = 0; i < objectList.size(); i++){
-            objectList[i]->Update(1);
-        }
-        //roach1.UpdateAI(ball1.getXpos(), ball1.getYpos());
-        roach1.UpdateAI(ball1.getHitbox());
-        spitter1.UpdateAI(ball1.getHitbox());
-    
-        if(spitter1.hasChildren()){
-            objectList.push_back(spitter1.getChildren());
-        }
-        
+        manager.updateProcesses(1);
 
         projectileCollision(&ball1);
 
         // draw screen
         SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
         SDL_RenderClear( renderer );
-        for(int i = 0; i < objectList.size(); i++){
-            objectList[i]->Render( renderer );
-        }
+        manager.renderProcesses( renderer );
         SDL_RenderPresent( renderer );
 
         // delta time calculation

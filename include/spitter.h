@@ -25,9 +25,6 @@ class Spitter : public Enemy {
         // updates the ai based on the player's position
         void UpdateAI(Circle phitbox);
 
-        // gets the projectile the spitter created
-        Projectile* getChildren();
-
 
 
     private:
@@ -37,9 +34,6 @@ class Spitter : public Enemy {
 
         // how fast the projectile will be
         float spitSpeed;
-
-        // the projectile the spitter created
-        Projectile* spit;
 
         // creates a projectile object
         void spitProjectile(Circle phitbox);

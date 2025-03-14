@@ -37,6 +37,11 @@ class GameProcess {
         // returns whether the process has children
         bool hasChildren() const;
 
+        // returns a vector of all the children of a process
+        std::vector<GameProcess*> getChildren();
+
+        GameProcess* getChild();
+
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
 
@@ -56,7 +61,10 @@ class GameProcess {
         // flag for if a process has children
         bool children;
 
+        // vector of all the children of a process
+        std::vector<GameProcess*> childrenList;
 
+        GameProcess* child;
 
 };
 

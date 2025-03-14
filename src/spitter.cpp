@@ -17,7 +17,6 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
     damage = 50;
     cooldown = 240;
     windup = 0;
-    spit = nullptr;
     spitSpeed = 10;
 }
 
@@ -69,12 +68,6 @@ void Spitter::UpdateAI(Circle phitbox) {
     }
 }
 
-// gets the projectile the spitter created
-Projectile* Spitter::getChildren() {
-    children = false;
-    return spit;
-}
-
 // creates a projectile object
 void Spitter::spitProjectile(Circle phitbox) {
 
@@ -95,7 +88,13 @@ void Spitter::spitProjectile(Circle phitbox) {
     float projYspeed = dy * spitSpeed;
 
     // create spit at spitter's location w/ calculated speeds
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    //child = spit;
+    // put spit in childrenList
+    childrenList.clear();
+    childrenList.push_back(spit);
+
     
     // set the flag for child to true
     children = true;
