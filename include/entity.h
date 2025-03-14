@@ -23,6 +23,9 @@ class Entity : public GameProcess {
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
 
+        // handles the interactions with other objects
+        virtual void handleInteractions(int tag) = 0;
+
         // gets the current health
         int getHealth() const;
 

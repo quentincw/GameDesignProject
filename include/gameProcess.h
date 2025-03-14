@@ -29,6 +29,9 @@ class GameProcess : public GameObject {
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
 
+        // handles the interactions with other objects
+        virtual void handleInteractions(int tag) = 0;
+
         // marks process for deletion by changing delete flag (boolean)
         void markForDeletion();
 

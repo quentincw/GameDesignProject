@@ -22,10 +22,15 @@ class Enemy : public Entity {
         // updates the ai based on the player's position
         virtual void UpdateAI(Circle phitbox) = 0;
 
+        // handles the interactions with other objects
+        virtual void handleInteractions(int tag) = 0;
+
+        // gets the damage an enemy does on contact
         int getDamage() const;
 
     protected:
 
+        // the damage an enemy does on contact
         int damage;
 
 

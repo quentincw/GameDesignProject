@@ -101,4 +101,10 @@ void Spitter::spitProjectile(Circle phitbox) {
 }
 
 
+// handles the interactions with other objects
+void Spitter::handleInteractions(int tag) {
+
+}
+
+
 

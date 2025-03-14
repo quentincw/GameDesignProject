@@ -25,6 +25,10 @@ class Spitter : public Enemy {
         // updates the ai based on the player's position
         void UpdateAI(Circle phitbox);
 
+        // handles the interactions with other objects
+        void handleInteractions(int tag);
+
+
 
 
     private:

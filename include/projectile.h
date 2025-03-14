@@ -23,6 +23,9 @@ class Projectile : public GameProcess {
         // get the damage the projectile causes to the player on contact
         int getDamage() const;
 
+        // handles the interactions with other objects
+        virtual void handleInteractions(int tag) = 0;
+
     protected:
         
         // the current speed of the projectile

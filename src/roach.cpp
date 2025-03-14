@@ -48,4 +48,9 @@ void Roach::UpdateAI(Circle phitbox) {
 }
 
 
+// handles the interactions with other objects
+void Roach::handleInteractions(int tag) {
+
+}
+
 

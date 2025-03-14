@@ -20,6 +20,9 @@ class PlayerProjectile : public Projectile {
         // draws the object
         void Render(SDL_Renderer* renderer);
 
+        // handles the interactions with other objects
+        void handleInteractions(int tag);
+
         void bounceX(int newX);
 
         void bounceY(int newY);

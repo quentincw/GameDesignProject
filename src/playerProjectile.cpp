@@ -25,6 +25,19 @@ void PlayerProjectile::Render(SDL_Renderer* renderer) {
     filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 0, 0, 255, 255);
 }
 
+// handles the interactions with other objects
+void PlayerProjectile::handleInteractions(int tag) {
+    switch (tag) {
+        case 1: //Wall X
+            bounceX(hitbox.x);
+            break;
+        case 2: // Wall Y
+            bounceY(hitbox.y);
+            break;
+    }
+}
+
+
 // projectile collided with top/bottom of obstacle
 void PlayerProjectile::bounceX(int newX){
     xSpeed = -xSpeed;
