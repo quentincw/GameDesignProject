@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <bits/stdc++.h>
+#include "gameObject.h"
 #include "gameProcess.h"
 
 
@@ -36,12 +37,6 @@ bool GameProcess::getMarkForDeletion() const {
 std::vector<GameProcess*> GameProcess::getChildren(){
     children = false;
     return childrenList;
-}
-
-// returns the child of a process
-GameProcess* GameProcess::getChild(){
-    children = false;
-    return child;
 }
 
 

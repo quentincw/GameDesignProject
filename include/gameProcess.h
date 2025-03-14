@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <bits/stdc++.h>
+#include "gameObject.h"
 
 
 struct Circle {
@@ -15,7 +16,7 @@ struct Circle {
     int radius;
 };
 
-class GameProcess {
+class GameProcess : public GameObject {
 
     public:
 
@@ -39,8 +40,6 @@ class GameProcess {
 
         // returns a vector of all the children of a process
         std::vector<GameProcess*> getChildren();
-
-        GameProcess* getChild();
 
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
