@@ -2,6 +2,7 @@
 #define _ROOM_H_
 
 #include <vector>
+#include <SDL_rect.h>
 using namespace std;
 
 class Room {
@@ -10,9 +11,14 @@ class Room {
     Room();
     
     // Methods
-    vector<vector<int>> gen(int width, int height, vector<bool> door = {0, 0, 0, 0}, int walk_pct = 0);
+    vector<vector<int>> gen(int width, int height, vector<int> door, int walk_pct = 0);
+    vector<vector<int>> genPassage(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<int>> floor_grid);
+    vector<vector<vector<SDL_Rect>>> genPassageCol(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<vector<SDL_Rect>>> floor_grid_col);
+    vector<vector<vector<SDL_Rect>>> getTilemapCollision();
     
     private:
+    int grid_width;
+    int grid_height;
     // tile[], side
     vector<vector<int>> tiles;
     // row, col, tile[]

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <stdio.h>
+#include <random>
+#include "constants.h"
 #include "room.h"
 
 Room::Room() {
@@ -52,7 +54,9 @@ Room::Room() {
     };
 }
 
-vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk_pct) {
+vector<vector<int>> Room::gen(int width, int height, vector<int> door_loc, int walk_pct) {
+    grid_width = width;
+    grid_height = height;
     // set all tiles to blank
     vector<vector<vector<int>>> grid(width, vector<vector<int>>(height, tiles[6]));
     // set all to blank
@@ -60,14 +64,14 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
     // assume all tiles will be walkable
     vector<vector<bool>> walk_grid(width, vector<bool>(height, true));
 
-    vector<int> door_loc = {-1, -1, -1, -1};
-    // randomly pick tile to place door, not in corners
-    if (door[0]) door_loc[0] = (rand() % (width - 3)) + 1;
-    if (door[1]) door_loc[1] = (rand() % (height - 3)) + 1;
-    if (door[2]) door_loc[2] = (rand() % (width - 3)) + 1;
-    if (door[3]) door_loc[3] = (rand() % (height - 3)) + 1;
+    // assume bottom is not walkable
+    for (int x = 0; x < width; x++) {
+        walk_grid[x][height - 1] = false;
+    }
 
-    srand(time(NULL));
+    random_device rd;  // get random number
+    mt19937 eng(rd()); // seed
+    uniform_int_distribution<> distr(0, 100); // Define the range
 
     int rand_tile;
 
@@ -76,6 +80,69 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
         int y = t / width;
 
         vector<int> pool = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+
+        // set up room border
+        if (x == 0 && y == 0) {
+            pool = {0, 13};
+        }
+        if (x == width - 1 && y == 0) {
+            pool = {2, 13};
+        }
+        if (x == 0 && y == height - 1) {
+            pool = {10, 13};
+        }
+        if (x == width - 1 && y == height - 1) {
+            pool = {12, 13};
+        }
+
+        if (y == 0 && x == door_loc[0]) {
+            continue;
+        }
+        if (y == 0 && x > 0 && x < width - 1) {
+            pool = {0, 1, 2, 13};
+            if (x == door_loc[0] - 1) {
+                pool = {5, 9};
+            }
+            if (x == door_loc[0] + 1) {
+                pool = {7, 8};
+            }
+        }
+        if (x == width - 1  && y == door_loc[1]) {
+            continue;
+        }
+        if (x == width - 1 && y > 0 && y < height  - 1) {
+            pool = {2, 7, 12, 13};
+            if (y == door_loc[1] - 1) {
+                pool = {1, 8};
+            }
+            if (y == door_loc[1] + 1) {
+                pool = {3, 11};
+            }
+        }
+        if (y == height - 1 && x == door_loc[2]) {
+            continue;
+        }
+        if (y == height - 1 && x > 0 && x < width - 1) {
+            pool = {10, 11, 12, 13};
+            if (x == door_loc[2] - 1) {
+                pool = {4, 5};
+            }
+            if (x == door_loc[2] + 1) {
+                pool = {3, 7};
+            }
+        }
+        if (x == 0 && y == door_loc[3]) {
+            continue;
+        }
+        if (x == 0 && y > 0 && y < height  - 1) {
+            pool = {0, 5, 10, 13};
+            if (y == door_loc[3] - 1) {
+                pool = {1, 9};
+            }
+            if (y == door_loc[3] + 1) {
+                pool = {4, 11};
+            }
+        }
 
         vector<int> new_pool;
         // first row (look at left tile)
@@ -88,7 +155,6 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
                     }
                 }
             }
-
             if (x == door_loc[0]) {
                 grid[x][y] = tiles[6];
                 continue;
@@ -215,6 +281,7 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
             }
             pool = new_pool;
         }
+
         // uses copy of pool so loop is unefected by removals
         vector<int> pool_cpy = pool;
         for (int i : pool_cpy) {
@@ -228,10 +295,10 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
                 walk_grid[x][y] = true;
             }
             // if not in first row or last col
-            // check if i is placed, the next tile (9) preserves contiguousness
+            // check if i is placed, the next tile 12 preserves contiguousness
             if (y > 0 && x < width - 1) {
                 if (tiles[i][1] == 3 && grid[x + 1][y - 1][2] == 3) {
-                    // set 9 as placeholder
+                    // set 12 as placeholder
                     grid[x + 1][y] = tiles[12];
                     if (!is_contiguous(width, height, grid, walk_grid)) {
                         pool.erase(remove(pool.begin(), pool.end(), i), pool.end());
@@ -248,20 +315,46 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
         }
 
         if (!pool.empty()) {
-            rand_tile = pool[rand() % pool.size()];
-            // edges only have non-walkable tiles if tiles in center require connection
-            if (x == 0 || y == 0 || x == width - 1 || y == height - 1 || walk_pct > rand() % 100) {
+            rand_tile = pool[distr(eng) % pool.size()];
+            if (walk_pct > distr(eng) % 100) {
                 if (find(pool.begin(), pool.end(), 6) != pool.end()) {
                     rand_tile = 6;
-                }
-                else if (find(pool.begin(), pool.end(), 3) != pool.end()) {
-                    rand_tile = 3;
                 }
                 else if (find(pool.begin(), pool.end(), 9) != pool.end()) {
                     rand_tile = 9;
                 }
+                else if (find(pool.begin(), pool.end(), 8) != pool.end()) {
+                    rand_tile = 8;
+                }
+                else if (find(pool.begin(), pool.end(), 4) != pool.end()) {
+                    rand_tile = 4;
+                }
+                else if (find(pool.begin(), pool.end(), 3) != pool.end()) {
+                    rand_tile = 3;
+                }
+                else if (find(pool.begin(), pool.end(), 1) != pool.end()) {
+                    rand_tile = 1;
+                }
                 else if (find(pool.begin(), pool.end(), 5) != pool.end()) {
                     rand_tile = 5;
+                }
+                else if (find(pool.begin(), pool.end(), 7) != pool.end()) {
+                    rand_tile = 7;
+                }
+                else if (find(pool.begin(), pool.end(), 11) != pool.end()) {
+                    rand_tile = 11;
+                }
+                else if (find(pool.begin(), pool.end(), 0) != pool.end()) {
+                    rand_tile = 0;
+                }
+                else if (find(pool.begin(), pool.end(), 2) != pool.end()) {
+                    rand_tile = 2;
+                }
+                else if (find(pool.begin(), pool.end(), 10) != pool.end()) {
+                    rand_tile = 10;
+                }
+                else if (find(pool.begin(), pool.end(), 12) != pool.end()) {
+                    rand_tile = 12;
                 }
             }
             fin_grid[x][y] = rand_tile;
@@ -280,7 +373,62 @@ vector<vector<int>> Room::gen(int width, int height, vector<bool> door, int walk
         }
     }
 
+    this->grid = grid;
+
     return fin_grid;
+}
+
+vector<vector<int>> Room::genPassage(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<int>> floor_grid)
+{
+    // right
+    if (door[1] != -1) {
+        for (int x = startX; x < maxX ; x++) {
+            floor_grid[x][offsetY + door[1] - 1] = 1;
+            floor_grid[x][offsetY + door[1]] = 6;
+            floor_grid[x][offsetY + door[1] + 1] = 11;
+        }
+    }
+    // down
+    if (door[2] != -1) {
+        for (int y = startY; y < maxY; y++) {
+            floor_grid[offsetX + door[2] - 1][y] = 5;
+            floor_grid[offsetX + door[2]][y] = 6;
+            floor_grid[offsetX + door[2] + 1][y] = 7;
+        }
+    }
+
+    return floor_grid;
+}
+
+vector<vector<vector<SDL_Rect>>> Room::genPassageCol(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<vector<SDL_Rect>>> floor_grid_col)
+{
+    int size = TILE_SIZE / 2;
+    // right
+    if (door[1] != -1) {
+        for (int x = startX; x < maxX ; x++) {
+            int posX = x * TILE_SIZE;
+
+            floor_grid_col[x][offsetY + door[1] - 1][0] = {posX, (offsetY + door[1] - 1) * TILE_SIZE, size, size};
+            floor_grid_col[x][offsetY + door[1] - 1][1] = {posX + size, (offsetY + door[1] - 1) * TILE_SIZE, size, size};
+
+            floor_grid_col[x][offsetY + door[1] + 1][2] = {posX, (offsetY + door[1] + 1) * TILE_SIZE + size, size, size};
+            floor_grid_col[x][offsetY + door[1] + 1][3] = {posX + size, (offsetY + door[1] + 1) * TILE_SIZE + size, size, size};
+        }
+    }
+    // down
+    if (door[2] != -1) {
+        for (int y = startY; y < maxY; y++) {
+            int posY = y * TILE_SIZE;
+
+            floor_grid_col[offsetX + door[2] - 1][y][0] = {(offsetX + door[2] - 1) * TILE_SIZE, posY, size, size};
+            floor_grid_col[offsetX + door[2] - 1][y][2] = {(offsetX + door[2] - 1) * TILE_SIZE, posY + size, size, size};
+
+            floor_grid_col[offsetX + door[2] + 1][y][1] = {(offsetX + door[2] + 1) * TILE_SIZE + size, posY, size, size};
+            floor_grid_col[offsetX + door[2] + 1][y][3] = {(offsetX + door[2] + 1) * TILE_SIZE + size, posY + size, size, size};
+        }
+    }
+
+    return floor_grid_col;
 }
 
 bool Room::is_contiguous(int width, int height, vector<vector<vector<int>>> grid, vector<vector<bool>> walk_grid) {
@@ -345,4 +493,29 @@ bool Room::is_contiguous(int width, int height, vector<vector<vector<int>>> grid
         return true;
     }
     return false;
+}
+
+vector<vector<vector<SDL_Rect>>> Room::getTilemapCollision() {
+    // row, col, Rect[]
+    vector<vector<vector<SDL_Rect>>> tilemap_collision(grid_width, vector<vector<SDL_Rect>>(grid_height, vector<SDL_Rect>(4)));
+    int size = TILE_SIZE / 2;
+    for (int x = 0; x < grid_width; x++) {
+        for (int y = 0; y < grid_height; y++) {
+            int posX = x * TILE_SIZE;
+            int posY = y * TILE_SIZE;
+            if (grid[x][y][0] == 1 || grid[x][y][0] == 2) {
+                tilemap_collision[x][y][0] = {posX, posY, size, size};
+            }
+            if (grid[x][y][0] == 1 || grid[x][y][0] == 3) {
+                tilemap_collision[x][y][1] = {posX + size, posY, size, size};
+            }
+            if (grid[x][y][2] == 1 || grid[x][y][2] == 2) {
+                tilemap_collision[x][y][2] = {posX, posY + size, size, size};
+            }
+            if (grid[x][y][2] == 1 || grid[x][y][2] == 3) {
+                tilemap_collision[x][y][3] = {posX + size, posY + size, size, size};
+            }
+        }
+    }
+    return tilemap_collision;
 }
