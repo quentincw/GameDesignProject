@@ -115,7 +115,7 @@ int ProcessManager::getEnemyCount() const {
 // gives the player's position any enemies
 void ProcessManager::updateEnemyAI() {
     for (auto& curProcess : processList) {
-        // Attempt to cast to DerivedGameProcess
+        // check if the current process is an enemy
         if (auto enemy = dynamic_cast<Enemy*>(curProcess)) {
             enemy->UpdateAI(player->getHitbox());
         }

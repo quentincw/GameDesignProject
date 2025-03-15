@@ -72,8 +72,6 @@ class GameProcess : public GameObject {
         // vector of all the children of a process
         std::vector<GameProcess*> childrenList;
 
-        GameProcess* child;
-
 };
 
 
