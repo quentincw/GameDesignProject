@@ -16,12 +16,16 @@ class Player : public GameObject{
 		
 		float getX();
 		float getY();
+		
+		void setMouse(float x, float y);
 	
 	protected:
 		float xPos;
 		float yPos;
 		float xMove;
 		float yMove;
+		float weaponX;
+		float weaponY;
 };
 
 

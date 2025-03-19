@@ -37,7 +37,9 @@ int main(int argc, char** argv)
   bool running = true;
   float playerX = 0;
   float playerY = 0;
-  Player P;
+  int mouseX = 0;
+  int mouseY = 0;
+  Player P(100,100);
   SDL_Event e;
 
   // While application is running
@@ -53,17 +55,17 @@ int main(int argc, char** argv)
       if( e.type == SDL_KEYDOWN )
       {
 		if( e.key.keysym.sym == SDLK_q ) running = false;
-		if( e.key.keysym.sym == SDLK_w) playerY = -1;
-		if( e.key.keysym.sym == SDLK_a) playerX = -1;
-		if( e.key.keysym.sym == SDLK_s) playerY = 1;
-		if( e.key.keysym.sym == SDLK_d) playerX = 1;
+		if( e.key.keysym.sym == SDLK_w) playerY = -0.5;
+		if( e.key.keysym.sym == SDLK_a) playerX = -0.5;
+		if( e.key.keysym.sym == SDLK_s) playerY = 0.5;
+		if( e.key.keysym.sym == SDLK_d) playerX = 0.5;
       }
 	  if( e.type == SDL_KEYUP )
 	  {
-		if( e.key.keysym.sym == SDLK_w) playerY += 1;
-		if( e.key.keysym.sym == SDLK_a) playerX += 1;
-		if( e.key.keysym.sym == SDLK_s) playerY -= 1;
-		if( e.key.keysym.sym == SDLK_d) playerX -= 1;
+		if( e.key.keysym.sym == SDLK_w) playerY = 0;
+		if( e.key.keysym.sym == SDLK_a) playerX = 0;
+		if( e.key.keysym.sym == SDLK_s) playerY = 0;
+		if( e.key.keysym.sym == SDLK_d) playerX = 0;
 	  }
     }
 	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
@@ -71,6 +73,9 @@ int main(int argc, char** argv)
 	
 	P.setX(playerX);
 	P.setY(playerY);
+	
+	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
+	P.setMouse(mouseX, mouseY);
 	
 	P.Update(1);
 	

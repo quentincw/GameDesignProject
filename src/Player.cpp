@@ -3,9 +3,11 @@
 
 Player::Player(){}
 
-Player::Player(float, float){
-	xPos = 0;
-	yPos = 0;
+Player::Player(float x, float y){
+	xPos = x;
+	yPos = y;
+	weaponX = 1;
+	weaponY = 0;
 }
 
 void Player::setX(float x){
@@ -24,11 +26,20 @@ float Player::getY(){
 	return yPos;
 }
 
+void Player::setMouse(float x, float y){
+	float Vx = x - xPos;
+	float Vy = y - yPos;
+	float mag = sqrt(pow(Vx,2) + pow(Vy,2));
+	weaponX = Vx / mag;
+	weaponY = Vy / mag;
+}
+
 void Player::Update(float deltaTime) {
     xPos += xMove;
     yPos += yMove;
 }
 
 void Player::Render(SDL_Renderer* renderer) {
-    boxRGBA(renderer, xPos, yPos, xPos+20, yPos+20, 0, 255, 0, 255);
+    boxRGBA(renderer, xPos-10, yPos-10, xPos+10, yPos+10, 0, 255, 0, 255);
+	filledCircleRGBA(renderer, xPos+(20*weaponX), yPos+(20*weaponY), 5, 255, 255, 255, 255);
 }
