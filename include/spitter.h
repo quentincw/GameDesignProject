@@ -23,7 +23,7 @@ class Spitter : public Enemy {
         void Render(SDL_Renderer* renderer);
 
         // updates the ai based on the player's position
-        void UpdateAI(Circle phitbox);
+        void UpdateAI(Rectangle phitbox);
 
         // handles the interactions with other objects
         void handleInteractions(int tag);
@@ -40,7 +40,7 @@ class Spitter : public Enemy {
         float spitSpeed;
 
         // creates a projectile object
-        void spitProjectile(Circle phitbox);
+        void spitProjectile(Rectangle phitbox);
 
 
 

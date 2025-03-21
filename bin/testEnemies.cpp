@@ -11,6 +11,8 @@
 #include "spitter.h"
 #include "playerProjectile.h"
 #include "processManager.h"
+#include "testWall.h"
+#include "gameObject.h"
 
 using namespace std;
 
@@ -25,9 +27,54 @@ void csci437_error(const std::string& msg)
   exit(0);
 }
 
+bool checkCollision(GameObject* rect1, GameObject* rect2){
+    Rectangle hitbox1 = rect1->getHitbox();
+    Rectangle hitbox2 = rect2->getHitbox();
+
+    if((hitbox1.x + hitbox1.width >= hitbox2.x) &&
+       (hitbox1.x <= hitbox2.x + hitbox2.width) &&
+       (hitbox1.y + hitbox1.height >= hitbox2.y) &&
+       (hitbox1.y <= hitbox2.y + hitbox2.height)) {
+
+        return true;
+    }
+    return false;
+
+}
+
+int moveInbounds(GameObject* rect1, GameObject* rect2){
+    Rectangle hitbox1 = rect1->getHitbox();
+    Rectangle hitbox2 = rect2->getHitbox();
+
+    Point center1 = rect1->getCenter(&hitbox1);
+    Point center2 = rect2->getCenter(&hitbox2);
+
+    // left side collision
+    if(center2.x <= hitbox1.x){
+        rect2->setPosition(hitbox1.x - hitbox2.width, hitbox2.y);
+        return 1;
+    }
+    // right side collision
+    else if(center2.x >= hitbox1.x + hitbox1.width){
+        rect2->setPosition(hitbox1.x + hitbox1.width, hitbox2.y);
+        return 3;
+    }
+    // top side collision
+    if(center2.y <= hitbox1.y){
+        rect2->setPosition(hitbox2.x, hitbox1.y - hitbox2.height);
+        return 2;
+    }
+    // bottom side collision
+    else if(center2.y >= hitbox1.y + hitbox1.height){
+        rect2->setPosition(hitbox2.x, hitbox1.y + hitbox1.height);
+        return 4;
+    }
+    return 0;
+}
+
 void projectileCollision(PlayerProjectile* ball){
 
-    
+    /*
     Circle hitbox = ball->getHitbox();
     int radius = hitbox.radius;
     int x = hitbox.x;
@@ -48,6 +95,33 @@ void projectileCollision(PlayerProjectile* ball){
     else if(x + radius >= SCREEN_WIDTH){
         ball->bounceX(SCREEN_WIDTH - radius);
     }
+    */
+
+    Rectangle hitbox = ball->getHitbox();
+    int height = hitbox.height;
+    int width = hitbox.height;
+    int x = hitbox.x;
+    int y = hitbox.y;
+
+    // collision with left side of screen
+    if (x <= 0) {
+        ball->bounceX(0);
+    }
+    // collision with right side of screen
+    else if (x + width >= SCREEN_WIDTH){
+        ball->bounceX(SCREEN_WIDTH - width);
+    }
+    // collision with top of screen
+    if (y <= 0) {
+        ball->bounceY(0);
+    }
+    // collision with bottom of screen
+    else if (y + height >= SCREEN_HEIGHT){
+        ball->bounceY(SCREEN_HEIGHT - height);
+    }
+
+
+
 }
 
 int main(int argc, char** argv)
@@ -80,7 +154,11 @@ int main(int argc, char** argv)
     // pointer to the current game process
     GameProcess* curProcess;
     // current circle
-    Circle curCircle;
+    //Circle curCircle;
+    Rectangle curHitbox;
+
+    //create test wall
+    TestWall wall1(400, 400, 100, 100);
 
     // create roach
     Roach roach1(1000, 700);
@@ -172,7 +250,7 @@ int main(int argc, char** argv)
         projectileCollision(&ball1);
 
         curProcesses = manager.getProcessList();
-        
+        /*
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];
             curCircle = curProcess->getHitbox();
@@ -182,11 +260,41 @@ int main(int argc, char** argv)
             else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
                 curProcess->markForDeletion();
             }
+        }*/
+
+        for(int i = 0; i < curProcesses.size(); i++){
+            curProcess = curProcesses[i];
+            curHitbox = curProcess->getHitbox();
+            if((curHitbox.x <= 0) || (curHitbox.y <= 0)){
+                curProcess->markForDeletion();
+            }
+            else if((curHitbox.x + curHitbox.width >= SCREEN_WIDTH) || (curHitbox.y + curHitbox.height >= SCREEN_HEIGHT)){
+                curProcess->markForDeletion();
+            }
+        }
+
+        if(checkCollision(&wall1, &ball1)){
+            //cout << "collision";
+            int code = moveInbounds(&wall1, &ball1);
+            if (code == 1 || code == 3){
+                ball1.bounceX(ball1.getHitbox().x);
+            }
+            else {
+                ball1.bounceY(ball1.getHitbox().y);
+            }
+        }
+
+        for(int i = 0; i < curProcesses.size(); i++){
+            curProcess = curProcesses[i];
+            if(checkCollision(&wall1, curProcess)){
+                moveInbounds(&wall1, curProcess);
+            }
         }
 
         // draw screen
         SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
         SDL_RenderClear( renderer );
+        wall1.Render( renderer );
         manager.renderProcesses( renderer );
         SDL_RenderPresent( renderer );
 

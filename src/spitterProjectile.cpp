@@ -8,8 +8,10 @@
 // constructor
 SpitterProjectile::SpitterProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {
 
-    hitbox.radius = 10;
+    radius = 10;
     damage = 10;
+    hitbox.height = 15;
+    hitbox.width = 15;
     tags.push_back("Player");
 }
 
@@ -21,7 +23,8 @@ void SpitterProjectile::Update(float deltaTime) {
 
 // draws the object
 void SpitterProjectile::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 0, 255, 0, 255);
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x, point.y, radius, 0, 255, 0, 255);
 }
 
 // handles the interactions with other objects
