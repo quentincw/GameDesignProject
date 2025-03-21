@@ -12,12 +12,14 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
     health = 150;
     radius = 15;
+    hitbox.height = 15;
+    hitbox.width = 15;
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
     cooldown = 240;
     windup = 0;
-    spitSpeed = 10;
+    spitSpeed = 5;
 }
 
 // updates the object
