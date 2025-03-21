@@ -1,4 +1,3 @@
-/*
 #include <iostream>
 #include <stdio.h>
 #include <random>
@@ -520,4 +519,3 @@ vector<vector<vector<SDL_Rect>>> Room::getTilemapCollision() {
     }
     return tilemap_collision;
 }
-*/
