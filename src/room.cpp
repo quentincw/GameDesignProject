@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include <algorithm>
 #include <random>
 #include "constants.h"
 #include "room.h"
