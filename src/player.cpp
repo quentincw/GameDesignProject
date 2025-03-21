@@ -4,8 +4,6 @@
 #include "player.h"
 
 Player::Player() {
-    posX = SCREEN_WIDTH / 2;
-    posY = SCREEN_HEIGHT / 2;
     velX = 0;
     velY = 0;
 }
@@ -14,8 +12,17 @@ void Player::move(vector<vector<vector<SDL_Rect>>> tilemap_collision)
 {
     posX += velX;
     posY += velY;
-    for (int x = 0; x < tilemap_collision.size(); x++) {
-        for (int y = 0; y < tilemap_collision[x].size(); y++) {
+
+    // check collisions with x tiles
+    int tileRange = 2;
+
+    // tile coordinates of the player's position
+    int tileX = posX / TILE_SIZE;
+    int tileY = posY / TILE_SIZE;
+
+    // limit tileRange such that it does not reach out of bounds
+    for (int x = max(0, tileX - tileRange); x < min(int(tilemap_collision.size()), tileX + tileRange); x++) {
+        for (int y = max(0, tileY - tileRange); y < min(int(tilemap_collision[x].size()), tileY + tileRange); y++) {
             for (SDL_Rect wall: tilemap_collision[x][y]) {
                 if (checkCollision(wall)) {
                     posX -= velX;
@@ -24,6 +31,12 @@ void Player::move(vector<vector<vector<SDL_Rect>>> tilemap_collision)
             }
         }
     }
+}
+
+void Player::setPos(int x, int y)
+{
+    posX = x;
+    posY = y;
 }
 
 vector<int> Player::getPos()
@@ -86,22 +99,4 @@ bool Player::checkCollision(SDL_Rect rect)
         return true;
     }
     return false;
-
-    // bottom a <= top b
-    // if (a.y + a.h <= b.y) {
-    //     return false;
-    // }
-    // // top a >= bottom b
-    // if (a.y >= b.y + b.h) {
-    //     return false;
-    // }
-    // // right a <= left b
-    // if (a.x + a.w <= b.x) {
-    //     return false;
-    // }
-    // // left a >= right b
-    // if (a.x >= b.x + b.w) {
-    //     return false;
-    // }
-    // return true;
 }

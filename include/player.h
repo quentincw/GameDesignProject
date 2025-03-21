@@ -13,6 +13,7 @@ class Player {
     
     // Methods
     void move(vector<vector<vector<SDL_Rect>>> tilemap_collision);
+    void setPos(int x, int y);
     vector<int> getPos();
     void setVelX(int x);
     void setVelY(int y);

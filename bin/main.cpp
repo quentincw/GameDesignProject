@@ -38,26 +38,36 @@ int main(int argc, char** argv)
   Player player;
   Floor floor;
   // width * height >= gen_rooms + 2 (start and boss room)
-  floor.gen(3, 3, 6);
-  int x_offset = floor.getCurRoom().x;
-  int y_offset = floor.getCurRoom().y;
-  int width = floor.getCurRoom().w;
-  int height = floor.getCurRoom().h;
+  floor.gen(6, 6, 16);
+  SDL_Rect curRoom = floor.getCurRoom();
+
+  player.setPos((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
+
   vector<vector<int>> rooms = floor.getRooms();
   int rooms_width = rooms.size();
   int rooms_height = rooms[0].size();
   vector<vector<vector<SDL_Rect>>> rooms_col = floor.getRoomsCol();
 
-  // [width][height], width and height must be smaller than value (set value is arbitrary, can be increased if needed)
-  SDL_Rect tile[500][500];
+  SDL_Rect tile[rooms_width][rooms_height];
+  SDL_Rect map[rooms_width][rooms_height];
+  vector<SDL_Rect> render_map;
+  static const int MAP_SIZE = 2;
   for (int x = 0; x < rooms_width; x++) {
     for (int y = 0; y < rooms_height; y++) {
+        if (rooms[x][y] >= 0) {
+            map[x][y].x = x * MAP_SIZE;
+            map[x][y].y = y * MAP_SIZE;
+            map[x][y].w = MAP_SIZE;
+            map[x][y].h = MAP_SIZE;
+
+            render_map.push_back(map[x][y]);
+        }
         tile[x][y].x = x * TILE_SIZE;
         tile[x][y].y = y * TILE_SIZE;
         tile[x][y].w = TILE_SIZE;
         tile[x][y].h = TILE_SIZE;
     }
-}
+  }
 
   SDL_Rect tile_0;
   tile_0.x = 0;
@@ -142,6 +152,8 @@ int main(int argc, char** argv)
   tile_13.y = 32;
   tile_13.w = 16;
   tile_13.h = 16;
+
+  SDL_Rect tileTextures[14] = {tile_0, tile_1, tile_2, tile_3, tile_4, tile_5, tile_6, tile_7, tile_8, tile_9, tile_10, tile_11, tile_12, tile_13};
   
   /*** Main Loop ***/
   bool running = true;
@@ -180,86 +192,36 @@ int main(int argc, char** argv)
         camera.x = player.getPos()[0] + player.rad - (SCREEN_WIDTH / 2);
         camera.y = player.getPos()[1] + player.rad - (SCREEN_HEIGHT / 2);
 
-        // if (camera.x < 0) camera.x = 0;
-        // if (camera.y < 0) camera.y = 0;
-        // if (camera.x > 0) camera.x = 0;
-        // if (camera.y > 0) camera.y = 0;
-
-        // if in room render room and all passages connected to it
-        // if in passage render passage and both rooms in either direction
         floor.setCurRoom(player.getPos()[0] / TILE_SIZE, player.getPos()[1] / TILE_SIZE);
-        x_offset = floor.getCurRoom().x;
-        y_offset = floor.getCurRoom().y;
-        width = floor.getCurRoom().w;
-        height = floor.getCurRoom().h;
+        curRoom = floor.getCurRoom();
 
-        for (int x = x_offset; x < x_offset + width; x++) {
-            for (int y = y_offset; y < y_offset + height; y++) {
-        // for (int x = 0; x < rooms_width; x++) {
-        //     for (int y = 0; y < rooms_height; y++) {
+        int min_x = max(0, (camera.x / TILE_SIZE));
+        int max_x = min(rooms_width, ((camera.x + SCREEN_WIDTH) / TILE_SIZE) + 1);
+        int min_y = max(0, (camera.y / TILE_SIZE));
+        int max_y = min(rooms_height, ((camera.y + SCREEN_HEIGHT) / TILE_SIZE) + 1);
+
+        for (int x = min_x; x < max_x; x++) {
+            for (int y = min_y; y < max_y; y++) {
                 SDL_Rect tileRect = {tile[x][y].x - camera.x, tile[x][y].y - camera.y, TILE_SIZE, TILE_SIZE};
-                switch (rooms[x][y])
-                {
-                case 0:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_0, &tileRect);
-                    break;
-                case 1:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_1, &tileRect);
-                    break;
-                case 2:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_2, &tileRect);
-                    break;
-                case 3:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_3, &tileRect);
-                    break;
-                case 4:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_4, &tileRect);
-                    break;
-                case 5:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_5, &tileRect);
-                    break;
-                case 6:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_6, &tileRect);
-                    break;
-                case 7:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_7, &tileRect);
-                    break;
-                case 8:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_8, &tileRect);
-                    break;
-                case 9:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_9, &tileRect);
-                    break;
-                case 10:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_10, &tileRect);
-                    break;
-                case 11:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_11, &tileRect);
-                    break;
-                case 12:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_12, &tileRect);
-                    break;
-                case 13:
-                    SDL_RenderCopy(renderer, tile_texture, &tile_13, &tileRect);
-                    break;
-                default:
-                    break;
+                if (rooms[x][y] >= 0 && rooms[x][y] < 14) {
+                    SDL_RenderCopy(renderer, tile_texture, &tileTextures[rooms[x][y]], &tileRect);
                 }
             }
         }
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        for (int x = 0; x < rooms_col.size(); x++) {
-            for (int y = 0; y < rooms_col[x].size(); y++) {
-                for (int z = 0; z < rooms_col[x][y].size(); z++) {
-                    SDL_Rect colRect = {rooms_col[x][y][z].x - camera.x, rooms_col[x][y][z].y - camera.y, rooms_col[x][y][z].w, rooms_col[x][y][z].h};
-                    SDL_RenderDrawRect(renderer, &colRect);
-                }
-            }
-        }
-        SDL_Rect screen = {-camera.x, -camera.y, SCREEN_WIDTH, SCREEN_HEIGHT};
-        SDL_RenderDrawRect(renderer, &screen);
+
         circleRGBA(renderer, player.getPos()[0] - camera.x, player.getPos()[1] - camera.y, player.rad, 255, 255, 0, 255);
         player.move(rooms_col);
+
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        for (SDL_Rect rect: render_map) {
+            if (rect.x / MAP_SIZE >= curRoom.x && rect.x / MAP_SIZE < curRoom.x + curRoom.w && rect.y / MAP_SIZE >= curRoom.y && rect.y / MAP_SIZE < curRoom.y + curRoom.h) {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+            }
+            SDL_RenderFillRect(renderer, &rect);
+        }
 
         SDL_RenderPresent( renderer );
 
