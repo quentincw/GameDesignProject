@@ -75,10 +75,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
 
     layout.push_back({x, y});
 
-    // UPDATE:
-    // if rooms are adjacent (not becuase they are genrated consecutively), there should be a chance a door is placed
-
-    for (int r = 0; r < gen_rooms; r++) {
+    while (layout.size() < gen_rooms) {
+        bool room_taken = false;
         int locX = (distr(eng) % (room_h_min - 4)) + 2;
         int locY = (distr(eng) % (room_w_min - 4)) + 2;
         bool up = y + 1 <= height - 1 && door_map[x][y][0] == -1;
@@ -134,7 +132,15 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
             door_map[x][y - 1] = {locY, door_map[x][y - 1][1], door_map[x][y - 1][2], door_map[x][y - 1][3]};
             y--;
         }
-        layout.push_back({x, y});
+        for (vector<int> coord : layout) {
+            if (coord[0] == x && coord[1] == y) {
+                room_taken = true;
+                break;
+            }
+        }
+        if (!room_taken) {
+            layout.push_back({x, y});
+        }
     }
 
     // create rooms and room collisions
@@ -186,12 +192,10 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     // for rooms render rooms and connected doors, for doors render doors and connected rooms
     // since render boxes overlap in connected doors, both rooms will render for doors
     vector<vector<SDL_Rect>> render_grid(grid_width, vector<SDL_Rect>(grid_height, SDL_Rect()));
+    
 
     int x_offset = 0;
     int y_offset = 0;
-
-    int x_start;
-    int y_start;
 
     for (int x = 0; x < grid_width; x++) {
         for (int iy = 0; iy < grid_height; iy++) {
@@ -211,15 +215,10 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 rooms = room.genPassage(x_offset + grid[x][y].size(), y_offset + grid[x][y][0].size(), x_offset, y_offset, x_offset + max_col[x] + pad, y_offset + max_row[y] + pad, door_map[x][y], rooms);
                 rooms_col = room.genPassageCol(x_offset + grid[x][y].size(), y_offset + grid[x][y][0].size(), x_offset, y_offset, x_offset + max_col[x] + pad, y_offset + max_row[y] + pad, door_map[x][y], rooms_col);
 
-                // set first room to curRoom
-                if (layout[0][0] == x && layout[0][1] == y) {
-                    x_start = x_offset;
-                    y_start = y_offset;
-                }
-            }
-            // max_width, max_height
-            render_grid[x][y] = {x_offset, y_offset, 24, 24};
+                render_grid[x][y] = {x_offset, y_offset, int(grid[x][y].size()), int(grid[x][y][0].size())};
 
+                std::cout << "grid: x = "<< x << ", "<< y << " | "<< "Render grid: x = " << render_grid[x][y].x << ", y = " << render_grid[x][y].y << ", w = " << render_grid[x][y].w << ", h = " << render_grid[x][y].h << std::endl;
+            }
             if (max_row[y] > 0) y_offset += max_row[y] + pad;
         }
         if (max_col[x] > 0) x_offset += max_col[x] + pad;
@@ -231,25 +230,48 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     this->rooms_col = rooms_col;
     this->render_grid = render_grid;
 
-    setCurRoom(x_start, y_start);
+    roomCoord = {layout[0][0], layout[0][1]};
+    curRoom = render_grid[roomCoord[0]][roomCoord[1]];
 
     return grid;
 }
 
 void Floor::setCurRoom(int posX, int posY)
 {
-    for (int x = 0; x < render_grid.size(); x++) {
-        if (render_grid[x][0].x <= posX && render_grid[x][0].x + render_grid[x][0].w >= posX) {
-            for (int y = 0; y < render_grid[x].size(); y++) {
-                if (render_grid[x][y].w > 0) {
-                    if (render_grid[x][y].y <= posY && render_grid[x][y].y + render_grid[x][y].h >= posY) {
-                        curRoom = render_grid[x][y];
-                        return;
-                    }
-                }
-            }
+    if (door_map[roomCoord[0]][roomCoord[1]][3] != -1) {
+        if (render_grid[roomCoord[0] - 1][roomCoord[1]].x + render_grid[roomCoord[0] - 1][roomCoord[1]].w > posX) {
+            // decrement x coord and set curRoom to room left
+            roomCoord[0]--;
+            cout<<roomCoord[0]<<", "<<roomCoord[1]<<endl;
         }
     }
+
+    if (door_map[roomCoord[0]][roomCoord[1]][1] != -1) {
+        if (render_grid[roomCoord[0] + 1][roomCoord[1]].x < posX) {
+            // increment x coord and set curRoom to room right
+            roomCoord[0]++;
+            cout<<roomCoord[0]<<", "<<roomCoord[1]<<endl;
+        }
+    }
+
+    if (door_map[roomCoord[0]][roomCoord[1]][0] != -1) {
+        if (render_grid[roomCoord[0]][roomCoord[1] + 1].y + render_grid[roomCoord[0]][roomCoord[1] + 1].h > posY) {
+            // increment y coord and set curRoom to room above
+            roomCoord[1]++;
+            cout<<roomCoord[0]<<", "<<roomCoord[1]<<endl;
+        }
+    }
+    
+    if (door_map[roomCoord[0]][roomCoord[1]][2] != -1) {
+        if (render_grid[roomCoord[0]][roomCoord[1] - 1].y < posY) {
+            // decrement y coord and set curRoom to room below
+            roomCoord[1]--;
+            cout<<roomCoord[0]<<", "<<roomCoord[1]<<endl;
+        }
+    }
+
+    curRoom = render_grid[roomCoord[0]][roomCoord[1]];
+    return;    
 }
 
 SDL_Rect Floor::getCurRoom()
