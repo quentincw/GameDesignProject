@@ -1,4 +1,4 @@
-#include "PlayerView.h"
+/*#include "PlayerView.h"
 #include "Process.h"
 #include "GameObject.h"
 
@@ -34,3 +34,4 @@ void PlayerView::renderProcesses()
         process->render();
     }
 }
+*/

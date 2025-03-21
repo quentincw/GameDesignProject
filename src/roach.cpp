@@ -10,7 +10,9 @@
 Roach::Roach(int x, int y) : Enemy(x, y) {
 
     health = 100;
-    hitbox.radius = 10;
+    hitbox.height = 10;
+    hitbox.width = 10;
+    radius = 10;
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
@@ -24,15 +26,18 @@ void Roach::Update(float deltaTime) {
 
 // draws the object
 void Roach::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 255, 0, 0, 255);
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x, point.y, radius, 255, 0, 0, 255);
 }
 
 // updates the ai based on the player's position
-void Roach::UpdateAI(Circle phitbox) {
+void Roach::UpdateAI(Rectangle phitbox) {
 
+    Point playerCenter = getCenter(&phitbox);
+    Point enemyCenter = getCenter(&hitbox);
     // calculate vector
-    float dx = phitbox.x - hitbox.x;
-    float dy = phitbox.y - hitbox.y;
+    float dx = playerCenter.x - enemyCenter.x;
+    float dy = playerCenter.y - enemyCenter.y;
 
     // normalize
     float length = sqrt((dx * dx) + (dy * dy));

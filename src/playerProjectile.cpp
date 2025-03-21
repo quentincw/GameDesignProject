@@ -8,7 +8,7 @@
 // constructor
 PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {
 
-    hitbox.radius = 15;
+    radius = 15;
     damage = 10;
     tags.push_back("Player");
     tags.push_back("Enemy");
@@ -22,7 +22,8 @@ void PlayerProjectile::Update(float deltaTime) {
 
 // draws the object
 void PlayerProjectile::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 0, 0, 255, 255);
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x, point.y, radius, 0, 0, 255, 255);
 }
 
 // handles the interactions with other objects

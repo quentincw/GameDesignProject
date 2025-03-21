@@ -11,7 +11,7 @@
 Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
     health = 150;
-    hitbox.radius = 15;
+    radius = 15;
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
@@ -29,20 +29,25 @@ void Spitter::Update(float deltaTime) {
 
 // draws the object
 void Spitter::Render(SDL_Renderer* renderer) {
-    filledCircleRGBA(renderer, hitbox.x, hitbox.y, hitbox.radius, 255, 255, 0, 255);
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x, point.y, radius, 255, 255, 0, 255);
 }
 
 // updates the ai based on the player's position
-void Spitter::UpdateAI(Circle phitbox) {
+void Spitter::UpdateAI(Rectangle phitbox) {
 
     if(cooldown <= 0){
         spitProjectile(phitbox);
         cooldown = 240;
     }
 
+    // get center of hitboxes
+    Point playerCenter = getCenter(&phitbox);
+    Point enemyCenter = getCenter(&hitbox);
+
     // calculate vector
-    float dx = phitbox.x - hitbox.x;
-    float dy = phitbox.y - hitbox.y;
+    float dx = playerCenter.x - enemyCenter.x;
+    float dy = playerCenter.y - enemyCenter.y;
 
     // normalize
     float length = sqrt((dx * dx) + (dy * dy));
@@ -69,11 +74,16 @@ void Spitter::UpdateAI(Circle phitbox) {
 }
 
 // creates a projectile object
-void Spitter::spitProjectile(Circle phitbox) {
+void Spitter::spitProjectile(Rectangle phitbox) {
+
+
+    // get center of hitboxes
+    Point playerCenter = getCenter(&phitbox);
+    Point enemyCenter = getCenter(&hitbox);
 
     // calculate vector
-    float dx = phitbox.x - hitbox.x;
-    float dy = phitbox.y - hitbox.y;
+    float dx = playerCenter.x - enemyCenter.x;
+    float dy = playerCenter.y - enemyCenter.y;
 
     // normalize
     float length = sqrt((dx * dx) + (dy * dy));

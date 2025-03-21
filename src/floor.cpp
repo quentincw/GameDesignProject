@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <stdio.h>
 #include <random>
@@ -264,3 +265,4 @@ vector<vector<int>> Floor::getRooms() {
 vector<vector<vector<SDL_Rect>>> Floor::getRoomsCol() {
     return rooms_col;
 }
+*/

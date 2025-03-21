@@ -8,7 +8,7 @@
 Projectile::Projectile(int x, int y, float startXSpeed, float startYSpeed) : GameProcess() {
     hitbox.x = x;
     hitbox.y = y;
-    hitbox.radius = 10;
+    radius = 10;
     xSpeed = startXSpeed;
     ySpeed = startYSpeed;
     damage = 10;

@@ -10,11 +10,6 @@
 #include "gameObject.h"
 
 
-struct Circle {
-    int x;
-    int y;
-    int radius;
-};
 
 class GameProcess : public GameObject {
 
@@ -47,9 +42,6 @@ class GameProcess : public GameObject {
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
 
-        // get the hitbox of the process
-        Circle getHitbox() const;
-
 
 
     protected:
@@ -60,8 +52,8 @@ class GameProcess : public GameObject {
         // map of all possible interactions a process can have
         //map<string, int> interactions;
 
-        // the x,y, and radius of the process
-        Circle hitbox;
+        // the radius of the circle for rendering
+        int radius;
 
         // mark for deletion flag
         bool deleteFlag;

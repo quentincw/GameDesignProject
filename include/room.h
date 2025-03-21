@@ -1,4 +1,4 @@
-#ifndef _ROOM_H_
+/*#ifndef _ROOM_H_
 #define _ROOM_H_
 
 #include <vector>
@@ -30,4 +30,4 @@ class Room {
     bool is_contiguous(int width, int height, vector<vector<vector<int>>> grid, vector<vector<bool>> walk_grid);
 };
 
-#endif /* _ROOM_H_ */
+#endif */ /* _ROOM_H_ */
