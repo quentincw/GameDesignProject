@@ -20,6 +20,7 @@ class Floor {
     private:
     // additional padding between rooms
     SDL_Rect curRoom;
+    vector<int> roomCoord;
     int pad;
     int grid_width;
     int grid_height;
