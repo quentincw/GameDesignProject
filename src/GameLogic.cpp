@@ -1,4 +1,3 @@
-/*
 #include "GameLogic.h"
 #include "Process.h"
 #include "GameObject.h"
@@ -70,4 +69,3 @@ void GameLogic::handleCollision(Process* p1, Process* p2, const std::string& mat
     p2->adjustHealth(p1->getInteractions().at(matchedTag));
     p1->handleInteraction(matchedTag);
 }
-*/

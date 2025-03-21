@@ -1,4 +1,4 @@
-/*#ifndef GAMELOGIC_H
+#ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
 #include "ProcessManager.h"
@@ -22,4 +22,4 @@ private:
     void handleCollision(Process* p1, Process* p2, const std::string& matchedTag);
 };
 
-#endif*/
+#endif

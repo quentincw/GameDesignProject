@@ -1,8 +1,3 @@
-int main(int argc, char** argv)
-{
-}
-
-/*
 //Using SDL and standard IO
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -17,9 +12,9 @@ int main(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    */
+
   /*** Initialization ***/
-  /*
+  
   // Create window
   SDL_Window* window = SDL_CreateWindow( "Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
   
@@ -148,8 +143,8 @@ int main(int argc, char** argv)
   tile_13.y = 32;
   tile_13.w = 16;
   tile_13.h = 16;
-  */
-  /*** Main Loop ***/ /*
+
+  /*** Main Loop ***/ 
   bool running = true;
   SDL_Event e;
 
@@ -272,9 +267,7 @@ int main(int argc, char** argv)
         startTicks = curTicks;
     }
   }
-    */
   /*** Clean Up ***/
-    /*
   // Destroy texture
   SDL_DestroyTexture( tile_texture );
   
@@ -290,4 +283,3 @@ int main(int argc, char** argv)
   // Done.
   return 0;
 }
-*/

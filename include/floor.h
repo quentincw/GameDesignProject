@@ -1,4 +1,4 @@
-/*#ifndef _FLOOR_H_
+#ifndef _FLOOR_H_
 #define _FLOOR_H_
 
 #include <vector>
@@ -33,4 +33,4 @@ class Floor {
     vector<vector<SDL_Rect>> render_grid;
 };
 
-#endif*/ /* _FLOOR_H_ */
+#endif /* _FLOOR_H_ */
