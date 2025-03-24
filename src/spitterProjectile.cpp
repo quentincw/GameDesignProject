@@ -27,6 +27,12 @@ void SpitterProjectile::Render(SDL_Renderer* renderer) {
     filledCircleRGBA(renderer, point.x, point.y, radius, 0, 255, 0, 255);
 }
 
+// draws the object based on the camera's position
+void SpitterProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 255, 0, 255);
+}
+
 // handles the interactions with other objects
 void SpitterProjectile::handleInteractions(int tag) {
     switch (tag) {

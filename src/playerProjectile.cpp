@@ -28,6 +28,12 @@ void PlayerProjectile::Render(SDL_Renderer* renderer) {
     filledCircleRGBA(renderer, point.x, point.y, radius, 0, 0, 255, 255);
 }
 
+// draws the object based on the camera's position
+void PlayerProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 0, 255, 255);
+}
+
 // handles the interactions with other objects
 void PlayerProjectile::handleInteractions(int tag) {
     switch (tag) {

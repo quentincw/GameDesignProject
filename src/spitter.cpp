@@ -35,6 +35,12 @@ void Spitter::Render(SDL_Renderer* renderer) {
     filledCircleRGBA(renderer, point.x, point.y, radius, 255, 255, 0, 255);
 }
 
+// draws the object based on the camera's position
+void Spitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 255, 0, 255);
+}
+
 // updates the ai based on the player's position
 void Spitter::UpdateAI(Rectangle phitbox) {
 

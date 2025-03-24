@@ -21,6 +21,9 @@ class TestWall : public GameObject {
         // draws the object
         void Render(SDL_Renderer* renderer);
 
+        // draws the object based on the camera's position
+        void RenderCam(SDL_Renderer* renderer, int camX, int camY);
+
 
 };
 

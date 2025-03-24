@@ -20,6 +20,9 @@ class Projectile : public GameProcess {
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
 
+        // draws the object based on the camera's position
+        virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
+
         // get the damage the projectile causes to the player on contact
         int getDamage() const;
 
