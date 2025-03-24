@@ -144,7 +144,7 @@ int main(int argc, char** argv)
     vector<GameObject*> walls;
     GameObject* curWall;
     //create test wall
-    TestWall wall1(400, 400, 100, 100);
+    TestWall wall1(TOTAL_WIDTH/2, TOTAL_HEIGHT/2, TOTAL_HEIGHT/2, TOTAL_WIDTH/2);
     // edge walls
     TestWall wall2(0, 0, TOTAL_HEIGHT, 100);
     TestWall wall3(0, 0, 100, TOTAL_WIDTH );

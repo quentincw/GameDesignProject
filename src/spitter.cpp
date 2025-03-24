@@ -12,8 +12,8 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
     health = 150;
     radius = 15;
-    hitbox.height = 15;
-    hitbox.width = 15;
+    hitbox.height = 30;
+    hitbox.width = 30;
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
