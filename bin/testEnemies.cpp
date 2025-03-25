@@ -10,6 +10,7 @@
 #include "roach.h"
 #include "spitter.h"
 #include "playerProjectile.h"
+#include "spitterProjectile.h"
 #include "processManager.h"
 #include "testWall.h"
 #include "gameObject.h"
@@ -177,7 +178,7 @@ int main(int argc, char** argv)
     bool curRoom = true;
 
     Spitter spitter2(30, 30);
-    Spitter spitter3(400, 400);
+    Spitter spitter3(700, 500);
     Spitter spitter4(1000, 30);
 
     room2.push_back(&spitter2);
@@ -265,11 +266,16 @@ int main(int argc, char** argv)
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];
             curHitbox = curProcess->getHitbox();
+
             if((curHitbox.x <= 0) || (curHitbox.y <= 0)){
-                curProcess->markForDeletion();
+                if (auto projectile = dynamic_cast<SpitterProjectile*>(curProcess)){
+                        curProcess->markForDeletion();
+                    }
             }
             else if((curHitbox.x + curHitbox.width >= SCREEN_WIDTH) || (curHitbox.y + curHitbox.height >= SCREEN_HEIGHT)){
-                curProcess->markForDeletion();
+                if (auto projectile = dynamic_cast<SpitterProjectile*>(curProcess)){
+                    curProcess->markForDeletion();
+                }
             }
         }
 
