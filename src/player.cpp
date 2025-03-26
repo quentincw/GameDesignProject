@@ -39,6 +39,15 @@ void Player::setPos(int x, int y)
     posY = y;
 }
 
+void Player::setMouse(float x, float y)
+{
+ 	float Vx = x - xPos;
+ 	float Vy = y - yPos;
+ 	float mag = sqrt(pow(Vx,2) + pow(Vy,2));
+ 	weaponX = Vx / mag;
+ 	weaponY = Vy / mag;
+}
+
 vector<int> Player::getPos()
 {
     return vector<int>{posX, posY};
@@ -99,4 +108,10 @@ bool Player::checkCollision(SDL_Rect rect)
         return true;
     }
     return false;
+}
+
+void Player::update(float deltaMS)
+{
+     xPos += xMove;
+     yPos += yMove;
 }
