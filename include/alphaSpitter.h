@@ -1,5 +1,5 @@
-#ifndef SPITTER_H
-#define SPITTER_H
+#ifndef ALPHASPITTER_H
+#define ALPHASPITTER_H
 
 #include <stdlib.h>
 #include <SDL.h>
@@ -9,12 +9,12 @@
 #include "enemy.h"
 #include "projectile.h"
 
-class Spitter : public Enemy {
+class AlphaSpitter : public Enemy {
 
     public:
 
         // constructor
-        Spitter(int x, int y);
+        AlphaSpitter(int x, int y);
 
         // updates the object
         void Update(float deltaTime);
