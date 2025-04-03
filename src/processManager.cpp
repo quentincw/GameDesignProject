@@ -132,3 +132,8 @@ void ProcessManager::updateEnemyAI() {
         }
     }
 }
+
+// returns the player's position
+GameProcess* ProcessManager::getPlayer() {
+    return player;
+}
