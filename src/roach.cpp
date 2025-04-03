@@ -39,6 +39,10 @@ void Roach::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 // updates the ai based on the player's position
 void Roach::UpdateAI(Rectangle phitbox) {
 
+    if(deleteFlag == true){
+        spawnBloodStain();
+    }
+
     Point playerCenter = getCenter(&phitbox);
     Point enemyCenter = getCenter(&hitbox);
     // calculate vector

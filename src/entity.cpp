@@ -4,6 +4,7 @@
 #include <vector>
 #include "entity.h"
 #include "gameProcess.h"
+#include "bloodStain.h"
 
 
 Entity::Entity() : GameProcess() {
@@ -27,4 +28,10 @@ void Entity::adjustHealth(int healthDamage) {
     if (health <= 0) {
         isAlive = false;
     }
+}
+
+void Entity::spawnBloodStain() {
+    BloodStain* blood = new BloodStain(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
+    childrenList.push_back(blood);
+    children = true;
 }

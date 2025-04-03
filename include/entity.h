@@ -54,6 +54,9 @@ class Entity : public GameProcess {
         // the speed of the entity
         float xSpeed, ySpeed;
 
+        // spawns a bloodstain child process
+        void spawnBloodStain();
+
 };
 
 

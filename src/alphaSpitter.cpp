@@ -44,6 +44,10 @@ void AlphaSpitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 // updates the ai based on the player's position
 void AlphaSpitter::UpdateAI(Rectangle phitbox) {
 
+    if(deleteFlag == true){
+        spawnBloodStain();
+    }
+
     if(cooldown <= 0){
         spitProjectile(phitbox);
         cooldown = 300;
@@ -110,7 +114,7 @@ void AlphaSpitter::spitProjectile(Rectangle phitbox) {
     SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
     //child = spit;
     // put spit in childrenList
-    childrenList.clear();
+    //childrenList.clear();
     childrenList.push_back(spit);
 
     

@@ -141,6 +141,10 @@ int main(int argc, char** argv)
     //Circle curCircle;
     Rectangle curHitbox;
 
+    //flag for killed processes
+    bool killed1 = false;
+    bool killed2 = false;
+
 
 
     // vector of current processes to check collisions/ oob
@@ -237,6 +241,13 @@ int main(int argc, char** argv)
                             room2 = manager.getProcessList();
                             manager.loadProcessList(room1);
                             curRoom = true;
+                        }
+                        break;
+                    case SDLK_k:
+                        //kill all the current processes
+                        for(int i = 0; i < curProcesses.size(); i++){
+                            curProcess = curProcesses[i];
+                            curProcess->markForDeletion();
                         }
                         break;
                     /*case SDLK_UP:
