@@ -16,6 +16,8 @@
 #include "gameObject.h"
 #include "alphaSpitter.h"
 #include "spewer.h"
+#include "healthPickup.h"
+
 using namespace std;
 
 //Screen dimension constants
@@ -171,11 +173,15 @@ int main(int argc, char** argv)
     // create a spewer
     Spewer spewer1(800, 200);
 
+    // healthpickup
+    HealthPickup health1(500, 250);
+
     // add processes to process manager
     manager.addProcess(&roach1);
     manager.addProcess(&spitter1);
     //manager.addProcess(&alphaSpitter1);
     manager.addProcess(&spewer1);
+    manager.addProcess(&health1);
     //manager.addProcess(&ball1);
 
     // storage for "room" process lists
