@@ -15,7 +15,7 @@ class Floor {
     void setCurRoom(int posX, int posY);
     SDL_Rect getCurRoom();
     vector<vector<int>> getRooms();
-    vector<vector<vector<SDL_Rect>>> getRoomsCol();
+    vector<vector<int>> getRoomsCol();
     
     private:
     // additional padding between rooms
@@ -29,7 +29,7 @@ class Floor {
     // row, col, tilemap[]
     vector<vector<int>> rooms;
     // row, col, collision map[]
-    vector<vector<vector<SDL_Rect>>> rooms_col;
+    vector<vector<int>> rooms_col;
     // rect areas in which tile and colliders will be used
     vector<vector<SDL_Rect>> render_grid;
 };

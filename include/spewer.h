@@ -1,17 +1,20 @@
-#ifndef ROACH_H
-#define ROACH_H
+#ifndef SPEWER_H
+#define SPEWER_H
 
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
+#include <cmath>
+#include <vector>
 #include "enemy.h"
+#include "projectile.h"
 
-class Roach : public Enemy {
+class Spewer : public Enemy {
 
     public:
 
         // constructor
-        Roach(int x, int y);
+        Spewer(int x, int y);
 
         // updates the object
         void Update(float deltaTime);
@@ -27,6 +30,23 @@ class Roach : public Enemy {
 
         // handles the interactions with other objects
         void handleInteractions(int tag);
+
+
+
+
+    private:
+
+        // time inbetween spitting, time the Spewer is stationary while spitting
+        float cooldown, windup;
+
+        // how fast the projectile will be
+        float spitSpeed;
+
+        // creates a projectile object
+        virtual void spitProjectile(Rectangle phitbox);
+
+
+
 
 
 };

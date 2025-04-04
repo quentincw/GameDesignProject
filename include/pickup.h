@@ -1,21 +1,30 @@
-#ifndef PROJECTILE_H
-#define PROJECTILE_H
+#ifndef PICKUP_H
+#define PICKUP_H
 
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "gameProcess.h"
 
+struct Stats {
+    int health;
+    int armor;
+    int damage;
+};
 
-class Projectile : public GameProcess {
+
+class Pickup : public GameProcess {
 
     public:
 
-        // constructor
-        Projectile(int x, int y, float startXSpeed, float startYSpeed);
+        // default constructor
+        Pickup(int x, int y);
+
+        // constructor with stats
+        Pickup(int x, int y, int health, int armor, int damage);
 
         // updates the object
-        virtual void Update(float deltaTime) = 0;
+        void Update(float deltaTime);
 
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
@@ -23,19 +32,17 @@ class Projectile : public GameProcess {
         // draws the object based on the camera's position
         virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
 
-        // get the damage the projectile causes to the player on contact
-        int getDamage() const;
+        // get the stats associated with the pickup
+        Stats getStats() const;
 
         // handles the interactions with other objects
         virtual void handleInteractions(int tag) = 0;
 
     protected:
         
-        // the current speed of the projectile
-        float xSpeed, ySpeed;
+        // the stats of the pickup
+        Stats pickupStats;
 
-        // the damage the projectile causes to the player
-        int damage;
 
 
 };

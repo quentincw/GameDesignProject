@@ -8,7 +8,7 @@ Player::Player() {
     velY = 0;
 }
 
-void Player::move(vector<vector<vector<SDL_Rect>>> tilemap_collision)
+void Player::move(vector<vector<int>> tilemap_collision)
 {
     posX += velX;
     posY += velY;
@@ -23,8 +23,8 @@ void Player::move(vector<vector<vector<SDL_Rect>>> tilemap_collision)
     // limit tileRange such that it does not reach out of bounds
     for (int x = max(0, tileX - tileRange); x < min(int(tilemap_collision.size()), tileX + tileRange); x++) {
         for (int y = max(0, tileY - tileRange); y < min(int(tilemap_collision[x].size()), tileY + tileRange); y++) {
-            for (SDL_Rect wall: tilemap_collision[x][y]) {
-                if (checkCollision(wall)) {
+            if (tilemap_collision[x][y]) {
+                if (checkCollision(x, y)) {
                     posX -= velX;
                     posY -= velY;
                 }
@@ -70,24 +70,24 @@ void Player::setVelY(int y)
     }
 }
 
-bool Player::checkCollision(SDL_Rect rect)
+bool Player::checkCollision(int x, int y)
 {
     // for circle/rect
     int cX, cY;
-    if (posX < rect.x) {
-        cX = rect.x;
+    if (posX < x) {
+        cX = x;
     }
-    else if (posX > rect.x + rect.w) {
-        cX = rect.x + rect.w;
+    else if (posX > x + (TILE_SIZE / 2)) {
+        cX = x + (TILE_SIZE / 2);
     }
     else {
         cX = posX;
     }
-    if (posY < rect.y) {
-        cY = rect.y;
+    if (posY < y) {
+        cY = y;
     }
-    else if (posY > rect.y + rect.h) {
-        cY = rect.y + rect.h;
+    else if (posY > y + (TILE_SIZE / 2)) {
+        cY = y + (TILE_SIZE / 2);
     }
     else {
         cY = posY;
