@@ -1,23 +1,24 @@
-// #ifndef PLAYERVIEW_H
-// #define PLAYERVIEW_H
+#ifndef PLAYERVIEW_H
+#define PLAYERVIEW_H
 
-// #include "processManager.h"
-// #include "levelManager.h"
+#include "processManager.h"
+#include "levelManager.h"
 
-// class PlayerView
-// {
-// public:
-//     PlayerView(ProcessManager* pm, LevelManager* lm);
+class PlayerView
+{
+public:
+    PlayerView(ProcessManager* pm, LevelManager* lm);
 
-//     void render();
+    void render();
+	void update(float deltaMS);
 
-// private:
-//     ProcessManager* processManager;
-//     LevelManager*   levelManager;
+private:
+    ProcessManager* processManager;
+    LevelManager*   levelManager;
 
-//     void renderLevel();
+    void renderLevel();
 
-//     void renderProcesses();
-// };
+    void renderProcesses();
+};
 
-// #endif
+#endif
