@@ -18,12 +18,13 @@
 #include "spewer.h"
 #include "healthPickup.h"
 #include "Player1.h"
+#include "playerView.h"
 
 using namespace std;
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
+/*const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;*/
 
 const int TOTAL_WIDTH = 1500;
 const int TOTAL_HEIGHT = 1500;
@@ -113,21 +114,8 @@ int main(int argc, char** argv)
 {
 
     /*** Initialization ***/
-  
-    // Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) csci437_error("SDL could not initialize!");
-
-    // Create window
-    SDL_Window* window = SDL_CreateWindow( "CSCI-437 Skeleton", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-    if( window == NULL ) csci437_error("Window could not be created!");
-
-    // Small delay to allow the system to create the window.
-    SDL_Delay(100);
-    
-    // Create renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
-    if (renderer == NULL) csci437_error("Unable to create renderer!");
-
+	PlayerView pv;
+	pv.initialize();
 
     // create "player"
     Player1 ball1(200, 200);
@@ -344,14 +332,16 @@ int main(int argc, char** argv)
         camY = (ball1.getHitbox().y + ball1.getHitbox().height / 2) - SCREEN_HEIGHT / 2;
 
         // draw screen
-        SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+        /*SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
         SDL_RenderClear( renderer );
         for(int i = 0; i < walls.size(); i++){
             curWall = walls[i];
             curWall->RenderCam(renderer, camX, camY );
         }
         manager.renderProcessesCam( renderer, camX, camY );
-        SDL_RenderPresent( renderer );
+        SDL_RenderPresent( renderer );*/
+		
+		pv.render(walls, &manager);
 
         // delta time calculation
         int deltaMS = SDL_GetTicks() - startMS;
@@ -359,7 +349,8 @@ int main(int argc, char** argv)
             SDL_Delay(TARGETMS - deltaMS);
         }
     }
-  
+	
+	pv.cleanup();
     // Done.
     return 0;
 }

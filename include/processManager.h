@@ -1,3 +1,6 @@
+#ifndef _PROCESSMANAGER_H_
+#define _PROCESSMANAGER_H_
+
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
@@ -64,7 +67,6 @@ class ProcessManager {
         // gives the player's position any enemies
         void updateEnemyAI();
 
-
-
-
 };
+
+#endif /* _PROCESSMANAGER_H_ */
