@@ -401,54 +401,20 @@ vector<vector<int>> Room::genPassage(int startX, int startY, int offsetX, int of
     return floor_grid;
 }
 
-vector<vector<int>> Room::genPassageCol(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<int>> floor_grid_col)
+vector<vector<int>> Room::genPassageCol(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, int pad, vector<int> door, vector<vector<int>> floor_grid_col)
 {
-    // int size = TILE_SIZE / 2;
-    // // right
-    // if (door[1] != -1) {
-    //     for (int x = startX; x < maxX ; x++) {
-    //         int posX = x * TILE_SIZE;
-
-    //         floor_grid_col[x][offsetY + door[1] - 1][0] = {posX, (offsetY + door[1] - 1) * TILE_SIZE, size, size};
-    //         floor_grid_col[x][offsetY + door[1] - 1][1] = {posX + size, (offsetY + door[1] - 1) * TILE_SIZE, size, size};
-
-    //         floor_grid_col[x][offsetY + door[1] + 1][2] = {posX, (offsetY + door[1] + 1) * TILE_SIZE + size, size, size};
-    //         floor_grid_col[x][offsetY + door[1] + 1][3] = {posX + size, (offsetY + door[1] + 1) * TILE_SIZE + size, size, size};
-    //     }
-    // }
-    // // down
-    // if (door[2] != -1) {
-    //     for (int y = startY; y < maxY; y++) {
-    //         int posY = y * TILE_SIZE;
-
-    //         floor_grid_col[offsetX + door[2] - 1][y][0] = {(offsetX + door[2] - 1) * TILE_SIZE, posY, size, size};
-    //         floor_grid_col[offsetX + door[2] - 1][y][2] = {(offsetX + door[2] - 1) * TILE_SIZE, posY + size, size, size};
-
-    //         floor_grid_col[offsetX + door[2] + 1][y][1] = {(offsetX + door[2] + 1) * TILE_SIZE + size, posY, size, size};
-    //         floor_grid_col[offsetX + door[2] + 1][y][3] = {(offsetX + door[2] + 1) * TILE_SIZE + size, posY + size, size, size};
-    //     }
-    // }
-
-    // return floor_grid_col;
-
     // right
     if (door[1] != -1) {
         for (int x = startX; x < maxX ; x++) {
-            floor_grid_col[x][offsetY + door[1] - 1] = (offsetY + door[1] - 1) * TILE_SIZE;
-            floor_grid_col[x + 1][offsetY + door[1] - 1] = (offsetY + door[1] - 1) * TILE_SIZE;
-
-            floor_grid_col[x][offsetY + door[1] + 1 + 1] = (offsetY + door[1] + 1) * TILE_SIZE;
-            floor_grid_col[x + 1][offsetY + door[1] + 1 + 1] = (offsetY + door[1] + 1);
+            floor_grid_col[x][offsetY + door[1] - 1] = 1;
+            floor_grid_col[x][offsetY + door[1] - 1 + pad] = 1;
         }
     }
     // down
     if (door[2] != -1) {
         for (int y = startY; y < maxY; y++) {
-            floor_grid_col[offsetX + door[2] - 1][y] = (offsetX + door[2] - 1) * TILE_SIZE;
-            floor_grid_col[offsetX + door[2] - 1][y + 1] = (offsetX + door[2] - 1) * TILE_SIZE;
-
-            floor_grid_col[offsetX + door[2] + 1 + 1][y] = (offsetX + door[2] + 1) * TILE_SIZE;
-            floor_grid_col[offsetX + door[2] + 1 + 1][y + 1] = (offsetX + door[2] + 1) * TILE_SIZE;
+            floor_grid_col[offsetX + door[2] - 1][y] = 1;
+            floor_grid_col[offsetX + door[2] - 1 + pad][y] = 1;
         }
     }
 
@@ -520,36 +486,11 @@ bool Room::is_contiguous(int width, int height, vector<vector<vector<int>>> grid
 }
 
 vector<vector<int>> Room::getTilemapCollision() {
-    // // row, col, Rect[]
-    // vector<vector<vector<SDL_Rect>>> tilemap_collision(grid_width, vector<vector<SDL_Rect>>(grid_height, vector<SDL_Rect>(4)));
-    // int size = TILE_SIZE / 2;
-    // for (int x = 0; x < grid_width; x++) {
-    //     for (int y = 0; y < grid_height; y++) {
-    //         int posX = x * TILE_SIZE;
-    //         int posY = y * TILE_SIZE;
-    //         if (grid[x][y][0] == 1 || grid[x][y][0] == 2) {
-    //             tilemap_collision[x][y][0] = {posX, posY, size, size};
-    //         }
-    //         if (grid[x][y][0] == 1 || grid[x][y][0] == 3) {
-    //             tilemap_collision[x][y][1] = {posX + size, posY, size, size};
-    //         }
-    //         if (grid[x][y][2] == 1 || grid[x][y][2] == 2) {
-    //             tilemap_collision[x][y][2] = {posX, posY + size, size, size};
-    //         }
-    //         if (grid[x][y][2] == 1 || grid[x][y][2] == 3) {
-    //             tilemap_collision[x][y][3] = {posX + size, posY + size, size, size};
-    //         }
-    //     }
-    // }
-    // return tilemap_collision;
-
     // subtile x, y (1 = wall, 0 = none)
     vector<vector<int>> tilemap_collision(grid_width * 2, vector<int>(grid_height * 2, 0));
     int size = TILE_SIZE / 2;
     for (int x = 0; x < grid_width; x++) {
         for (int y = 0; y < grid_height; y++) {
-            // 1 = wall, 2 = wall up/left, 3 = wall down/right, 4 = none
-            // [up, right, down, left]
             if (grid[x][y][0] == 1 || grid[x][y][0] == 2) {
                 tilemap_collision[x][y] = 1;
             }

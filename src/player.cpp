@@ -70,12 +70,15 @@ void Player::setVelY(int y)
     }
 }
 
-bool Player::checkCollision(int x, int y)
+bool Player::checkCollision(int xs, int ys)
 {
+    int x = xs * TILE_SIZE;
+    int y = ys * TILE_SIZE;
+    
     // for circle/rect
     int cX, cY;
-    if (posX < x) {
-        cX = x;
+    if (posX < x - (TILE_SIZE / 2)) {
+        cX = x - (TILE_SIZE / 2);
     }
     else if (posX > x + (TILE_SIZE / 2)) {
         cX = x + (TILE_SIZE / 2);
@@ -83,8 +86,8 @@ bool Player::checkCollision(int x, int y)
     else {
         cX = posX;
     }
-    if (posY < y) {
-        cY = y;
+    if (posY < y - (TILE_SIZE / 2)) {
+        cY = y - (TILE_SIZE / 2);
     }
     else if (posY > y + (TILE_SIZE / 2)) {
         cY = y + (TILE_SIZE / 2);

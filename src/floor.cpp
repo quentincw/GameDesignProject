@@ -254,7 +254,7 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 }
                 // create passages and passage collisions
                 rooms = room.genPassage(x_offset + grid[x][y].size(), y_offset + grid[x][y][0].size(), x_offset, y_offset, x_offset + max_col[x] + pad, y_offset + max_row[y] + pad, door_map[x][y], rooms);
-                rooms_col = room.genPassageCol(x_offset + grid[x][y].size(), y_offset + grid[x][y][0].size(), x_offset, y_offset, x_offset + max_col[x] + pad, y_offset + max_row[y] + pad, door_map[x][y], rooms_col);
+                rooms_col = room.genPassageCol(x_offset + grid[x][y].size(), y_offset + grid[x][y][0].size(), x_offset, y_offset, x_offset + max_col[x] + pad, y_offset + max_row[y] + pad, pad, door_map[x][y], rooms_col);
 
                 render_grid[x][y] = {x_offset, y_offset, int(grid[x][y].size()), int(grid[x][y][0].size())};
 
