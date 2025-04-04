@@ -12,7 +12,7 @@ class Player {
     Player();
     
     // Methods
-    void move(vector<vector<vector<SDL_Rect>>> tilemap_collision);
+    void move(vector<vector<int>> tilemap_collision);
     void setPos(int x, int y);
     vector<int> getPos();
     void setVelX(int x);
@@ -23,7 +23,7 @@ class Player {
     int posY;
     int velX;
     int velY;
-    bool checkCollision(SDL_Rect rect);
+    bool checkCollision(int x, int y);
 
 };
 

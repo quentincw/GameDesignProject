@@ -10,21 +10,16 @@ Floor::Floor() {
     pad = 3;
 }
 
-// start room: empty, 1 door, 12x9 (normal size)
-// boss room: empty, circle-ish shape, 1 door, size tbd
-// identify different room types: small, normal, large
-// small: empty (enemy encounter or reward), 2 doors, 8x6
-// normal: ~80 walk_pct, 2-4 doors, 12x9
-// large: ~60-80 walk_pct, 2-4 doors, size tbd (but should vary significantly), scroll
+// boss room: empty, circle-ish shape, 1 door, 24x24
+// small: empty (enemy encounter or reward), 2 doors, 8x8 - 11x11
+// normal: ~80-90 walk_pct, 2-4 doors, 12x12 - 15x15
+// large: ~60-80 walk_pct, 2-4 doors, 16x16 - 20x20
 
-// identify layout possibilities:
-// ~10-12 rooms (not including start and boss)
 // should be normal room in between any non-normal rooms
 // always start with: start -> normal -> normal -> etc.
 // always end with: normal -> boss
-// there is always at a base of 4 normal rooms, and start will be at least 3 steps from boss
+// start will be at least 3 steps from boss
 // small: 3-4 rooms
-// normal: 6-7 rooms
 // large: 2-3 rooms
 
 vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_rooms) {
@@ -47,8 +42,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
 
     // 2D vector of vector<vector<int>> (tilemap of a room)
     vector<vector<vector<vector<int>>>> grid(width, vector<vector<vector<int>>>(height));
-    // 2D vector of vector<vector<vector<SDL_Rect>>> (collision map of a room)
-    vector<vector<vector<vector<vector<SDL_Rect>>>>> grid_col(width, vector<vector<vector<vector<SDL_Rect>>>>(height));
+    // 2D vector of vector<vector<int>> (collision map of a room)
+    vector<vector<vector<vector<int>>>> grid_col(width, vector<vector<vector<int>>>(height));
     // 2D vector of [up, right, down, left]
     vector<vector<vector<int>>> door_map(width, vector<vector<int>>(height, {-1, -1, -1, -1}));
     // vector of x, y coordinates for all rooms in order
@@ -61,38 +56,58 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     int room_w_min = room_width;
     int room_h_min = room_height;
 
-    for (int r = 0; r < gen_rooms; r++) {
-        room_width = (distr(eng) % 16) + 8;
-        room_height = (distr(eng) % 16) + 8;
-        walk_pct = (distr(eng) % 20) + 70;
+    for (int r = 1; r < gen_rooms - 1; r++) {
+        if (r != 1 && r != 2 && r != gen_rooms - 2 && room_width < 15 && room_width > 12) {
+            room_width = (distr(eng) % 12) + 8;
+            room_height = (distr(eng) % 12) + 8;
+            if (room_width * room_height > 256) {
+                walk_pct = (distr(eng) % 20) + 60;
+            }
+            else {
+                walk_pct = (distr(eng) % 10) + 80;
+            }
+        }
+        // for the first second and last (not including start and boss) room or if previous room was not normal, set normal conditions
+        else {
+            room_width = (distr(eng) % 3) + 12;
+            room_height = (distr(eng) % 3) + 12;
+            walk_pct = (distr(eng) % 10) + 80;
+        }
         dimensions.push_back({room_width, room_height, walk_pct});
         if (room_w_min > room_width) room_w_min = room_width;
         if (room_h_min > room_height) room_h_min = room_height;
     }
+
+    room_width = 24;
+    room_height = 24;
+    walk_pct = 100;
+    dimensions.push_back({room_width, room_height, walk_pct});
 
     int x = distr(eng) % width;
     int y = distr(eng) % height;
 
     layout.push_back({x, y});
 
+    bool start_con = false;
+
     while (layout.size() < gen_rooms) {
         bool room_taken = false;
         int locX = (distr(eng) % (room_h_min - 4)) + 2;
         int locY = (distr(eng) % (room_w_min - 4)) + 2;
-        bool up = y + 1 <= height - 1 && door_map[x][y][0] == -1;
-        bool right = x + 1 <= width - 1 && door_map[x][y][1] == -1;
-        bool down = y - 1 >= 0 && door_map[x][y][2] == -1;
-        bool left = x - 1 >= 0 && door_map[x][y][3] == -1;
+        bool up = y + 1 <= height - 1 && door_map[x][y][0] == -1 && (!start_con || (start_con && (layout[0][0] != x || layout[0][1] != y + 1)));
+        bool right = x + 1 <= width - 1 && door_map[x][y][1] == -1 && (!start_con || (start_con && (layout[0][0] != x + 1 || layout[0][1] != y)));
+        bool down = y - 1 >= 0 && door_map[x][y][2] == -1 && (!start_con || (start_con && (layout[0][0] != x || layout[0][1] != y - 1)));
+        bool left = x - 1 >= 0 && door_map[x][y][3] == -1 && (!start_con || (start_con && (layout[0][0] != x - 1 || layout[0][1] != y)));
         vector<int> pool = {};
         int layout_index = 0;
 
         while (!left && !right && !up && !down) {
             x = layout[layout.size() - 1 - layout_index][0];
             y = layout[layout.size() - 1 - layout_index][1];
-            up = y + 1 <= height - 1 && door_map[x][y][0] == -1;
-            right = x + 1 <= width - 1 && door_map[x][y][1] == -1;
-            down = y - 1 >= 0 && door_map[x][y][2] == -1;
-            left = x - 1 >= 0 && door_map[x][y][3] == -1;
+            up = y + 1 <= height - 1 && door_map[x][y][0] == -1 && (!start_con || (start_con && (layout[0][0] != x || layout[0][1] != y + 1)));
+            right = x + 1 <= width - 1 && door_map[x][y][1] == -1 && (!start_con || (start_con && (layout[0][0] != x + 1 || layout[0][1] != y)));
+            down = y - 1 >= 0 && door_map[x][y][2] == -1 && (!start_con || (start_con && (layout[0][0] != x || layout[0][1] != y - 1)));
+            left = x - 1 >= 0 && door_map[x][y][3] == -1 && (!start_con || (start_con && (layout[0][0] != x - 1 || layout[0][1] != y)));
             layout_index++;
         }
 
@@ -111,27 +126,54 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
 
         int rand = pool[distr(eng) % pool.size()];
 
-        if (rand == 0) {
-            // mark door location for room and effected adjacent room
-            door_map[x][y] = {door_map[x][y][0], door_map[x][y][1], door_map[x][y][2], locX};
-            door_map[x - 1][y] = {door_map[x - 1][y][0], locX, door_map[x - 1][y][2], door_map[x - 1][y][3]};
-            x--;
+        if (left) {
+            if (rand == 0) {
+                // mark door location for room and effected adjacent room
+                door_map[x][y][3] = locX;
+                door_map[x - 1][y][1] = locX;
+                x--;
+            }
+            else if (door_map[x - 1][y][0] != -1 || door_map[x - 1][y][2] != -1 || door_map[x - 1][y][3] != -1) {
+                door_map[x][y][3] = locX;
+                door_map[x - 1][y][1] = locX;
+            }
         }
-        if (rand == 1) {
-            door_map[x][y] = {door_map[x][y][0], locX, door_map[x][y][2], door_map[x][y][3]};
-            door_map[x + 1][y] = {door_map[x + 1][y][0], door_map[x + 1][y][1], door_map[x + 1][y][2], locX};
-            x++;
+        if (right) {
+            if (rand == 1) {
+                door_map[x][y][1] = locX;
+                door_map[x + 1][y][3] = locX;
+                x++;
+            }
+            else if (door_map[x + 1][y][0] != -1 || door_map[x + 1][y][1] != -1 || door_map[x + 1][y][2] != -1) {
+                door_map[x][y][1] = locX;
+                door_map[x + 1][y][3] = locX;
+            }
         }
-        if (rand == 2) {
-            door_map[x][y] = {locY, door_map[x][y][1], door_map[x][y][2], door_map[x][y][3]};
-            door_map[x][y + 1] = {door_map[x][y + 1][0], door_map[x][y + 1][1], locY, door_map[x][y + 1][3]};
-            y++;
+        if (up) {
+            if (rand == 2) {
+                door_map[x][y][0] = locY;
+                door_map[x][y + 1][2] = locY;
+                y++;
+            }
+            else if (door_map[x][y + 1][0] != -1 || door_map[x][y + 1][1] != -1 || door_map[x][y + 1][3] != -1) {
+                door_map[x][y][0] = locY;
+                door_map[x][y + 1][2] = locY;
+            }
         }
-        if (rand == 3) {
-            door_map[x][y] = {door_map[x][y][0], door_map[x][y][1], locY, door_map[x][y][3]};
-            door_map[x][y - 1] = {locY, door_map[x][y - 1][1], door_map[x][y - 1][2], door_map[x][y - 1][3]};
-            y--;
+        if (down) {
+            if (rand == 3) {
+                door_map[x][y][2] = locY;
+                door_map[x][y - 1][0] = locY;
+                y--;
+            }
+            else if (door_map[x][y - 1][1] != -1 || door_map[x][y - 1][2] != -1 || door_map[x][y - 1][3] != -1) {
+                door_map[x][y][2] = locY;
+                door_map[x][y - 1][0] = locY;
+            }
         }
+
+        start_con = true;
+
         for (vector<int> coord : layout) {
             if (coord[0] == x && coord[1] == y) {
                 room_taken = true;
@@ -186,7 +228,7 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
 
     // vector that consolidates the rooms in grid to a 2D vector of all rooms (tiles)
     vector<vector<int>> rooms(max_col_total, vector<int>(max_row_total, -1));
-    vector<vector<vector<SDL_Rect>>> rooms_col(max_col_total, vector<vector<SDL_Rect>>(max_row_total, vector<SDL_Rect>(4)));
+    vector<vector<int>> rooms_col(max_col_total * 2, vector<int>(max_row_total * 2, 0));
 
     // stores rects that determine what should be rendered at given coordinates
     // for rooms render rooms and connected doors, for doors render doors and connected rooms
@@ -205,10 +247,9 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                     for (int j = 0; j < grid[x][y][i].size(); j++) {
                         rooms[i + x_offset][j + y_offset] = grid[x][y][i][j];
                         rooms_col[i + x_offset][j + y_offset] = grid_col[x][y][i][j];
-                        for (int k = 0; k < grid_col[x][y][i][j].size(); k++) {
-                            rooms_col[i + x_offset][j + y_offset][k].x += x_offset * TILE_SIZE;
-                            rooms_col[i + x_offset][j + y_offset][k].y += y_offset * TILE_SIZE;
-                        }
+                        rooms_col[i + x_offset + 1][j + y_offset] = grid_col[x][y][i + 1][j];
+                        rooms_col[i + x_offset][j + y_offset + 1] = grid_col[x][y][i][j + 1];
+                        rooms_col[i + x_offset + 1][j + y_offset + 1] = grid_col[x][y][i + 1][j + 1];
                     }
                 }
                 // create passages and passage collisions
@@ -283,6 +324,6 @@ vector<vector<int>> Floor::getRooms() {
     return rooms;
 }
 
-vector<vector<vector<SDL_Rect>>> Floor::getRoomsCol() {
+vector<vector<int>> Floor::getRoomsCol() {
     return rooms_col;
 }
