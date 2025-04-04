@@ -3,6 +3,7 @@
 
 // #include "processManager.h"
 // #include "levelManager.h"
+// #include "constants.h"
 
 // class PlayerView
 // {
@@ -18,6 +19,13 @@
 //     void renderLevel();
 
 //     void renderProcesses();
+
+       // updates the camera's position based on the player's position
+//     updateCameraPosition();
+
+       // The x and y of the camera
+//     int cameraX;
+//     int cameraY;
 // };
 
 // #endif

@@ -3,46 +3,46 @@
 #include <SDL2_gfxPrimitives.h>
 #include <cmath>
 #include "enemy.h"
-#include "spitter.h"
+#include "alphaSpitter.h"
 #include "spitterProjectile.h"
 
 
 // constructor
-Spitter::Spitter(int x, int y) : Enemy(x, y) {
+AlphaSpitter::AlphaSpitter(int x, int y) : Enemy(x, y) {
 
-    health = 150;
-    radius = 15;
-    hitbox.height = 30;
-    hitbox.width = 30;
+    health = 250;
+    radius = 25;
+    hitbox.height = 50;
+    hitbox.width = 50;
     xSpeed = 0;
     ySpeed = 0;
     damage = 50;
-    cooldown = 240;
+    cooldown = 300;
     windup = 0;
     spitSpeed = 5;
 }
 
 // updates the object
-void Spitter::Update(float deltaTime) {
+void AlphaSpitter::Update(float deltaTime) {
     hitbox.x = hitbox.x + xSpeed;
     hitbox.y = hitbox.y + ySpeed;
     cooldown = cooldown - 1;
 }
 
 // draws the object
-void Spitter::Render(SDL_Renderer* renderer) {
+void AlphaSpitter::Render(SDL_Renderer* renderer) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x, point.y, radius, 255, 255, 0, 255);
 }
 
 // draws the object based on the camera's position
-void Spitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+void AlphaSpitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 255, 0, 255);
 }
 
 // updates the ai based on the player's position
-void Spitter::UpdateAI(Rectangle phitbox) {
+void AlphaSpitter::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
@@ -50,7 +50,7 @@ void Spitter::UpdateAI(Rectangle phitbox) {
 
     if(cooldown <= 0){
         spitProjectile(phitbox);
-        cooldown = 240;
+        cooldown = 300;
     }
 
     // get center of hitboxes
@@ -86,7 +86,7 @@ void Spitter::UpdateAI(Rectangle phitbox) {
 }
 
 // creates a projectile object
-void Spitter::spitProjectile(Rectangle phitbox) {
+void AlphaSpitter::spitProjectile(Rectangle phitbox) {
 
 
     // get center of hitboxes
@@ -124,7 +124,7 @@ void Spitter::spitProjectile(Rectangle phitbox) {
 
 
 // handles the interactions with other objects
-void Spitter::handleInteractions(int tag) {
+void AlphaSpitter::handleInteractions(int tag) {
 
 }
 

@@ -20,6 +20,9 @@ class PlayerProjectile : public Projectile {
         // draws the object
         void Render(SDL_Renderer* renderer);
 
+        // draws the object based on the camera's position
+        void RenderCam(SDL_Renderer* renderer, int camX, int camY);
+
         // handles the interactions with other objects
         void handleInteractions(int tag);
 

@@ -9,8 +9,8 @@
 PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {
 
     radius = 15;
-    hitbox.height = 15;
-    hitbox.width = 15;
+    hitbox.height = 30;
+    hitbox.width = 30;
     damage = 10;
     tags.push_back("Player");
     tags.push_back("Enemy");
@@ -26,6 +26,12 @@ void PlayerProjectile::Update(float deltaTime) {
 void PlayerProjectile::Render(SDL_Renderer* renderer) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x, point.y, radius, 0, 0, 255, 255);
+}
+
+// draws the object based on the camera's position
+void PlayerProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 0, 255, 255);
 }
 
 // handles the interactions with other objects

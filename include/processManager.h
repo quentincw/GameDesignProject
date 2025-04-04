@@ -25,6 +25,9 @@ class ProcessManager {
         // draws the object
         void renderProcesses(SDL_Renderer* renderer);
 
+        // draws the objects based on the camera position
+        void renderProcessesCam(SDL_Renderer* renderer, int camX, int camY);
+
         // loads a process list from a room
         void loadProcessList(std::vector<GameProcess*> newList);
 

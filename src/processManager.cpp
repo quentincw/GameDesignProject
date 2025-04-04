@@ -8,7 +8,8 @@
 #include "playerProjectile.h"
 #include "enemy.h"
 
-
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;
 
 // constructor for process manager
 ProcessManager::ProcessManager() {
@@ -45,11 +46,19 @@ void ProcessManager::updateProcesses(float deltaTime) {
 // draws the objects
 void ProcessManager::renderProcesses(SDL_Renderer* renderer) {
 
-    
     for(int i = 0; i < processList.size(); i++){
         processList[i]->Render( renderer );
     }
     player->Render( renderer );
+}
+
+// draws the objects based on the camera's postion
+void ProcessManager::renderProcessesCam(SDL_Renderer* renderer, int camX, int camY) {
+
+    for(int i = 0; i < processList.size(); i++){
+        processList[i]->RenderCam( renderer, camX, camY );
+    }
+    player->RenderCam( renderer, camX, camY );
 }
 
 // loads a process list from a room
@@ -122,4 +131,9 @@ void ProcessManager::updateEnemyAI() {
             enemyCount++;
         }
     }
+}
+
+// returns the player's position
+GameProcess* ProcessManager::getPlayer() {
+    return player;
 }
