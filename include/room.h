@@ -13,8 +13,8 @@ class Room {
     // Methods
     vector<vector<int>> gen(int width, int height, vector<int> door, int walk_pct = 0);
     vector<vector<int>> genPassage(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<int>> floor_grid);
-    vector<vector<vector<SDL_Rect>>> genPassageCol(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<vector<SDL_Rect>>> floor_grid_col);
-    vector<vector<vector<SDL_Rect>>> getTilemapCollision();
+    vector<vector<int>> genPassageCol(int startX, int startY, int offsetX, int offsetY, int maxX, int maxY, vector<int> door, vector<vector<int>> floor_grid_col);
+    vector<vector<int>> getTilemapCollision();
     
     private:
     int grid_width;
