@@ -6,6 +6,7 @@
 #include "gameProcess.h"
 #include "playerProjectile.h"
 #include "enemy.h"
+#include "Player1.h"
 
 
 
@@ -17,7 +18,7 @@ class ProcessManager {
         ProcessManager();
 
         // constructor for testing targetting
-        ProcessManager(PlayerProjectile* newProj);
+        ProcessManager(Player1* newPlayer);
 
         // updates the list of processes
         void updateProcesses(float deltaTime);
@@ -49,7 +50,7 @@ class ProcessManager {
         std::vector<GameProcess*> processList;
 
         // player object
-        PlayerProjectile* player;
+        Player1* player;
 
         // number of enemies in the process list
         int enemyCount;

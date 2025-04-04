@@ -14,6 +14,7 @@
 #include "processManager.h"
 #include "testWall.h"
 #include "gameObject.h"
+#include "Player1.h"
 
 using namespace std;
 
@@ -146,7 +147,7 @@ int main(int argc, char** argv)
 
 
     // create "player"
-    PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
+    Player1 ball1(0, 0);
 
     // create process manager
     ProcessManager manager(&ball1);
@@ -227,18 +228,18 @@ int main(int argc, char** argv)
                             curRoom = true;
                         }
                         break;
-                    /*case SDLK_UP:
-                        roach1.UpdateAI(roach1.getXpos(), 100);
+                    case SDLK_UP:
+                        ball1.setSpeedY(-3);
                         break;
                     case SDLK_DOWN:
-                        roach1.UpdateAI(roach1.getXpos(), SCREEN_HEIGHT - 100);
+                        ball1.setSpeedY(3);
                         break;
                     case SDLK_RIGHT:
-                        roach1.UpdateAI(SCREEN_WIDTH - 100, roach1.getYpos());
+                        ball1.setSpeedX(3);
                         break;
                     case SDLK_LEFT:
-                        roach1.UpdateAI(100, roach1.getYpos());
-                        break;*/
+                        ball1.setSpeedX(-3);
+                        break;
                 }
             }
             else {
@@ -248,7 +249,7 @@ int main(int argc, char** argv)
 
         manager.updateProcesses(1);
 
-        projectileCollision(&ball1);
+        //projectileCollision(&ball1);
 
         curProcesses = manager.getProcessList();
         /*
@@ -279,7 +280,7 @@ int main(int argc, char** argv)
             }
         }
 
-        if(checkCollision(&wall1, &ball1)){
+        /*if(checkCollision(&wall1, &ball1)){
             //cout << "collision";
             int code = moveInbounds(&wall1, &ball1);
             if (code == 1 || code == 3){
@@ -288,7 +289,7 @@ int main(int argc, char** argv)
             else {
                 ball1.bounceY(ball1.getHitbox().y);
             }
-        }
+        }*/
 
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];

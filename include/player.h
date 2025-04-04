@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <vector>
+#include "entity.h"
 using namespace std;
 
 class Player {
@@ -17,6 +18,7 @@ class Player {
     vector<int> getPos();
     void setVelX(int x);
     void setVelY(int y);
+	void Update(float deltaTime);
     
     private:
     int posX;
