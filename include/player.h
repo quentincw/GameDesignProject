@@ -25,6 +25,8 @@ class Player {
     int posY;
     int velX;
     int velY;
+	float weaponX;
+	float weaponY;
     bool checkCollision(SDL_Rect rect);
 
 };

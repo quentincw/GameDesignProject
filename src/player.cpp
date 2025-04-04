@@ -112,6 +112,29 @@ bool Player::checkCollision(SDL_Rect rect)
 
 void Player::update(float deltaMS)
 {
-     xPos += xMove;
-     yPos += yMove;
+    while( SDL_PollEvent( &e ) != 0 )
+     {
+       // User requests quit
+       if( e.type == SDL_QUIT ); //quit;
+
+       // User presses a key
+       if( e.type == SDL_KEYDOWN )
+       {
+		if( e.key.keysym.sym == SDLK_q );//quit;
+ 		if( e.key.keysym.sym == SDLK_w) velY = -0.5;
+ 		if( e.key.keysym.sym == SDLK_a) velX = -0.5;
+ 		if( e.key.keysym.sym == SDLK_s) velY = 0.5;
+ 		if( e.key.keysym.sym == SDLK_d) velX = 0.5;
+       }
+	   if( e.type == SDL_KEYUP )
+ 	   {
+ 		if( e.key.keysym.sym == SDLK_w) velY = 0;
+ 		if( e.key.keysym.sym == SDLK_a) velX = 0;
+ 		if( e.key.keysym.sym == SDLK_s) velY = 0;
+ 		if( e.key.keysym.sym == SDLK_d) velX = 0;
+ 	   }
+     }
+	
+	//player move
+	
 }
