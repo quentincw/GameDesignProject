@@ -36,6 +36,73 @@ void PlayerView::cleanup()
     SDL_Quit();
 }
 
+void PlayerView::handleInputs(ProcessManager* pm)
+{
+	SDL_Event e;
+	auto player = dynamic_cast<Player1*>(pm->getPlayer());
+	auto curProcesses = pm->getProcessList();
+	while( SDL_PollEvent( &e ) != 0)
+        {
+              // User requests quit
+            //if( e.type == SDL_QUIT ) running = false;
+
+            // User presses a key
+            if( e.type == SDL_KEYDOWN ){
+
+                switch(e.key.keysym.sym){
+                    /*case SDLK_q:
+                        running = false;
+                        break;
+                    /*case SDLK_s:
+                        // check which list is active (true = room1)
+                        if(curRoom){
+                            room1 = manager.getProcessList();
+                            manager.loadProcessList(room2);
+                            curRoom = false;
+                        }
+                        else{
+                            room2 = manager.getProcessList();
+                            manager.loadProcessList(room1);
+                            curRoom = true;
+                        }
+                        break;*/
+                    case SDLK_k:
+                        //kill all the current processes
+                        for(int i = 0; i < curProcesses.size(); i++){
+                            auto curProcess = curProcesses[i];
+                            curProcess->markForDeletion();
+                        }
+                        break;
+                    case SDLK_UP:
+                        player->setSpeedY(-3);
+                        break;
+                    case SDLK_DOWN:
+                        player->setSpeedY(3);
+                        break;
+                    case SDLK_RIGHT:
+                        player->setSpeedX(3);
+                        break;
+                    case SDLK_LEFT:
+                        player->setSpeedX(-3);
+                        break;
+					case SDLK_g:
+						int mouseX = 0;
+						int mouseY = 0;
+					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
+						player->updateMouse(mouseX, mouseY);
+
+						player->shootProj(cameraX, cameraY);
+						break;
+                }
+            }
+            else {
+            // no keys pressed,
+				player->setSpeedX(0);
+				player->setSpeedY(0);
+            }
+        }
+}
+
 void PlayerView::render(vector<GameObject*> walls, ProcessManager* pm)
 {
 	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );

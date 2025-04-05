@@ -17,6 +17,8 @@ public:
 	void cleanup();
 
     void render(vector<GameObject*> walls, ProcessManager* pm);
+	
+	void handleInputs(ProcessManager* pm);
 
 private:
 

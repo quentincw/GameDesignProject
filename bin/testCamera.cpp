@@ -211,7 +211,8 @@ int main(int argc, char** argv)
         // get start timee
         int startMS = SDL_GetTicks();
         // Handle events on queue
-        while( SDL_PollEvent( &e ) != 0)
+		pv.handleInputs(&manager);
+        /*while( SDL_PollEvent( &e ) != 0)
         {
               // User requests quit
             if( e.type == SDL_QUIT ) running = false;
@@ -269,7 +270,7 @@ int main(int argc, char** argv)
 				ball1.setSpeedX(0);
 				ball1.setSpeedY(0);
             }
-        }
+        }*/
 
         manager.updateProcesses(1);
 
