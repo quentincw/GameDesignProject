@@ -67,5 +67,3 @@ void Roach::UpdateAI(Rectangle phitbox) {
 void Roach::handleInteractions(int tag) {
 
 }
-
-
