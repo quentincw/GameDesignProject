@@ -22,8 +22,19 @@ Player1::Player1(int x, int y) : Entity() {
 
 // updates the object
 void Player1::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+	float dx, dy;
+	if (abs(xSpeed) == abs(ySpeed)){
+		dx = sqrt(xSpeed*xSpeed/2);
+		dy = sqrt(ySpeed*ySpeed/2);
+		if (xSpeed<0) dx*=-1;
+		if (ySpeed<0) dy*=-1;
+	}
+	else{
+		dx = xSpeed;
+		dy = ySpeed;
+	}
+    hitbox.x = hitbox.x + dx;
+    hitbox.y = hitbox.y + dy;
 	cooldown-=1;
 }
 

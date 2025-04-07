@@ -73,16 +73,16 @@ void PlayerView::handleInputs(ProcessManager* pm)
                             curProcess->markForDeletion();
                         }
                         break;
-                    case SDLK_UP:
+                    case SDLK_w:
                         player->setSpeedY(-3);
                         break;
-                    case SDLK_DOWN:
+                    case SDLK_s:
                         player->setSpeedY(3);
                         break;
-                    case SDLK_RIGHT:
+                    case SDLK_d:
                         player->setSpeedX(3);
                         break;
-                    case SDLK_LEFT:
+                    case SDLK_a:
                         player->setSpeedX(-3);
                         break;
 					case SDLK_g:
@@ -99,16 +99,16 @@ void PlayerView::handleInputs(ProcessManager* pm)
 			else if( e.type == SDL_KEYUP ){
 
                 switch(e.key.keysym.sym){
-					case SDLK_UP:
+					case SDLK_w:
 						player->setSpeedY(0);
 						break;
-					case SDLK_DOWN:
+					case SDLK_s:
 						player->setSpeedY(0);
 						break;
-					case SDLK_RIGHT:
+					case SDLK_d:
 						player->setSpeedX(0);
 						break;
-					case SDLK_LEFT:
+					case SDLK_a:
 						player->setSpeedX(0);
 						break;
 				}
