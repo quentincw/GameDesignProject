@@ -19,3 +19,8 @@ TestWall::TestWall(int x, int y, int height, int width)  {
 void TestWall::Render(SDL_Renderer* renderer) {
     rectangleRGBA(renderer, hitbox.x, hitbox.y, hitbox.x + hitbox.width, hitbox.y + hitbox.height, 0, 100, 255, 255);
 }
+
+// draws the object based on the camera's position
+void TestWall::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    rectangleRGBA(renderer, hitbox.x - camX, hitbox.y - camY, hitbox.x - camX + hitbox.width, hitbox.y - camY + hitbox.height, 0, 100, 255, 255);
+}

@@ -1,3 +1,6 @@
+#ifndef _PROCESSMANAGER_H_
+#define _PROCESSMANAGER_H_
+
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
@@ -6,6 +9,7 @@
 #include "gameProcess.h"
 #include "playerProjectile.h"
 #include "enemy.h"
+#include "Player1.h"
 
 
 
@@ -17,13 +21,16 @@ class ProcessManager {
         ProcessManager();
 
         // constructor for testing targetting
-        ProcessManager(PlayerProjectile* newProj);
+        ProcessManager(Player1* newPlayer);
 
         // updates the list of processes
         void updateProcesses(float deltaTime);
 
         // draws the object
         void renderProcesses(SDL_Renderer* renderer);
+
+        // draws the objects based on the camera position
+        void renderProcessesCam(SDL_Renderer* renderer, int camX, int camY);
 
         // loads a process list from a room
         void loadProcessList(std::vector<GameProcess*> newList);
@@ -46,7 +53,7 @@ class ProcessManager {
         std::vector<GameProcess*> processList;
 
         // player object
-        PlayerProjectile* player;
+        Player1* player;
 
         // number of enemies in the process list
         int enemyCount;
@@ -60,7 +67,6 @@ class ProcessManager {
         // gives the player's position any enemies
         void updateEnemyAI();
 
-
-
-
 };
+
+#endif /* _PROCESSMANAGER_H_ */

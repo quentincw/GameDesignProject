@@ -34,7 +34,9 @@ bool GameProcess::getMarkForDeletion() const {
 // returns a vector of all the children of a process
 std::vector<GameProcess*> GameProcess::getChildren(){
     children = false;
-    return childrenList;
+    std::vector<GameProcess*> childrenTemp = childrenList;
+    childrenList.clear();
+    return childrenTemp;
 }
 
 
