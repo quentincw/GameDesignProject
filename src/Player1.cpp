@@ -15,8 +15,8 @@ Player1::Player1(int x, int y) : Entity() {
 	hitbox.x = x;
 	hitbox.y = y;
     radius = 10;
-    xSpeed = 3;
-    ySpeed = 3;
+    xSpeed = 0;
+    ySpeed = 0;
 	cooldown = 40;
 }
 
