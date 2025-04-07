@@ -23,7 +23,7 @@ class Player {
     int posY;
     int velX;
     int velY;
-    bool checkCollision(int x, int y);
+    bool checkCollision(int xs, int ys);
 
 };
 
