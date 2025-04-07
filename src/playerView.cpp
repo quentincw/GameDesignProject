@@ -95,10 +95,26 @@ void PlayerView::handleInputs(ProcessManager* pm)
 						break;
                 }
             }
+			// User releases a key
+			else if( e.type == SDL_KEYUP ){
+
+                switch(e.key.keysym.sym){
+					case SDLK_UP:
+						player->setSpeedY(0);
+						break;
+					case SDLK_DOWN:
+						player->setSpeedY(0);
+						break;
+					case SDLK_RIGHT:
+						player->setSpeedX(0);
+						break;
+					case SDLK_LEFT:
+						player->setSpeedX(0);
+						break;
+				}
+			}
             else {
             // no keys pressed,
-				player->setSpeedX(0);
-				player->setSpeedY(0);
             }
         }
 }
