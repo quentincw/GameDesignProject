@@ -1,32 +1,41 @@
-// #ifndef _PLAYER_H_
-// #define _PLAYER_H_
+#ifndef _PLAYER1_H_
+#define _PLAYER1_H_
 
-// #include "gameObject.h"
+#include "entity.h"
 
-// class Player : public GameObject{
-// 	public:
-// 		Player();
-// 		Player(float, float);
-	
-// 		void Update(float deltaTime);
-// 		void Render(SDL_Renderer* renderer);
+class Player1 : public Entity {
+    public:
+
+        // constructor
+        Player1(int x, int y);
+
+        // updates the object
+        void Update(float deltaTime);
+
+        // draws the object
+        void Render(SDL_Renderer* renderer);
+
+        // draws the object based on the camera's position
+        void RenderCam(SDL_Renderer* renderer, int camX, int camY);
+
+        // handles the interactions with other objects
+        void handleInteractions(int tag);
+
+		// updates angle for firing based on mouse position
+		void updateMouse(float x, float y);
+
+		// shoots projectile
+		void shootProj(int camX, int camY);
 		
-// 		void setX(float x);
-// 		void setY(float y);
+		// Adjust player speed
+		void setSpeedX(float x);
+		void setSpeedY(float y);
 		
-// 		float getX();
-// 		float getY();
-		
-// 		void setMouse(float x, float y);
-	
-// 	protected:
-// 		float xPos;
-// 		float yPos;
-// 		float xMove;
-// 		float yMove;
-// 		float weaponX;
-// 		float weaponY;
-// };
+	protected:
+		float mouseX;
+		float mouseY;
+		float cooldown;
+};
 
 
-// #endif /* _PLAYER_H_ */
+#endif /* _PLAYER_H_ */

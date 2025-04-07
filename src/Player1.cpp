@@ -1,45 +1,97 @@
-// #include "Player.h"
-// #include <iostream>
+#include <stdlib.h>
+#include <SDL.h>
+#include <SDL2_gfxPrimitives.h>
+#include <cmath>
+#include "Player1.h"
+#include "PlayerProjectile.h"
+#include <iostream>
 
-// Player::Player(){}
+// constructor
+Player1::Player1(int x, int y) : Entity() {
 
-// Player::Player(float x, float y){
-// 	xPos = x;
-// 	yPos = y;
-// 	weaponX = 1;
-// 	weaponY = 0;
-// }
+    health = 100;
+    hitbox.height = 20;
+    hitbox.width = 20;
+	hitbox.x = x;
+	hitbox.y = y;
+    radius = 10;
+    xSpeed = 0;
+    ySpeed = 0;
+	cooldown = 40;
+}
 
-// void Player::setX(float x){
-// 	xMove = x;
-// }
+// updates the object
+void Player1::Update(float deltaTime) {
+    hitbox.x = hitbox.x + xSpeed;
+    hitbox.y = hitbox.y + ySpeed;
+	cooldown-=1;
+}
 
-// void Player::setY(float y){
-// 	yMove = y;
-// }
+// adjust move speed
+void Player1::setSpeedX(float x) {
+	xSpeed = x;
+}
 
-// float Player::getX(){
-// 	return xPos;
-// }
+void Player1::setSpeedY(float y) {
+	ySpeed = y;
+}
 
-// float Player::getY(){
-// 	return yPos;
-// }
+// draws the object
+void Player1::Render(SDL_Renderer* renderer) {
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x, point.y, radius, 0, 55, 200, 255);
+	filledCircleRGBA(renderer, point.x+(20*mouseX), point.y+(20*mouseY), 5, 255, 255, 255, 255);
+}
 
-// void Player::setMouse(float x, float y){
-// 	float Vx = x - xPos;
-// 	float Vy = y - yPos;
-// 	float mag = sqrt(pow(Vx,2) + pow(Vy,2));
-// 	weaponX = Vx / mag;
-// 	weaponY = Vy / mag;
-// }
+// draws the object based on the camera's position
+void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    Point point = getCenter(&hitbox);
+    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 55, 200, 255);
+}
 
-// void Player::Update(float deltaTime) {
-//     xPos += xMove;
-//     yPos += yMove;
-// }
+// handles the interactions with other objects
+void Player1::handleInteractions(int tag) {
 
-// void Player::Render(SDL_Renderer* renderer) {
-//     boxRGBA(renderer, xPos-10, yPos-10, xPos+10, yPos+10, 0, 255, 0, 255);
-// 	filledCircleRGBA(renderer, xPos+(20*weaponX), yPos+(20*weaponY), 5, 255, 255, 255, 255);
-// }
+}
+
+void Player1::updateMouse(float x, float y){
+	mouseX = x;
+	mouseY = y;
+}
+
+// creates a projectile object
+void Player1::shootProj(int camX, int camY) {
+	if (cooldown<=0){
+
+    // get center of hitboxes
+    Point playerCenter = getCenter(&hitbox);
+
+    // calculate vector
+    float dx = mouseX - playerCenter.x + camX;
+    float dy = mouseY - playerCenter.y + camY;
+
+    // normalize
+    float length = sqrt((dx * dx) + (dy * dy));
+
+    if(length != 0) {
+        dx = dx / length;
+        dy = dy / length;
+    }
+
+    // set the speed based on spitSpeed
+    float projXspeed = dx * 3;
+    float projYspeed = dy * 3;
+
+    // create spit at spitter's location w/ calculated speeds
+    //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    PlayerProjectile* spit = new PlayerProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    //child = spit;
+    // put spit in childrenList
+    //childrenList.clear();
+    childrenList.push_back(spit);
+    
+    // set the flag for child to true
+    children = true;
+	cooldown = 40;
+	}
+}

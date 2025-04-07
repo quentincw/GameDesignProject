@@ -7,18 +7,19 @@
 #include "gameProcess.h"
 #include "playerProjectile.h"
 #include "enemy.h"
+#include "Player1.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
 
 // constructor for process manager
 ProcessManager::ProcessManager() {
-    player = new PlayerProjectile(0, 0, 3.0f, 3.0f);
+    player = new Player1(0, 0);
 }
 
 // constructor for testing targetting
-ProcessManager::ProcessManager(PlayerProjectile* newProj) {
-    player = newProj;
+ProcessManager::ProcessManager(Player1* newPlayer) {
+    player = newPlayer;
 }
 
 // updates the list of processes
@@ -96,6 +97,15 @@ void ProcessManager::findChildren() {
     std::vector<GameProcess*> processChildren;
     // the current process
     GameProcess* curProcess;
+
+	// getting the player if it has a projectile or blood stain
+	if (player->hasChildren()){
+		processChildren = player->getChildren();
+        // iterate through the children vector and add them to full list of children
+        for(int j = 0; j < processChildren.size(); j++){
+            childrenList.push_back(processChildren[j]);
+        }
+	}
 
     // iterate through the vector
     for(int i = 0; i < processList.size(); i++){

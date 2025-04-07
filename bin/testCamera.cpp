@@ -17,12 +17,14 @@
 #include "alphaSpitter.h"
 #include "spewer.h"
 #include "healthPickup.h"
+#include "Player1.h"
+#include "playerView.h"
 
 using namespace std;
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
+/*const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;*/
 
 const int TOTAL_WIDTH = 1500;
 const int TOTAL_HEIGHT = 1500;
@@ -112,24 +114,11 @@ int main(int argc, char** argv)
 {
 
     /*** Initialization ***/
-  
-    // Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) csci437_error("SDL could not initialize!");
-
-    // Create window
-    SDL_Window* window = SDL_CreateWindow( "CSCI-437 Skeleton", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-    if( window == NULL ) csci437_error("Window could not be created!");
-
-    // Small delay to allow the system to create the window.
-    SDL_Delay(100);
-    
-    // Create renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
-    if (renderer == NULL) csci437_error("Unable to create renderer!");
-
+	PlayerView pv;
+	pv.initialize();
 
     // create "player"
-    PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
+    Player1 ball1(200, 200);
 
     // create process manager
     ProcessManager manager(&ball1);
@@ -210,6 +199,10 @@ int main(int argc, char** argv)
     SDL_Event e;
     const int FPS = 60;
     const int TARGETMS = 1000/FPS;
+	int mouseX = 0;
+    int mouseY = 0;
+	int camX, camY;
+
 
     // While application is running
     while( running )
@@ -218,7 +211,8 @@ int main(int argc, char** argv)
         // get start timee
         int startMS = SDL_GetTicks();
         // Handle events on queue
-        while( SDL_PollEvent( &e ) != 0)
+		pv.handleInputs(&manager);
+        /*while( SDL_PollEvent( &e ) != 0)
         {
               // User requests quit
             if( e.type == SDL_QUIT ) running = false;
@@ -250,28 +244,37 @@ int main(int argc, char** argv)
                             curProcess->markForDeletion();
                         }
                         break;
-                    /*case SDLK_UP:
-                        roach1.UpdateAI(roach1.getXpos(), 100);
+                    case SDLK_UP:
+                        ball1.setSpeedY(-3);
                         break;
                     case SDLK_DOWN:
-                        roach1.UpdateAI(roach1.getXpos(), SCREEN_HEIGHT - 100);
+                        ball1.setSpeedY(3);
                         break;
                     case SDLK_RIGHT:
-                        roach1.UpdateAI(SCREEN_WIDTH - 100, roach1.getYpos());
+                        ball1.setSpeedX(3);
                         break;
                     case SDLK_LEFT:
-                        roach1.UpdateAI(100, roach1.getYpos());
-                        break;*/
+                        ball1.setSpeedX(-3);
+                        break;
+					case SDLK_g:
+					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
+						ball1.updateMouse(mouseX, mouseY);
+						std::cout << mouseX << " " << mouseY << std::endl;
+
+						ball1.shootProj(camX, camY);
+						break;
                 }
             }
             else {
             // no keys pressed,
+				ball1.setSpeedX(0);
+				ball1.setSpeedY(0);
             }
-        }
+        }*/
 
         manager.updateProcesses(1);
 
-        projectileCollision(&ball1);
+        //projectileCollision(&ball1);
 
         curProcesses = manager.getProcessList();
         /*
@@ -303,10 +306,12 @@ int main(int argc, char** argv)
                 //cout << "collision";
                 int code = moveInbounds(curWall, &ball1);
                 if (code == 1 || code == 3){
-                    ball1.bounceX(ball1.getHitbox().x);
+					ball1.setSpeedX(0);
+                    //ball1.bounceX(ball1.getHitbox().x);
                 }
                 else {
-                    ball1.bounceY(ball1.getHitbox().y);
+					ball1.setSpeedY(0);
+                    //ball1.bounceY(ball1.getHitbox().y);
                 }
             }
 
@@ -323,20 +328,21 @@ int main(int argc, char** argv)
 
         }
 
-        int camX, camY;
 
         camX = (ball1.getHitbox().x + ball1.getHitbox().width / 2) - SCREEN_WIDTH / 2;
         camY = (ball1.getHitbox().y + ball1.getHitbox().height / 2) - SCREEN_HEIGHT / 2;
 
         // draw screen
-        SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+        /*SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
         SDL_RenderClear( renderer );
         for(int i = 0; i < walls.size(); i++){
             curWall = walls[i];
             curWall->RenderCam(renderer, camX, camY );
         }
         manager.renderProcessesCam( renderer, camX, camY );
-        SDL_RenderPresent( renderer );
+        SDL_RenderPresent( renderer );*/
+		
+		pv.render(walls, &manager);
 
         // delta time calculation
         int deltaMS = SDL_GetTicks() - startMS;
@@ -344,7 +350,8 @@ int main(int argc, char** argv)
             SDL_Delay(TARGETMS - deltaMS);
         }
     }
-  
+	
+	pv.cleanup();
     // Done.
     return 0;
 }
