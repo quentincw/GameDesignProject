@@ -7,6 +7,8 @@
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
     : processManager(pm), levelManager(lm)
 {
+    processManager = pm;
+    levelManager = lm;
 }
 
 void GameLogic::update()
@@ -16,29 +18,32 @@ void GameLogic::update()
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
 {
-    return (a->x < (b->x + b->width)) &&
-           ((a->x + a->width) > b->x) &&
-           (a->y < (b->y + b->height)) &&
-           ((a->y + a->height) > b->y);
+    auto a_hitbox = a->getHitbox();
+    auto b_hitbox = b->getHitbox();
+    return (a_hitbox.x < (b_hitbox.x + b_hitbox.width)) &&
+           ((a_hitbox.x + a_hitbox.width) > b_hitbox.x) &&
+           (a_hitbox.y < (b_hitbox.y + b_hitbox.height)) &&
+           ((a_hitbox.y + a_hitbox.height) > b_hitbox.y);
 }
 
 bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const
 {
-    return (obj->x < (rx + rw)) &&
-           ((obj->x + obj->width) > rx) &&
-           (obj->y < (ry + rh)) &&
-           ((obj->y + obj->height) > ry);
+    auto obj_hitbox = obj->getHitbox();
+    return (obj_hitbox.x < (rx + rw)) &&
+           ((obj_hitbox.x + obj_hitbox.width) > rx) &&
+           (obj_hitbox.y < (ry + rh)) &&
+           ((obj_hitbox.y + obj_hitbox.height) > ry);
 }
 
 void GameLogic::checkCollisions()
 {
-    auto& processes = processManager->getProcesses();
+    auto processes = processManager->getProcessList();
     for (size_t i = 0; i < processes.size(); ++i)
     {
-        Process* p1 = processes[i];
+        GameProcess* p1 = processes[i];
         for (size_t j = i + 1; j < processes.size(); ++j)
         {
-            Process* p2 = processes[j];
+            GameProcess* p2 = processes[j];
             
             if (!p1 || !p2) 
                 continue;
@@ -58,7 +63,7 @@ void GameLogic::checkCollisions()
         }
     }
 
-    const auto& tilemapData = levelManager->getTilemapData();
+    const auto& tilemapData = levelManager->getTilemap();
     if (tilemapData.empty()) return;
     int mapWidth = tilemapData.size();
     int mapHeight = tilemapData[0].size();

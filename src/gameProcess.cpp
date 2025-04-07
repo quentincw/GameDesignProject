@@ -39,8 +39,12 @@ std::vector<GameProcess*> GameProcess::getChildren(){
     return childrenTemp;
 }
 
+// returns the vector of interactions
+std::vector<std::string> GameProcess::getInteractions() const {
+    return interactions;
+}
 
-// returns the vector of tags of the process
+// returns a vector of tags associated with the process
 std::vector<std::string> GameProcess::getTags() const {
     return tags;
 }

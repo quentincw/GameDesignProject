@@ -42,15 +42,19 @@ class GameProcess : public GameObject {
         // returns a vector of all the children of a process
         std::vector<GameProcess*> getChildren();
 
+        // returns a vector of target tags the proccess can interact with
+        std::vector<std::string> getInteractions() const;
+
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
 
-
-
     protected:
 
-        // list of tags the process can interact with
+        // list of tags associated with the process
         std::vector<std::string> tags;
+
+        // list of tags process can interact with
+        std::vector<std::string> interactions;
 
         // map of all possible interactions a process can have
         //map<string, int> interactions;
@@ -66,7 +70,6 @@ class GameProcess : public GameObject {
 
         // vector of all the children of a process
         std::vector<GameProcess*> childrenList;
-
 };
 
 
