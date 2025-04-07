@@ -19,6 +19,7 @@
 #include "healthPickup.h"
 #include "Player1.h"
 #include "playerView.h"
+#include "enemyFactory.h"
 
 using namespace std;
 
@@ -153,27 +154,37 @@ int main(int argc, char** argv)
     walls.push_back(&wall4);
     walls.push_back(&wall5);
 
-
+    GameProcess* enemy = nullptr;
     // create roach
-    Roach roach1(1000, 700);
+    //Roach roach1(1000, 700);
+    enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ROACH);
+    enemy->setPosition(200,500);
+    manager.addProcess(enemy);
 
     // create spitter
-    Spitter spitter1(200,500);
+    //Spitter spitter1(200,500);
+    enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+    enemy->setPosition(500,200);
+    manager.addProcess(enemy);
 
     // create alpha Spitter
     //AlphaSpitter alphaSpitter1(500, 200);
 
     // create a spewer
-    Spewer spewer1(800, 200);
+    //Spewer spewer1(800, 200);
+    enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPEWER);
+    enemy->setPosition(800,200);
+    manager.addProcess(enemy);
+
 
     // healthpickup
     HealthPickup health1(500, 250);
 
     // add processes to process manager
-    manager.addProcess(&roach1);
-    manager.addProcess(&spitter1);
+    //manager.addProcess(&roach1);
+    //manager.addProcess(&spitter1);
     //manager.addProcess(&alphaSpitter1);
-    manager.addProcess(&spewer1);
+    //manager.addProcess(&spewer1);
     manager.addProcess(&health1);
     //manager.addProcess(&ball1);
 
@@ -182,13 +193,24 @@ int main(int argc, char** argv)
     vector<GameProcess*> room2;
     bool curRoom = true;
 
-    Spitter spitter2(30, 30);
-    Spitter spitter3(400, 400);
-    Spitter spitter4(1000, 30);
+    //Spitter spitter2(30, 30);
+    enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPEWER);
+    enemy->setPosition(500,200);
+    room2.push_back(enemy);
 
-    room2.push_back(&spitter2);
-    room2.push_back(&spitter3);
-    room2.push_back(&spitter4);
+    //Spitter spitter3(400, 400);
+    enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+    enemy->setPosition(800,200);
+    room2.push_back(enemy);
+
+    //Spitter spitter4(1000, 30);
+    enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+    enemy->setPosition(300,1000);
+    room2.push_back(enemy);
+
+    //room2.push_back(&spitter2);
+    //room2.push_back(&spitter3);
+    //room2.push_back(&spitter4);
 
 
 
@@ -318,10 +340,19 @@ int main(int argc, char** argv)
             for(int i = 0; i < curProcesses.size(); i++){
                 curProcess = curProcesses[i];
                 if(checkCollision(curWall, curProcess)){
-                    moveInbounds(curWall, curProcess);
+                    int code = moveInbounds(curWall, curProcess);
                     // check if it is a spitter projectile
                     if (auto projectile = dynamic_cast<SpitterProjectile*>(curProcess)){
                         curProcess->markForDeletion();
+                    }
+                    // check if it is a player projectile
+                    else if (auto projectile = dynamic_cast<PlayerProjectile*>(curProcess)){
+                        if (code == 1 || code == 3){
+                            projectile->bounceX(projectile->getHitbox().x);
+                        }
+                        else {
+                            projectile->bounceY(projectile->getHitbox().y);
+                        }
                     }
                 }
             }
