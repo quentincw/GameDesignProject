@@ -9,12 +9,9 @@
 #include <bits/stdc++.h>
 #include "gameObject.h"
 
-
-
 class GameProcess : public GameObject {
 
     public:
-
         // constructor for process
         GameProcess();
 
@@ -28,7 +25,7 @@ class GameProcess : public GameObject {
         virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
+        virtual void handleInteractions(std::string tag) = 0;
 
         // marks process for deletion by changing delete flag (boolean)
         void markForDeletion();
@@ -47,6 +44,12 @@ class GameProcess : public GameObject {
 
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
+
+        // handles interaction with a given tag
+        virtual void handleInteraction(std::string tag) = 0;
+
+        // gets the damage an enemy does on contact
+        int getDamage() const;
 
     protected:
 
@@ -70,7 +73,9 @@ class GameProcess : public GameObject {
 
         // vector of all the children of a process
         std::vector<GameProcess*> childrenList;
-};
 
+        // the damage a process does on collision
+        int damage;
+};
 
 #endif

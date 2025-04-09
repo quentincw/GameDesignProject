@@ -42,13 +42,18 @@ class GameObject {
         // calculates and returns the center point of the hitbox
         Point getCenter(Rectangle* rectangle) const;
 
+        // reverts to previous position
+        void revertPosition();
+
     
     protected:
 
         // hitbox for game object
         Rectangle hitbox;
 
-        
+        // the last position
+        float lastX;
+        float lastY;  
 };
 
 

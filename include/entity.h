@@ -35,7 +35,8 @@ class Entity : public GameProcess {
         // subtracts the health damage from the current health
         void adjustHealth(int healthDamage);
 
-
+        // handles the interactions with other objects
+        void handleInteraction(std::string tag) override;
 
     protected:
 

@@ -29,6 +29,8 @@ class PlayerProjectile : public Projectile {
         void bounceX(int newX);
 
         void bounceY(int newY);
+
+        void handleInteraction(std::string tag) override;
 };
 
 

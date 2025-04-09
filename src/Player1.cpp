@@ -95,3 +95,9 @@ void Player1::shootProj(int camX, int camY) {
 	cooldown = 40;
 	}
 }
+
+void Player::handleInteraction(std::string tag) {
+    if (tag == "wall") {
+        revertPosition();
+    }
+}

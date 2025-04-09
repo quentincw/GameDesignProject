@@ -7,7 +7,6 @@
 #include "gameObject.h"
 #include "gameProcess.h"
 
-
 // constructor
 GameProcess::GameProcess() : tags{}, childrenList{} {
     tags.push_back("Wall");
@@ -47,4 +46,9 @@ std::vector<std::string> GameProcess::getInteractions() const {
 // returns a vector of tags associated with the process
 std::vector<std::string> GameProcess::getTags() const {
     return tags;
+}
+
+// get the damage the enemy causes to the player on contact
+int GameProcess::getDamage() const {
+    return damage;
 }

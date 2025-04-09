@@ -25,3 +25,9 @@ int Projectile::getDamage() const {
     return damage;
 }
 
+void Projectile::handleInteraction(std::string tag) {
+    if (tag == "Wall" || tag == "Player" || tag == "Enemy") {
+        markForDeletion();
+    }
+}
+

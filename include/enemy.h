@@ -26,17 +26,7 @@ class Enemy : public Entity {
         virtual void UpdateAI(Rectangle phitbox) = 0;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
-
-        // gets the damage an enemy does on contact
-        int getDamage() const;
-
-    protected:
-
-        // the damage an enemy does on contact
-        int damage;
-
-
+        virtual void handleInteractions(std::string tag) = 0;
 };
 
 

@@ -8,13 +8,13 @@
 
 
 Entity::Entity() : GameProcess() {
+    tags.push_back("Entity");
     health = 0;
     maxHealth = 0;
     isAlive = true;
     speed = 0;
     xSpeed = 0;
     ySpeed = 0;
-
 }
 
 // gets the current health
@@ -34,4 +34,10 @@ void Entity::spawnBloodStain() {
     BloodStain* blood = new BloodStain(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
     childrenList.push_back(blood);
     children = true;
+}
+
+void Entity::handleInteraction(std::string tag) {
+    if (tag == "wall") {
+        revertPosition();
+    }
 }

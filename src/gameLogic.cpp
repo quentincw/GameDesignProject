@@ -3,6 +3,8 @@
 #include "gameObject.h"
 #include "processManager.h"
 #include "levelManager.h"
+#include "constants.h"
+#include "entity.h"
 
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
     : processManager(pm), levelManager(lm)
@@ -14,6 +16,10 @@ GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
 void GameLogic::update()
 {
     checkCollisions();
+}
+
+bool contains(const std::vector<std::string>& vec, const std::string& target) {
+    return std::find(vec.begin(), vec.end(), target) != vec.end();
 }
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
@@ -52,11 +58,11 @@ void GameLogic::checkCollisions()
             
             for (const auto& kv : interactions)
             {
-                if (p2->hasTag(kv.first))
+                if (contains(p2->getTags(), kv))
                 {
                     if (isColliding(p1, p2))
                     {
-                        handleCollision(p1, p2, kv.first);
+                        handleCollision(p1, p2, kv);
                     }
                 }
             }
@@ -67,20 +73,21 @@ void GameLogic::checkCollisions()
     if (tilemapData.empty()) return;
     int mapWidth = tilemapData.size();
     int mapHeight = tilemapData[0].size();
-    int tileSize = levelManager->getTileSize(); // this may be in constants file
 
-    for (Process* proc : processes)
+    for (GameProcess* proc : processes)
     {
         if (!proc) continue;
-        float px1 = proc->x;
-        float py1 = proc->y;
-        float px2 = px1 + proc->width;
-        float py2 = py1 + proc->height;
 
-        int leftTile = px1 / tileSize;
-        int rightTile = px2 / tileSize;
-        int topTile = py1 / tileSize;
-        int bottomTile = py2 / tileSize;
+        auto procHitbox = proc->getHitbox();
+        float px1 = procHitbox.x;
+        float py1 = procHitbox.y;
+        float px2 = px1 + procHitbox.width;
+        float py2 = py1 + procHitbox.height;
+
+        int leftTile = px1 / TILE_SIZE;
+        int rightTile = px2 / TILE_SIZE;
+        int topTile = py1 / TILE_SIZE;
+        int bottomTile = py2 / TILE_SIZE;
 
         if (leftTile < 0) leftTile = 0;
         if (rightTile >= mapWidth) rightTile = mapWidth - 1;
@@ -93,9 +100,9 @@ void GameLogic::checkCollisions()
             {
                 if (tilemapData[tx][ty] == 1)
                 {
-                    float rx = tx * tileSize;
-                    float ry = ty * tileSize;
-                    if (isColliding(proc, rx, ry, tileSize, tileSize))
+                    float rx = tx * TILE_SIZE;
+                    float ry = ty * TILE_SIZE;
+                    if (isColliding(proc, rx, ry, TILE_SIZE, TILE_SIZE))
                     {
                         proc->handleInteraction("wall");
                     }
@@ -105,9 +112,17 @@ void GameLogic::checkCollisions()
     }
 }
 
-void GameLogic::handleCollision(Process* p1, Process* p2, const std::string& matchedTag)
+void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag)
 {
     //p2->adjustHealth(p1->getInteractions().at(matchedTag)); // might be doing damage as a field now
-    p2->adjustHealth(p1->getDamage());
+    if (contains(p2->getTags(), "Entity"))
+    {
+        Entity* entity = dynamic_cast<Entity*>(p2);
+        if (entity)
+        {
+            entity->adjustHealth(p1->getDamage());
+        }
+    }
+    
     p1->handleInteraction(matchedTag);
 }
