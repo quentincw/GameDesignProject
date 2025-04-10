@@ -201,6 +201,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 else cout << "0 ";
             } else {
                 cout << "- ";
+                curRoomPos.x = x;
+                curRoomPos.y = y;
             }
         }
         cout << endl;
@@ -274,6 +276,33 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     roomCoord = {layout[0][0], layout[0][1]};
     curRoom = render_grid[roomCoord[0]][roomCoord[1]];
 
+    // 2D vector to hold the room positions
+    vector<vector<int>> roomPos(grid_width, vector<int>(grid_height, 0));
+    // iterate the possible positions to find which x,y have a room
+    int count = 0;
+    for (int gridX = 0; gridX < grid_width; gridX++) {
+        for (int gridY = 0; gridY < grid_height; gridY++) {
+            for(int roomC = 0; roomC < layout.size(); roomC++) {
+                // check if the coordinates map to a room in the layout
+                if((gridX == layout[roomC][0] && (gridY == layout[roomC][1]))) {
+                    //cout << gridX << ' ' << gridY << endl;
+                    roomPos[gridX][gridY] = 1;
+                    count++;
+                }
+            }
+        }
+    }
+    this->roomPosCoords = roomPos;
+    /*
+    // print out each room in the coordinate grid
+    for (int i = 0; i < roomPos.size(); i++) {
+        for (int j = 0; j < roomPos[i].size(); j++) {
+          cout << roomPos[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << count;
+    */
     return grid;
 }
 
@@ -312,12 +341,25 @@ void Floor::setCurRoom(int posX, int posY)
     }
 
     curRoom = render_grid[roomCoord[0]][roomCoord[1]];
+    curRoomPos.x = roomCoord[0];
+    curRoomPos.y = roomCoord[1];
+    //cout<<curRoomPos.x<<", "<<curRoomPos.x<<endl;
     return;    
+}
+
+// returns a 2D vector representing where each room is
+vector<vector<int>> Floor::getRoomsPos() {
+    return roomPosCoords;
 }
 
 SDL_Rect Floor::getCurRoom()
 {
     return curRoom;
+}
+
+// returns the current room's position in the 2D array
+RoomPosition Floor::getRoomPos() {
+    return curRoomPos;
 }
 
 vector<vector<int>> Floor::getRooms() {

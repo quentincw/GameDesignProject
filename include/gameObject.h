@@ -6,13 +6,14 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
+#include "rectangle.h"
 
-struct Rectangle {
+/*struct Rectangle {
     int x;
     int y;
     int width;
     int height;
-};
+};*/
 
 struct Point {
     int x;
