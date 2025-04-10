@@ -6,6 +6,7 @@
 #include <SDL_ttf.h>
 #include "processManager.h"
 #include "constants.h"
+#include "floor.h"
 
 class PlayerView
 {
@@ -16,17 +17,25 @@ public:
 	
 	void cleanup();
 
-    void render(vector<GameObject*> walls, ProcessManager* pm);
+    void render(Floor* floor, ProcessManager* pm);
+
+    void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
-	void handleInputs(ProcessManager* pm);
+	int handleInputs(ProcessManager* pm);
 
 private:
 
-    void renderLevel(vector<GameObject*> walls);
+    void renderLevel(Floor* floor);
+
+    void renderLevel(std::vector<GameObject*> walls);
+
+    void testLevelRendering(Floor* floor);
 
     void renderProcesses(ProcessManager* pm);
+	
+	//void renderMinimap(LevelManager* lm);
 
-       // updates the camera's position based on the player's position
+    // updates the camera's position based on the player's position
     void updateCameraPosition(ProcessManager* pm);
 
     // The x and y of the camera
@@ -35,6 +44,7 @@ private:
 	
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+    SDL_Texture* tile_texture;
 };
 
 #endif

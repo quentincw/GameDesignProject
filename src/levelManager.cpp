@@ -1,4 +1,103 @@
-#include "gameLogic.h"
+#include "gameProcess.h"
+#include "gameObject.h"
+#include "constants.h"
+#include "levelManager.h"
+using namespace std;
+
+LevelManager::LevelManager() {
+
+}
+
+
+void LevelManager::genFloor(int level) {
+    // different parameters for floor generation
+    switch (level) {
+        case 1:
+            // 3, 4, 5
+            curfloor.gen(3, 5, 14);
+            break;
+        case 2:
+            // 4, 5, 6
+            curfloor.gen(6, 6, 16);
+            break;
+        case 3:
+            // 4, 5, 6
+            curfloor.gen(5, 5, 18);
+            break;
+        default:
+            curfloor.gen(5, 5, 14);
+    }
+
+    // set the current room to the start room
+    RoomPosition newPos = curfloor.getRoomPos();
+    roomX = newPos.x;
+    roomY = newPos.y;
+
+    // get the room coordinates
+    vector<vector<int>> roomPos = curfloor.getRoomsPos();
+
+    // make the 2D vector of process lists match the rooms
+    // rows
+    roomLists.resize(roomPos.size());
+
+    //columns
+    for (size_t i = 0; i < roomPos.size(); ++i) {
+        roomLists[i].resize(roomPos[i].size()); 
+
+        // fill each element with an empty vector of GameProcess*
+        for (size_t j = 0; j < roomPos[i].size(); ++j) {
+            roomLists[i][j] = vector<GameProcess*>();
+        }
+    }
+
+}
+
+
+//player.setPos((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
+
+
+void LevelManager::setCurrentRoom(ProcessManager* pm) {
+
+    //get the player
+    GameProcess* player = pm->getPlayer();
+    int pX = player->getHitbox().x;
+    int pY = player->getHitbox().y;
+
+    // set the current room within the floor
+    curfloor.setCurRoom(pX / TILE_SIZE, pY / TILE_SIZE);
+
+    // get the current room
+    RoomPosition newPos = curfloor.getRoomPos();
+
+
+    // check if the player entered a different room
+    if ((roomX != newPos.x) || (roomY != newPos.y)) {
+
+        cout << "entered new room: " << newPos.x << " " << newPos.y << endl;
+
+        // save process list
+        roomLists[roomX][roomY] = pm->getProcessList();
+
+        cout << "saved list" << endl;
+
+        // load new list
+        pm->loadProcessList(roomLists[newPos.x][newPos.y]);
+
+        cout << "loaded list" << endl;
+
+        // update current room
+        roomX = newPos.x;
+        roomY = newPos.y;
+    }
+}
+
+// returns the current floor
+Floor* LevelManager::getCurrentFloor() {
+    return &curfloor;
+}
+
+/*
+//#include "gameLogic.h"
 #include "gameProcess.h"
 #include "gameObject.h"
 #include "constants.h"
@@ -127,7 +226,4 @@ void LevelManager::genFloor(int level)
     }
 }
 
-vector<vector<int>> LevelManager::getTilemap()
-{
-    return floor.getRoomsCol();
-}
+*/
