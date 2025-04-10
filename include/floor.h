@@ -5,6 +5,13 @@
 #include <SDL_rect.h>
 using namespace std;
 
+// struct for holding room position in 2D array
+struct RoomPosition {
+    int x;
+    int y;
+};
+
+
 class Floor {
     public:
     // Constructor
@@ -15,7 +22,13 @@ class Floor {
     void setCurRoom(int posX, int posY);
     SDL_Rect getCurRoom();
     vector<vector<int>> getRooms();
-    vector<vector<vector<SDL_Rect>>> getRoomsCol();
+    vector<vector<int>> getRoomsCol();
+
+    // returns a 2D vector representing where each room is
+    vector<vector<int>> getRoomsPos();
+
+    // returns the current room's position in the 2D array
+    RoomPosition getRoomPos();
     
     private:
     // additional padding between rooms
@@ -29,9 +42,15 @@ class Floor {
     // row, col, tilemap[]
     vector<vector<int>> rooms;
     // row, col, collision map[]
-    vector<vector<vector<SDL_Rect>>> rooms_col;
+    vector<vector<int>> rooms_col;
     // rect areas in which tile and colliders will be used
     vector<vector<SDL_Rect>> render_grid;
+
+    // 2D vector of 1 and 0, stores where each room is.
+    vector<vector<int>> roomPosCoords;
+
+    // current room position in 2D array
+    RoomPosition curRoomPos;
 };
 
 #endif /* _FLOOR_H_ */

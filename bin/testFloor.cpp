@@ -9,6 +9,9 @@
 #include "room.h"
 #include "floor.h"
 #include "player.h"
+#include <processManager.h>
+#include <roach.h>
+#include <spitter.h>
 
 int main(int argc, char** argv)
 {
@@ -35,9 +38,35 @@ int main(int argc, char** argv)
   SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
   Uint64 startTicks = SDL_GetTicks();
   Player player;
+
+  //
+  // // create process manager
+  // ProcessManager manager(&player);
+  // // create roach
+  // Roach roach1(1000, 700);
+  // // create spitter
+  // Spitter spitter1(200,500);
+
+  // // add processes to process manager
+  // manager.addProcess(&roach1);
+  // manager.addProcess(&spitter1);
+
+  // // storage for "room" process lists
+  // vector<GameProcess*> room1;
+  // vector<GameProcess*> room2;
+
+  // Spitter spitter2(30, 30);
+  // Spitter spitter3(400, 400);
+  // Spitter spitter4(1000, 30);
+
+  // room2.push_back(&spitter2);
+  // room2.push_back(&spitter3);
+  // room2.push_back(&spitter4);
+  //
+
   Floor floor;
   // width * height >= gen_rooms + 2 (start and boss room)
-  floor.gen(6, 6, 16);
+  floor.gen(3, 5, 14);
   SDL_Rect curRoom = floor.getCurRoom();
 
   player.setPos((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
@@ -45,10 +74,10 @@ int main(int argc, char** argv)
   vector<vector<int>> rooms = floor.getRooms();
   int rooms_width = rooms.size();
   int rooms_height = rooms[0].size();
-  vector<vector<vector<SDL_Rect>>> rooms_col = floor.getRoomsCol();
+  vector<vector<int>> rooms_col = floor.getRoomsCol();
 
-  SDL_Rect tile[rooms_width][rooms_height];
-  SDL_Rect map[rooms_width][rooms_height];
+  vector<vector<SDL_Rect>> tile(rooms_width, vector<SDL_Rect>(rooms_height));
+  vector<vector<SDL_Rect>> map(rooms_width, vector<SDL_Rect>(rooms_height));
   vector<SDL_Rect> render_map;
   static const int MAP_SIZE = 2;
   for (int x = 0; x < rooms_width; x++) {
@@ -221,6 +250,12 @@ int main(int argc, char** argv)
             }
             SDL_RenderFillRect(renderer, &rect);
         }
+
+        //
+        // manager.updateProcesses(1);
+        // SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+        // manager.renderProcesses( renderer );
+        //
 
         SDL_RenderPresent( renderer );
 
