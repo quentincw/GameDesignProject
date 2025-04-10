@@ -23,14 +23,9 @@ class PlayerProjectile : public Projectile {
         // draws the object based on the camera's position
         void RenderCam(SDL_Renderer* renderer, int camX, int camY);
 
-        // handles the interactions with other objects
-        void handleInteractions(int tag);
-
         void bounceX(int newX);
 
         void bounceY(int newY);
-
-        void handleInteraction(std::string tag) override;
 };
 
 

@@ -61,9 +61,3 @@ void Roach::UpdateAI(Rectangle phitbox) {
     xSpeed = dx * 3;
     ySpeed = dy * 3;
 }
-
-
-// handles the interactions with other objects
-void Roach::handleInteractions(int tag) {
-
-}

@@ -36,8 +36,6 @@ class Projectile : public GameProcess {
 
         // the damage the projectile causes to the player
         int damage;
-
-
 };
 
 

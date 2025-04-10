@@ -3,7 +3,7 @@
 #include <SDL2_gfxPrimitives.h>
 #include <cmath>
 #include "Player1.h"
-#include "PlayerProjectile.h"
+#include "playerProjectile.h"
 #include <iostream>
 
 // constructor
@@ -107,7 +107,7 @@ void Player1::shootProj(int camX, int camY) {
 	}
 }
 
-void Player::handleInteraction(std::string tag) {
+void Player1::handleInteraction(std::string tag) {
     if (tag == "wall") {
         revertPosition();
     }

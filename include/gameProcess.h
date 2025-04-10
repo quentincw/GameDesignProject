@@ -24,9 +24,6 @@ class GameProcess : public GameObject {
         // draws the object based on the camera's position
         virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
 
-        // handles the interactions with other objects
-        virtual void handleInteractions(std::string tag) = 0;
-
         // marks process for deletion by changing delete flag (boolean)
         void markForDeletion();
 
@@ -46,7 +43,7 @@ class GameProcess : public GameObject {
         std::vector<std::string> getTags() const;
 
         // handles interaction with a given tag
-        virtual void handleInteraction(std::string tag) = 0;
+        virtual void handleInteraction(std::string tag);
 
         // gets the damage an enemy does on contact
         int getDamage() const;

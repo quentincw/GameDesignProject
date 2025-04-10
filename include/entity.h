@@ -26,9 +26,6 @@ class Entity : public GameProcess {
         // draws the object based on the camera's position
         virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
 
-        // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
-
         // gets the current health
         int getHealth() const;
 

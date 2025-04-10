@@ -69,7 +69,8 @@ void GameLogic::checkCollisions()
         }
     }
 
-    const auto& tilemapData = levelManager->getTilemap();
+    const auto& floor = levelManager->getCurrentFloor();
+    const auto& tilemapData = floor->getRoomsCol();
     if (tilemapData.empty()) return;
     int mapWidth = tilemapData.size();
     int mapHeight = tilemapData[0].size();
@@ -114,7 +115,6 @@ void GameLogic::checkCollisions()
 
 void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag)
 {
-    //p2->adjustHealth(p1->getInteractions().at(matchedTag)); // might be doing damage as a field now
     if (contains(p2->getTags(), "Entity"))
     {
         Entity* entity = dynamic_cast<Entity*>(p2);

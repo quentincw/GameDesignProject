@@ -30,4 +30,3 @@ void Projectile::handleInteraction(std::string tag) {
         markForDeletion();
     }
 }
-

@@ -26,7 +26,7 @@ class Enemy : public Entity {
         virtual void UpdateAI(Rectangle phitbox) = 0;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(std::string tag) = 0;
+        void handleInteraction(std::string tag) override;
 };
 
 
