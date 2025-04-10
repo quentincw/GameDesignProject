@@ -36,23 +36,22 @@ void PlayerView::cleanup()
     SDL_Quit();
 }
 
-void PlayerView::handleInputs(ProcessManager* pm)
+int PlayerView::handleInputs(ProcessManager* pm)
 {
 	SDL_Event e;
 	auto player = dynamic_cast<Player1*>(pm->getPlayer());
 	auto curProcesses = pm->getProcessList();
 	while( SDL_PollEvent( &e ) != 0)
         {
-              // User requests quit
-            //if( e.type == SDL_QUIT ) running = false;
+            // User requests quit
+            if( e.type == SDL_QUIT ) return -1;
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
 
                 switch(e.key.keysym.sym){
-                    /*case SDLK_q:
-                        running = false;
-                        break;
+                    case SDLK_q:
+                        return -1;
                     /*case SDLK_s:
                         // check which list is active (true = room1)
                         if(curRoom){
@@ -84,15 +83,6 @@ void PlayerView::handleInputs(ProcessManager* pm)
                         break;
                     case SDLK_a:
                         player->setSpeedX(-3);
-                        break;
-					case SDLK_g:
-						int mouseX = 0;
-						int mouseY = 0;
-					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
-						player->updateMouse(mouseX, mouseY);
-
-						player->shootProj(cameraX, cameraY);
-						break;
                 }
             }
 			// User releases a key
@@ -113,10 +103,23 @@ void PlayerView::handleInputs(ProcessManager* pm)
 						break;
 				}
 			}
+			else if( e.type == SDL_MOUSEBUTTONDOWN ){
+				switch(e.button.button){
+					case SDL_BUTTON_LEFT:
+						int mouseX = 0;
+						int mouseY = 0;
+					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
+						player->updateMouse(mouseX, mouseY);
+
+						player->shootProj(cameraX, cameraY);
+						break;
+				}
+			}
             else {
             // no keys pressed,
             }
         }
+	return 0;
 }
 
 void PlayerView::render(vector<GameObject*> walls, ProcessManager* pm)
@@ -129,6 +132,8 @@ void PlayerView::render(vector<GameObject*> walls, ProcessManager* pm)
 	renderLevel(walls);
 
     renderProcesses(pm);
+	
+	//renderMinimap(walls);
 	
 	SDL_RenderPresent( renderer );
 }
@@ -160,6 +165,13 @@ void PlayerView::renderProcesses(ProcessManager* pm)
     }
 	pm->getPlayer()->Render(renderer);*/
 }
+
+/*
+void PlayerView::renderMinimap(walls)
+{
+	
+}
+*/
 
 // updates the camera's position based on the player's position
 void PlayerView::updateCameraPosition(ProcessManager* pm)

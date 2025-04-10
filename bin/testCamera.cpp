@@ -211,83 +211,12 @@ int main(int argc, char** argv)
         // get start timee
         int startMS = SDL_GetTicks();
         // Handle events on queue
-		pv.handleInputs(&manager);
-        /*while( SDL_PollEvent( &e ) != 0)
-        {
-              // User requests quit
-            if( e.type == SDL_QUIT ) running = false;
-
-            // User presses a key
-            if( e.type == SDL_KEYDOWN ){
-
-                switch(e.key.keysym.sym){
-                    case SDLK_q:
-                        running = false;
-                        break;
-                    case SDLK_s:
-                        // check which list is active (true = room1)
-                        if(curRoom){
-                            room1 = manager.getProcessList();
-                            manager.loadProcessList(room2);
-                            curRoom = false;
-                        }
-                        else{
-                            room2 = manager.getProcessList();
-                            manager.loadProcessList(room1);
-                            curRoom = true;
-                        }
-                        break;
-                    case SDLK_k:
-                        //kill all the current processes
-                        for(int i = 0; i < curProcesses.size(); i++){
-                            curProcess = curProcesses[i];
-                            curProcess->markForDeletion();
-                        }
-                        break;
-                    case SDLK_UP:
-                        ball1.setSpeedY(-3);
-                        break;
-                    case SDLK_DOWN:
-                        ball1.setSpeedY(3);
-                        break;
-                    case SDLK_RIGHT:
-                        ball1.setSpeedX(3);
-                        break;
-                    case SDLK_LEFT:
-                        ball1.setSpeedX(-3);
-                        break;
-					case SDLK_g:
-					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
-						ball1.updateMouse(mouseX, mouseY);
-						std::cout << mouseX << " " << mouseY << std::endl;
-
-						ball1.shootProj(camX, camY);
-						break;
-                }
-            }
-            else {
-            // no keys pressed,
-				ball1.setSpeedX(0);
-				ball1.setSpeedY(0);
-            }
-        }*/
+		int ret = pv.handleInputs(&manager);
+		if (ret==-1) running=false;
 
         manager.updateProcesses(1);
 
-        //projectileCollision(&ball1);
-
         curProcesses = manager.getProcessList();
-        /*
-        for(int i = 0; i < curProcesses.size(); i++){
-            curProcess = curProcesses[i];
-            curCircle = curProcess->getHitbox();
-            if((curCircle.x - curCircle.radius <= 0) || (curCircle.y - curCircle.radius <= 0)){
-                curProcess->markForDeletion();
-            }
-            else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
-                curProcess->markForDeletion();
-            }
-        }*/
 
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];
@@ -331,16 +260,6 @@ int main(int argc, char** argv)
 
         camX = (ball1.getHitbox().x + ball1.getHitbox().width / 2) - SCREEN_WIDTH / 2;
         camY = (ball1.getHitbox().y + ball1.getHitbox().height / 2) - SCREEN_HEIGHT / 2;
-
-        // draw screen
-        /*SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-        SDL_RenderClear( renderer );
-        for(int i = 0; i < walls.size(); i++){
-            curWall = walls[i];
-            curWall->RenderCam(renderer, camX, camY );
-        }
-        manager.renderProcessesCam( renderer, camX, camY );
-        SDL_RenderPresent( renderer );*/
 		
 		pv.render(walls, &manager);
 

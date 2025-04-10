@@ -17,16 +17,20 @@ public:
 	void cleanup();
 
     void render(vector<GameObject*> walls, ProcessManager* pm);
+	//void render(LevelManager* lm, ProcessManager* pm);
 	
-	void handleInputs(ProcessManager* pm);
+	int handleInputs(ProcessManager* pm);
 
 private:
 
     void renderLevel(vector<GameObject*> walls);
+	//void renderLevel(LevelManager* lm);
 
     void renderProcesses(ProcessManager* pm);
+	
+	//void renderMinimap(LevelManager* lm);
 
-       // updates the camera's position based on the player's position
+    // updates the camera's position based on the player's position
     void updateCameraPosition(ProcessManager* pm);
 
     // The x and y of the camera
