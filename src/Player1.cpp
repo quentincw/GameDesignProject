@@ -90,8 +90,8 @@ void Player1::shootProj(int camX, int camY) {
     }
 
     // set the speed based on spitSpeed
-    float projXspeed = dx * 3;
-    float projYspeed = dy * 3;
+    float projXspeed = dx * 3 + xSpeed;
+    float projYspeed = dy * 3 + ySpeed;
 
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
