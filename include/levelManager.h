@@ -33,6 +33,9 @@ private:
     // the coordinates of the current room
     int roomX, roomY;
 
+    // calculates the x,y positions and height, width of each room
+    void fillProcessLists();
+
 
 };
 

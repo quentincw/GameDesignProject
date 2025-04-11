@@ -192,6 +192,7 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
         grid[x][y] = room.gen(dimensions[r][0], dimensions[r][1], door_map[x][y], dimensions[r][2]);
         grid_col[x][y] = room.getTilemapCollision();
     }
+    cout << "grid: " << grid.size() << " grid y: " << grid[0].size() << endl;
 
     for (int iy = 0; iy < grid_height; ++iy) {
         y = grid_height - 1 - iy;
@@ -237,6 +238,10 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     // since render boxes overlap in connected doors, both rooms will render for doors
     vector<vector<SDL_Rect>> render_grid(grid_width, vector<SDL_Rect>(grid_height, SDL_Rect()));
     
+    // vector of rectangles that stores x,y, height, width of each room for level manager
+    //vector<Rectangle> roomDimensions;
+    // rectangle for populating vector of room dimensions for the level manager
+    Rectangle roomRectangle;
 
     int x_offset = 0;
     int y_offset = 0;
@@ -261,6 +266,12 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 render_grid[x][y] = {x_offset, y_offset, int(grid[x][y].size()), int(grid[x][y][0].size())};
 
                 std::cout << "grid: x = "<< x << ", "<< y << " | "<< "Render grid: x = " << render_grid[x][y].x << ", y = " << render_grid[x][y].y << ", w = " << render_grid[x][y].w << ", h = " << render_grid[x][y].h << std::endl;
+                roomRectangle.x = render_grid[x][y].x;
+                roomRectangle.y = render_grid[x][y].y;
+                roomRectangle.width = render_grid[x][y].w;
+                roomRectangle.height = render_grid[x][y].h;
+                roomDimensions.push_back(roomRectangle);
+
             }
             if (max_row[y] > 0) y_offset += max_row[y] + pad;
         }
@@ -360,6 +371,11 @@ SDL_Rect Floor::getCurRoom()
 // returns the current room's position in the 2D array
 RoomPosition Floor::getRoomPos() {
     return curRoomPos;
+}
+
+// returns a vector containing rectangles that represent each room
+vector<Rectangle> Floor::getRoomDimensions() {
+    return roomDimensions;
 }
 
 vector<vector<int>> Floor::getRooms() {
