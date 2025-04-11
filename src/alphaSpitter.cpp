@@ -123,10 +123,4 @@ void AlphaSpitter::spitProjectile(Rectangle phitbox) {
 }
 
 
-// handles the interactions with other objects
-void AlphaSpitter::handleInteractions(int tag) {
-
-}
-
-
 

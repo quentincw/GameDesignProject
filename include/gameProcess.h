@@ -9,14 +9,14 @@
 #include <bits/stdc++.h>
 #include "gameObject.h"
 
-
-
 class GameProcess : public GameObject {
 
     public:
-
         // constructor for process
         GameProcess();
+
+        // destructor
+        virtual ~GameProcess();
 
         // updates the object
         virtual void Update(float deltaTime) = 0;
@@ -26,9 +26,6 @@ class GameProcess : public GameObject {
 
         // draws the object based on the camera's position
         virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
-
-        // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
 
         // marks process for deletion by changing delete flag (boolean)
         void markForDeletion();
@@ -42,15 +39,25 @@ class GameProcess : public GameObject {
         // returns a vector of all the children of a process
         std::vector<GameProcess*> getChildren();
 
+        // returns a vector of target tags the proccess can interact with
+        std::vector<std::string> getInteractions() const;
+
         // returns the vector of tags of the process
         std::vector<std::string> getTags() const;
 
+        // handles interaction with a given tag
+        virtual void handleInteraction(std::string tag);
 
+        // gets the damage an enemy does on contact
+        int getDamage() const;
 
     protected:
 
-        // list of tags the process can interact with
+        // list of tags associated with the process
         std::vector<std::string> tags;
+
+        // list of tags process can interact with
+        std::vector<std::string> interactions;
 
         // map of all possible interactions a process can have
         //map<string, int> interactions;
@@ -67,7 +74,8 @@ class GameProcess : public GameObject {
         // vector of all the children of a process
         std::vector<GameProcess*> childrenList;
 
+        // the damage a process does on collision
+        int damage;
 };
-
 
 #endif

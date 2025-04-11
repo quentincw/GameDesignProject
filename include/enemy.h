@@ -13,6 +13,9 @@ class Enemy : public Entity {
         // constructor
         Enemy(int x, int y);
 
+        // destructor
+        virtual ~Enemy();
+
         // updates the object
         virtual void Update(float deltaTime) = 0;
 
@@ -26,17 +29,7 @@ class Enemy : public Entity {
         virtual void UpdateAI(Rectangle phitbox) = 0;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
-
-        // gets the damage an enemy does on contact
-        int getDamage() const;
-
-    protected:
-
-        // the damage an enemy does on contact
-        int damage;
-
-
+        void handleInteraction(std::string tag) override;
 };
 
 

@@ -7,7 +7,6 @@
 #include "gameObject.h"
 #include "gameProcess.h"
 
-
 // constructor
 GameProcess::GameProcess() : tags{}, childrenList{} {
     tags.push_back("Wall");
@@ -15,6 +14,9 @@ GameProcess::GameProcess() : tags{}, childrenList{} {
     children = false;
     radius = 0;
 }
+
+// destructor
+GameProcess::~GameProcess() {}
 
 // marks process for deletion by changing delete flag (boolean)
 void GameProcess::markForDeletion() {
@@ -39,8 +41,20 @@ std::vector<GameProcess*> GameProcess::getChildren(){
     return childrenTemp;
 }
 
+// returns the vector of interactions
+std::vector<std::string> GameProcess::getInteractions() const {
+    return interactions;
+}
 
-// returns the vector of tags of the process
+// returns a vector of tags associated with the process
 std::vector<std::string> GameProcess::getTags() const {
     return tags;
+}
+
+// get the damage the enemy causes to the player on contact
+int GameProcess::getDamage() const {
+    return damage;
+}
+
+void GameProcess::handleInteraction(const std::string tag) {
 }

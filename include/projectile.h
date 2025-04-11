@@ -27,7 +27,7 @@ class Projectile : public GameProcess {
         int getDamage() const;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
+        void handleInteraction(std::string tag) override;
 
     protected:
         
@@ -36,8 +36,6 @@ class Projectile : public GameProcess {
 
         // the damage the projectile causes to the player
         int damage;
-
-
 };
 
 

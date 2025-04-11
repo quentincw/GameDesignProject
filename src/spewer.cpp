@@ -124,12 +124,3 @@ void Spewer::spitProjectile(Rectangle phitbox) {
     // set the flag for child to true
     children = true;
 }
-
-
-// handles the interactions with other objects
-void Spewer::handleInteractions(int tag) {
-
-}
-
-
-

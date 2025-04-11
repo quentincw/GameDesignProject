@@ -28,12 +28,6 @@ class Spewer : public Enemy {
         // updates the ai based on the player's position
         void UpdateAI(Rectangle phitbox);
 
-        // handles the interactions with other objects
-        void handleInteractions(int tag);
-
-
-
-
     private:
 
         // time inbetween spitting, time the Spewer is stationary while spitting

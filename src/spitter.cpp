@@ -121,12 +121,3 @@ void Spitter::spitProjectile(Rectangle phitbox) {
     // set the flag for child to true
     children = true;
 }
-
-
-// handles the interactions with other objects
-void Spitter::handleInteractions(int tag) {
-
-}
-
-
-
