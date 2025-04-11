@@ -4,6 +4,7 @@
 #include "levelManager.h"
 #include "floor.h"
 #include "enemyFactory.h"
+#include "gameDoor.h"
 //#include <algorithm> // reverse
 #include <set>
 using namespace std;
@@ -74,6 +75,18 @@ void LevelManager::genFloor(int level) {
     int count = 0;
     Rectangle curRect;
     GameProcess* enemy = nullptr;
+    vector<vector<int>> roomsCol = curfloor.getRoomsCol();
+    GameProcess* gameDoor = nullptr;
+
+    cout << "roomsCol size x: " << roomsCol.size() << endl;
+    
+    for (size_t i = 0; i < roomsCol.size(); ++i) {
+        for (size_t j = 0; j < 70; ++j) {
+            cout << roomsCol[i][j] << " ";
+        }
+        cout << "\n";
+    }
+
 
     // loop through every room
     for (size_t i = 0; i < roomPos.size(); ++i) {
@@ -87,6 +100,55 @@ void LevelManager::genFloor(int level) {
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
                 enemy->setPosition(curRect.x * TILE_SIZE, curRect.y * TILE_SIZE);
                 roomLists[i][j].push_back(enemy);
+                cout << "RoomPos h/w: " << i << " " << j << ": " << curRect.width << " " << curRect.height << endl;
+                
+                
+                // check for door on top side
+                bool door = false;
+                for(size_t w = 0; w < curRect.width; ++w) {
+                    //cout << roomsCol[curRect.x + w][curRect.y] << " ";
+                    if((door == false) && (roomsCol[curRect.x + w][curRect.y] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+                //cout << "\n";
+
+                // check for door on left side
+                door = false;
+                for(size_t h = 0; h < curRect.height; ++h) {
+                    if((door == false) && (roomsCol[curRect.x][curRect.y + h] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x - 1) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+
+                // check for door on bottom side
+                door = false;
+                for(size_t w = 0; w < curRect.width; ++w) {
+                    if((door == false) && (roomsCol[curRect.x + w][curRect.y + curRect.height] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y + curRect.height) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+
+                // check for door on right side
+                door = false;
+                for(size_t h = 0; h < curRect.height; ++h) {
+                    if((door == false) && (roomsCol[curRect.x + curRect.width][curRect.y + h] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x + curRect.width) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+
 
                 // iterate count
                 count++;
