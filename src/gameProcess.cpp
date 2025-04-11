@@ -15,6 +15,9 @@ GameProcess::GameProcess() : tags{}, childrenList{} {
     radius = 0;
 }
 
+// destructor
+GameProcess::~GameProcess() {}
+
 // marks process for deletion by changing delete flag (boolean)
 void GameProcess::markForDeletion() {
     deleteFlag = true;
@@ -51,4 +54,7 @@ std::vector<std::string> GameProcess::getTags() const {
 // get the damage the enemy causes to the player on contact
 int GameProcess::getDamage() const {
     return damage;
+}
+
+void GameProcess::handleInteraction(const std::string tag) {
 }

@@ -77,6 +77,14 @@ void GameLogic::checkCollisions()
 
     for (GameProcess* proc : processes)
     {
+        //testing
+        auto tags = proc->getTags();
+        for (std::string s: tags) {
+            std::cout << s << std::endl;
+        }
+
+        std::cout << std::endl;
+
         if (!proc) continue;
 
         auto procHitbox = proc->getHitbox();
@@ -115,7 +123,7 @@ void GameLogic::checkCollisions()
 
 void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag)
 {
-    if (contains(p2->getTags(), "Entity"))
+    if (contains(p2->getTags(), "entity"))
     {
         Entity* entity = dynamic_cast<Entity*>(p2);
         if (entity)

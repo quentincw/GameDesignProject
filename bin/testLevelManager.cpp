@@ -9,6 +9,7 @@
 #include "floor.h"
 #include "levelManager.h"
 #include "playerView.h"
+#include "gameLogic.h"
 
 
 using namespace std;
@@ -68,6 +69,8 @@ int main(int argc, char** argv) {
     SDL_Rect curRoom = curFloor->getCurRoom();
     processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
 
+    // make game logic
+    GameLogic gameLogic(&processManager, &levelManager);
 
     /*** Main Loop ***/
     bool running = true;
@@ -77,14 +80,19 @@ int main(int argc, char** argv) {
     // While application is running
     while( running )
     {
-  
         // get start timee
         int startMS = SDL_GetTicks();
         // Handle events on queue
-		playerView.handleInputs(&processManager);
+		int ret = playerView.handleInputs(&processManager);
+        if (ret == -1) {
+            running = false;
+        }
 
         // update the player and current process list
         processManager.updateProcesses(1);
+
+        // update game logic
+        gameLogic.update();
 
         // check if the player moved to a new room
         levelManager.setCurrentRoom(&processManager);
@@ -98,9 +106,4 @@ int main(int argc, char** argv) {
         }
     }
     return 0;
-
-
-
-
-
 }

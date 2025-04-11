@@ -13,6 +13,9 @@ class Enemy : public Entity {
         // constructor
         Enemy(int x, int y);
 
+        // destructor
+        virtual ~Enemy();
+
         // updates the object
         virtual void Update(float deltaTime) = 0;
 

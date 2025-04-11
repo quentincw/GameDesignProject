@@ -15,6 +15,9 @@ class GameProcess : public GameObject {
         // constructor for process
         GameProcess();
 
+        // destructor
+        virtual ~GameProcess();
+
         // updates the object
         virtual void Update(float deltaTime) = 0;
 

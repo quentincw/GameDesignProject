@@ -75,7 +75,7 @@ int moveInbounds(GameObject* rect1, GameObject* rect2){
         return 2;
     }
     // bottom side collision
-    else if(center2.y >= hitbox1.y + hitbox1.height){
+    else if(center2.y >=  hitbox1.y + hitbox1.height){
         rect2->setPosition(hitbox2.x, hitbox1.y + hitbox1.height);
         return 4;
     }

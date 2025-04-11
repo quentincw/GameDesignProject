@@ -8,7 +8,7 @@
 
 
 Entity::Entity() : GameProcess() {
-    tags.push_back("Entity");
+    tags.push_back("entity");
     health = 0;
     maxHealth = 0;
     isAlive = true;
