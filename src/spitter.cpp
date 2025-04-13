@@ -6,7 +6,6 @@
 #include "spitter.h"
 #include "spitterProjectile.h"
 
-
 // constructor
 Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
