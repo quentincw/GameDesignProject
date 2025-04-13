@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <SDL_rect.h>
+#include "rectangle.h"
 using namespace std;
 
 // struct for holding room position in 2D array
@@ -29,6 +30,9 @@ class Floor {
 
     // returns the current room's position in the 2D array
     RoomPosition getRoomPos();
+
+    // returns a vector containing rectangles that represent each room
+    vector<Rectangle> getRoomDimensions();
     
     private:
     // additional padding between rooms
@@ -51,6 +55,9 @@ class Floor {
 
     // current room position in 2D array
     RoomPosition curRoomPos;
+
+    // vector of rectangles that stores x, y, height, width of each room for level manager
+    vector<Rectangle> roomDimensions;
 };
 
 #endif /* _FLOOR_H_ */

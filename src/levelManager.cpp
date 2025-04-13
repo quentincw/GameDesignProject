@@ -2,6 +2,11 @@
 #include "gameObject.h"
 #include "constants.h"
 #include "levelManager.h"
+#include "floor.h"
+#include "enemyFactory.h"
+#include "gameDoor.h"
+//#include <algorithm> // reverse
+#include <set>
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -35,6 +40,12 @@ void LevelManager::genFloor(int level) {
 
     // get the room coordinates
     vector<vector<int>> roomPos = curfloor.getRoomsPos();
+    
+    // reverse y vector
+    //reverse(roomPos.begin(), roomPos.end());
+    for (size_t i = 0; i < roomPos.size(); ++i) {
+        reverse(roomPos[i].begin(), roomPos[i].end());
+    }
 
     // make the 2D vector of process lists match the rooms
     // rows
@@ -50,10 +61,114 @@ void LevelManager::genFloor(int level) {
         }
     }
 
+    // fill room lists with enemies
+    //fillProcessLists();
+
+    // get the dimensions of the floor
+    vector<Rectangle> rooms = curfloor.getRoomDimensions();
+    /*
+    for (size_t i = 0; i < rooms.size(); ++i) {
+        cout << "x: " << rooms[i].x << " y: " << rooms[i].y << " width: " << rooms[i].width << " height: " << rooms[i].height << endl;
+    }*/
+
+    // 1 == room, 0 == gap
+    int count = 0;
+    Rectangle curRect;
+    GameProcess* enemy = nullptr;
+    vector<vector<int>> roomsCol = curfloor.getRoomsCol();
+    GameProcess* gameDoor = nullptr;
+
+    cout << "roomsCol size x: " << roomsCol.size() << endl;
+    
+    for (size_t i = 0; i < roomsCol.size(); ++i) {
+        for (size_t j = 0; j < 70; ++j) {
+            cout << roomsCol[i][j] << " ";
+        }
+        cout << "\n";
+    }
+
+
+    // loop through every room
+    for (size_t i = 0; i < roomPos.size(); ++i) {
+        for (size_t j = 0; j < roomPos[i].size(); ++j) {
+            // if there is not a gap in this spot
+            if(roomPos[i][j] == 1) {
+                // get the next rectangle
+                Rectangle curRect = rooms[count];
+                cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
+                // level filler call (fill list using the rectangle)
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+                enemy->setPosition(curRect.x * TILE_SIZE, curRect.y * TILE_SIZE);
+                roomLists[i][j].push_back(enemy);
+                cout << "RoomPos h/w: " << i << " " << j << ": " << curRect.width << " " << curRect.height << endl;
+                
+                
+                // check for door on top side
+                bool door = false;
+                for(size_t w = 0; w < curRect.width; ++w) {
+                    //cout << roomsCol[curRect.x + w][curRect.y] << " ";
+                    if((door == false) && (roomsCol[curRect.x + w][curRect.y] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+                //cout << "\n";
+
+                // check for door on left side
+                door = false;
+                for(size_t h = 0; h < curRect.height; ++h) {
+                    if((door == false) && (roomsCol[curRect.x][curRect.y + h] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x - 1) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+
+                // check for door on bottom side
+                door = false;
+                for(size_t w = 0; w < curRect.width; ++w) {
+                    if((door == false) && (roomsCol[curRect.x + w][curRect.y + curRect.height] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y + curRect.height) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+
+                // check for door on right side
+                door = false;
+                for(size_t h = 0; h < curRect.height; ++h) {
+                    if((door == false) && (roomsCol[curRect.x + curRect.width][curRect.y + h] == 0)) {
+                        door = true;
+                        // create a door at the position
+                        gameDoor = new GameDoor((curRect.x + curRect.width) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
+                        roomLists[i][j].push_back(gameDoor);
+                    }
+                }
+
+
+                // iterate count
+                count++;
+            }
+        }
+    }
+    
+    // reverse y vectors
+    for (size_t i = 0; i < roomPos.size(); ++i) {
+        reverse(roomLists[i].begin(), roomLists[i].end());
+    }
+    
+
+
 }
 
+// calculates the x,y positions and height, width of each room
+void LevelManager::fillProcessLists() {
 
-//player.setPos((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
+}
 
 
 void LevelManager::setCurrentRoom(ProcessManager* pm) {
@@ -95,135 +210,3 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 Floor* LevelManager::getCurrentFloor() {
     return &curfloor;
 }
-
-/*
-//#include "gameLogic.h"
-#include "gameProcess.h"
-#include "gameObject.h"
-#include "constants.h"
-#include "levelManager.h"
-
-LevelManager::LevelManager()
-{
-    SDL_Rect tile_0;
-    tile_0.x = 0;
-    tile_0.y = 0;
-    tile_0.w = 16;
-    tile_0.h = 16;
-
-    SDL_Rect tile_1;
-    tile_1.x = 16;
-    tile_1.y = 0;
-    tile_1.w = 16;
-    tile_1.h = 16;
-
-    SDL_Rect tile_2;
-    tile_2.x = 32;
-    tile_2.y = 0;
-    tile_2.w = 16;
-    tile_2.h = 16;
-
-    SDL_Rect tile_3;
-    tile_3.x = 48;
-    tile_3.y = 0;
-    tile_3.w = 16;
-    tile_3.h = 16;
-
-    SDL_Rect tile_4;
-    tile_4.x = 64;
-    tile_4.y = 0;
-    tile_4.w = 16;
-    tile_4.h = 16;
-
-    SDL_Rect tile_5;
-    tile_5.x = 0;
-    tile_5.y = 16;
-    tile_5.w = 16;
-    tile_5.h = 16;
-
-    SDL_Rect tile_6;
-    tile_6.x = 16;
-    tile_6.y = 16;
-    tile_6.w = 16;
-    tile_6.h = 16;
-
-    SDL_Rect tile_7;
-    tile_7.x = 32;
-    tile_7.y = 16;
-    tile_7.w = 16;
-    tile_7.h = 16;
-
-    SDL_Rect tile_8;
-    tile_8.x = 48;
-    tile_8.y = 16;
-    tile_8.w = 16;
-    tile_8.h = 16;
-
-    SDL_Rect tile_9;
-    tile_9.x = 64;
-    tile_9.y = 16;
-    tile_9.w = 16;
-    tile_9.h = 16;
-
-    SDL_Rect tile_10;
-    tile_10.x = 0;
-    tile_10.y = 32;
-    tile_10.w = 16;
-    tile_10.h = 16;
-
-    SDL_Rect tile_11;
-    tile_11.x = 16;
-    tile_11.y = 32;
-    tile_11.w = 16;
-    tile_11.h = 16;
-
-    SDL_Rect tile_12;
-    tile_12.x = 32;
-    tile_12.y = 32;
-    tile_12.w = 16;
-    tile_12.h = 16;
-
-    SDL_Rect tile_13;
-    tile_13.x = 48;
-    tile_13.y = 32;
-    tile_13.w = 16;
-    tile_13.h = 16;
-
-    SDL_Rect tileTextures[14] = {tile_0, tile_1, tile_2, tile_3, tile_4, tile_5, tile_6, tile_7, tile_8, tile_9, tile_10, tile_11, tile_12, tile_13};
-}
-
-void LevelManager::genFloor(int level)
-{
-    switch (level) {
-        case 1:
-            // 3, 4, 5
-            floor.gen(6, 6, 14);
-        case 2:
-            // 4, 5, 6
-            floor.gen(6, 6, 16);
-        case 3:
-            // 4, 5, 6
-            floor.gen(5, 5, 18);
-        default:
-            floor.gen(5, 5, 14);
-    }
-
-    SDL_Rect curRoom = floor.getCurRoom();
-
-    vector<vector<int>> rooms = floor.getRooms();
-    int rooms_width = rooms.size();
-    int rooms_height = rooms[0].size();
-
-    vector<vector<SDL_Rect>> tile(rooms_width, vector<SDL_Rect>(rooms_height));
-    static const int MAP_SIZE = 2;
-    for (int x = 0; x < rooms_width; x++) {
-        for (int y = 0; y < rooms_height; y++) {
-            tile[x][y].x = x * TILE_SIZE;
-            tile[x][y].y = y * TILE_SIZE;
-            tile[x][y].w = TILE_SIZE;
-            tile[x][y].h = TILE_SIZE;
-        }
-    }
-}
-
-*/
