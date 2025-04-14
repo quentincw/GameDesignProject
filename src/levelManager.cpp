@@ -98,7 +98,7 @@ void LevelManager::genFloor(int level) {
                 cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
                 // level filler call (fill list using the rectangle)
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
-                enemy->setPosition(curRect.x * TILE_SIZE, curRect.y * TILE_SIZE);
+                enemy->setPosition((curRect.x * TILE_SIZE) + 100, (curRect.y * TILE_SIZE) + 100);
                 roomLists[i][j].push_back(enemy);
                 cout << "RoomPos h/w: " << i << " " << j << ": " << curRect.width << " " << curRect.height << endl;
                 

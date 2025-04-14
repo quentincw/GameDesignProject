@@ -11,7 +11,7 @@ PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startY
     radius = 15;
     hitbox.height = 30;
     hitbox.width = 30;
-    damage = 10;
+    damage = 100;
     tags.push_back("Player");
     tags.push_back("Enemy");
 }

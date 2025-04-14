@@ -35,6 +35,9 @@ class Entity : public GameProcess {
         // handles the interactions with other objects
         void handleInteraction(std::string tag) override;
 
+        // spawns a bloodstain child process
+        void spawnBloodStain();
+
     protected:
 
         // current health
@@ -52,8 +55,6 @@ class Entity : public GameProcess {
         // the speed of the entity
         float xSpeed, ySpeed;
 
-        // spawns a bloodstain child process
-        void spawnBloodStain();
 
 };
 
