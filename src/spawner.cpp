@@ -10,14 +10,14 @@
 // constructor
 Spawner::Spawner(int x, int y) : Enemy(x, y) {
 
-    health = 200;
-    radius = 20;
-    hitbox.height = 40;
-    hitbox.width = 40;
+    health = SPAWNER_HEALTH;
+    radius = SPAWNER_RADIUS;
+    hitbox.height = SPAWNER_SIZE;
+    hitbox.width = SPAWNER_SIZE;
     xSpeed = 0;
     ySpeed = 0;
-    damage = 50;
-    cooldown = 240;
+    damage = SPAWNER_DAMAGE;
+    cooldown = SPAWNER_COOLDOWN;
 }
 
 // updates the object
@@ -47,7 +47,7 @@ void Spawner::UpdateAI(Rectangle phitbox) {
 
     if(cooldown <= 0){
         spawnEnemy();
-        cooldown = 240;
+        cooldown = SPAWNER_COOLDOWN;
     }
 
     // get center of hitboxes
@@ -67,8 +67,8 @@ void Spawner::UpdateAI(Rectangle phitbox) {
     }
 
     // set the speed based on speed
-    xSpeed = dx * 1;
-    ySpeed = dy * 1;
+    xSpeed = dx * SPAWNER_SPEED;
+    ySpeed = dy * SPAWNER_SPEED;
 
     // if the player is too close, reverse
     if(length <= 250){

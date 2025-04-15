@@ -19,13 +19,13 @@ BloodStain::BloodStain(int x, int y, int height, int width) : GameProcess() {
 // draw the bloodstain
 void BloodStain::Render(SDL_Renderer* renderer) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x, point.y, hitbox.height/2, 0, 200, 0, 200);
+    filledCircleRGBA(renderer, point.x, point.y, hitbox.height/1.5, 0, 200, 0, 200);
 }
 
 // draws the object based on the camera's position
 void BloodStain::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, hitbox.height/2, 0, 200, 0, 200);
+    filledCircleRGBA(renderer, point.x - camX, point.y - camY, hitbox.height/1.5, 0, 200, 0, 200);
 }
 
 // updates the object

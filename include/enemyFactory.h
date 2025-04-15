@@ -5,6 +5,7 @@
 #include "spitter.h"
 #include "spewer.h"
 #include "spawner.h"
+#include "exploder.h"
 
 class EnemyFactory {
 
