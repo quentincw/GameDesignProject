@@ -33,15 +33,8 @@ private:
     // the coordinates of the current room
     int roomX, roomY;
 
-    // random number generators
-    random_device rd;
-    mt19937 gen;
-
-    // takes a process list and a room. Finds valid locations inside the room to place the enemies
-    void findValidSpots(vector<GameProcess*>& curList, Rectangle rectangle);
-
-    // fills a process list based on a difficulty level
-    void fillProcessList(vector<GameProcess*>& curList, int difficulty);
+    // calculates the x,y positions and height, width of each room
+    void fillProcessLists();
 
 
 };
