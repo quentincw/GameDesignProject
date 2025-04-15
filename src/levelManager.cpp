@@ -5,12 +5,14 @@
 #include "floor.h"
 #include "enemyFactory.h"
 #include "gameDoor.h"
+#include <random>
+#include <ctime>
 //#include <algorithm> // reverse
 #include <set>
 using namespace std;
 
 LevelManager::LevelManager() {
-
+    mt19937 gen(rd()); 
 }
 
 
@@ -97,9 +99,10 @@ void LevelManager::genFloor(int level) {
                 Rectangle curRect = rooms[count];
                 cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
                 // level filler call (fill list using the rectangle)
-                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
-                enemy->setPosition(curRect.x * TILE_SIZE, curRect.y * TILE_SIZE);
-                roomLists[i][j].push_back(enemy);
+                fillProcessList(roomLists[i][j], 2);
+                // find valid places for each enemy
+                findValidSpots(roomLists[i][j], curRect);
+
                 cout << "RoomPos h/w: " << i << " " << j << ": " << curRect.width << " " << curRect.height << endl;
                 
                 
@@ -155,7 +158,7 @@ void LevelManager::genFloor(int level) {
             }
         }
     }
-    
+    //cout << "out of geen" << endl;
     // reverse y vectors
     for (size_t i = 0; i < roomPos.size(); ++i) {
         reverse(roomLists[i].begin(), roomLists[i].end());
@@ -165,9 +168,89 @@ void LevelManager::genFloor(int level) {
 
 }
 
-// calculates the x,y positions and height, width of each room
-void LevelManager::fillProcessLists() {
+// takes a process list and a room. Finds valid locations inside the room to place the enemies
+void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle rectangle) {
 
+
+    // random number ranges (height/width)
+    uniform_real_distribution<> width(2, rectangle.width - 2);
+    uniform_real_distribution<> height(2, rectangle.height- 2);
+
+    // potential position (tile)
+    int x,y;
+
+    cout << rectangle.x << endl;
+    cout << rectangle.y << endl;
+    cout << rectangle.width << endl;
+    cout << rectangle.height << endl;
+    cout << "generate" << endl;
+
+    // vector of valid/ invalid locations
+    vector<vector<int>> roomsCol = curfloor.getRoomsCol();
+
+    // loop through each process
+    for (size_t i = 0; i < curList.size(); ++i) {
+        // generate a position
+        x = width(gen) + rectangle.x;
+        y = height(gen) + rectangle.y;
+        cout << x << endl;
+        cout << y << endl;
+        cout << roomsCol[x][y] << endl;
+        // cheeck if valid
+        while(roomsCol[x][y] == 1){
+            // repeat until valid
+            x = width(gen) + rectangle.x;
+            y = height(gen) + rectangle.y;
+        }
+        cout << "found spot" << endl;
+        if (curList[i] != nullptr) {
+            curList[i]->setPosition(x * TILE_SIZE, y * TILE_SIZE);
+        } else {
+            cout << "Null pointer encountered at index " << i << endl;
+        }
+        cout << "seet spot" << endl;
+    }
+    cout << "fin spots" << endl;
+}
+
+// fills a process list based on a difficulty level
+void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty) {
+
+    // random enemy generator
+    // increase for every enemy added
+    uniform_int_distribution<> enemyDist(0, 2);
+
+    cout << "made it" << endl;
+ 
+    GameProcess* enemy = nullptr;
+
+    // loop for generating enemies
+    // spawns difficulty * 2 enemies
+    for (int i = 0; i < difficulty * 2; ++i) { 
+        // generate an enemy number
+        int enemyType = enemyDist(gen);
+
+        switch (enemyType) {
+            case 0:
+                // spawn roach
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ROACH);
+                break;
+            case 1:
+                // spawn spitter
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+                break;
+            case 2:
+                // spawn spewer
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPEWER);
+                break;
+            default:
+                break;
+        }
+
+        // add enemy to the list
+        curList.push_back(enemy);
+
+    }
 }
 
 

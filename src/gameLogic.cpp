@@ -80,10 +80,10 @@ void GameLogic::checkCollisions()
         //testing
         auto tags = proc->getTags();
         for (std::string s: tags) {
-            std::cout << s << std::endl;
+            //std::cout << s << std::endl;
         }
 
-        std::cout << std::endl;
+        //std::cout << std::endl;
 
         if (!proc) continue;
 
