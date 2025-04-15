@@ -85,9 +85,14 @@ void Spawner::UpdateAI(Rectangle phitbox) {
 // creates a projectile object
 void Spawner::spawnEnemy() {
 
-    // create spit at spitter's location w/ calculated speeds
-    //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    Roach* roach = new Roach(hitbox.x, hitbox.y);
+    // get the center of the enemy
+    Point center = getCenter(&hitbox);
+
+    // spawn raoch centered on the enemy
+    int x = center.x - (ROACH_SIZE / 2);
+    int y = center.y - (ROACH_SIZE / 2);
+   
+    Roach* roach = new Roach(x, y);
     // put roach in childrenList
     childrenList.push_back(roach);
 

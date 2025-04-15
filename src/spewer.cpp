@@ -89,34 +89,39 @@ void Spewer::UpdateAI(Rectangle phitbox) {
 void Spewer::spitProjectile(Rectangle phitbox) {
 
 
+    // get the center of the enemy
+    Point center = getCenter(&hitbox);
+
+    // spawn explosion centered on the enemy
+    int x = center.x - (SPITTERPROJECTILE_SIZE / 2);
+    int y = center.y - (SPITTERPROJECTILE_SIZE / 2);
+
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, spitSpeed, spitSpeed);
-    //child = spit;
-    // put spit in childrenList
-    //childrenList.clear();
+    SpitterProjectile* spit = new SpitterProjectile(x, y, spitSpeed, spitSpeed);
+
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, -spitSpeed, spitSpeed);
+    spit = new SpitterProjectile(x, y, -spitSpeed, spitSpeed);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, -spitSpeed, -spitSpeed);
+    spit = new SpitterProjectile(x, y, -spitSpeed, -spitSpeed);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, spitSpeed, -spitSpeed);
+    spit = new SpitterProjectile(x, y, spitSpeed, -spitSpeed);
     childrenList.push_back(spit);
 
     // up, down, left, right
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, -spitSpeed, 0);
+    spit = new SpitterProjectile(x, y, -spitSpeed, 0);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, 0, -spitSpeed);
+    spit = new SpitterProjectile(x, y, 0, -spitSpeed);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, spitSpeed, 0);
+    spit = new SpitterProjectile(x, y, spitSpeed, 0);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, 0, spitSpeed);
+    spit = new SpitterProjectile(x, y, 0, spitSpeed);
     childrenList.push_back(spit);
 
 

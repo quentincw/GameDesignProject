@@ -109,9 +109,13 @@ void Spitter::spitProjectile(Rectangle phitbox) {
     float projXspeed = dx * spitSpeed;
     float projYspeed = dy * spitSpeed;
 
+    // spawn explosion centered on the enemy
+    int x = enemyCenter.x - (SPITTERPROJECTILE_SIZE / 2);
+    int y = enemyCenter.y - (SPITTERPROJECTILE_SIZE / 2);
+
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    SpitterProjectile* spit = new SpitterProjectile(x, y, projXspeed, projYspeed);
     //child = spit;
     // put spit in childrenList
     //childrenList.clear();
