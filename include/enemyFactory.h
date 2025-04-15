@@ -4,6 +4,7 @@
 #include "roach.h"
 #include "spitter.h"
 #include "spewer.h"
+#include "spawner.h"
 
 class EnemyFactory {
 
@@ -13,7 +14,9 @@ class EnemyFactory {
         enum class EnemyType {
             ROACH,
             SPITTER,
-            SPEWER
+            SPEWER,
+            SPAWNER,
+            EXPLODER
         };
 
         // create and return an enemy of the type provided

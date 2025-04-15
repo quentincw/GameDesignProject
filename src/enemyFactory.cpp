@@ -16,6 +16,9 @@ GameProcess* EnemyFactory::createEnemy(EnemyType type) {
         case EnemyType::SPEWER:
             enemy = new Spewer(0,0);
             return enemy;
+        case EnemyType::SPAWNER:
+            enemy = new Spawner(0,0);
+            return enemy;
         default:
             // return nullptr if invalid type
             return enemy;
