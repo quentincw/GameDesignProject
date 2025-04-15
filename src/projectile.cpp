@@ -21,9 +21,9 @@ void Projectile::Update(float deltaTime) {
 }
 
 // get the damage the projectile causes to the player on contact
-int Projectile::getDamage() const {
+/*int Projectile::getDamage() const {
     return damage;
-}
+}*/
 
 void Projectile::handleInteraction(std::string tag) {
     if (tag == "wall" || tag == "player" || tag == "enemy") {

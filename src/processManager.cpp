@@ -8,6 +8,7 @@
 #include "playerProjectile.h"
 #include "enemy.h"
 #include "Player1.h"
+#include "gameDoor.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
@@ -28,13 +29,14 @@ void ProcessManager::updateProcesses(float deltaTime) {
     // update player
     player->Update(deltaTime);
 
+    // update AI
+    updateEnemyAI();
+
+
     // update everything else
     for(int i = 0; i < processList.size(); i++){
         processList[i]->Update(deltaTime);
     }
-
-    // update AI
-    updateEnemyAI();
 
     // add any children to the list
     findChildren();
@@ -139,6 +141,15 @@ void ProcessManager::updateEnemyAI() {
         if (auto enemy = dynamic_cast<Enemy*>(curProcess)) {
             enemy->UpdateAI(player->getHitbox());
             enemyCount++;
+        }
+    }
+    // all enemies are dead
+    if(enemyCount == 0){
+        for (auto& curProcess : processList) {
+            // check if the current process is an door
+            if (auto door = dynamic_cast<GameDoor*>(curProcess)) {
+                door->markForDeletion();
+            }
         }
     }
 }

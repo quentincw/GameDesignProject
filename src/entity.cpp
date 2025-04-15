@@ -27,6 +27,7 @@ void Entity::adjustHealth(int healthDamage) {
     health = health - healthDamage;
     if (health <= 0) {
         isAlive = false;
+        markForDeletion();
     }
 }
 

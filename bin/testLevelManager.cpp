@@ -10,6 +10,7 @@
 #include "levelManager.h"
 #include "playerView.h"
 #include "gameLogic.h"
+#include "oldLogic.h"
 
 
 using namespace std;
@@ -70,7 +71,9 @@ int main(int argc, char** argv) {
     processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
 
     // make game logic
-    GameLogic gameLogic(&processManager, &levelManager);
+    //GameLogic gameLogic(&processManager, &levelManager);
+    OldGameLogic gameLogic(&processManager, &levelManager);
+
 
     /*** Main Loop ***/
     bool running = true;
