@@ -218,7 +218,7 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
 
     // random enemy generator
     // increase for every enemy added
-    uniform_int_distribution<> enemyDist(0, 4);
+    uniform_int_distribution<> enemyDist(0, 5);
 
     cout << "made it" << endl;
  
@@ -250,6 +250,10 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
             case 4:
                 // spawn Exploder
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::EXPLODER);
+                break;
+            case 5:
+                // spawn Alpha Spitter
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
                 break;
 
             default:

@@ -22,6 +22,9 @@ GameProcess* EnemyFactory::createEnemy(EnemyType type) {
         case EnemyType::EXPLODER:
             enemy = new Exploder(0,0);
             return enemy;
+        case EnemyType::ALPHASPITTER:
+            enemy = new AlphaSpitter(0,0);
+            return enemy;
         default:
             // return nullptr if invalid type
             return enemy;

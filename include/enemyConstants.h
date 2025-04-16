@@ -24,6 +24,17 @@ static const int SPITTERPROJECTILE_RADIUS = 10;
 static const int SPITTERPROJECTILE_SPEED = 5;
 static const int SPITTERPROJECTILE_DAMAGE = 30;
 
+// ALPHA SPITTER
+static const int ALPHASPITTER_SIZE = 50;
+static const int ALPHASPITTER_RADIUS = 25;
+static const int ALPHASPITTER_SPEED = 3;
+static const int ALPHASPITTER_HEALTH = 400;
+static const int ALPHASPITTER_DAMAGE = 100;
+static const int ALPHASPITTER_COOLDOWN = 100;
+
+// ALPHA SPITTER PROJECTILE
+static const int ALPHASPITTERPROJECTILE_SPEED = 4;
+
 // SPEWER
 static const int SPEWER_SIZE = 40;
 static const int SPEWER_RADIUS = 20;
