@@ -9,13 +9,13 @@
 // constructor
 Roach::Roach(int x, int y) : Enemy(x, y) {
 
-    health = 100;
-    hitbox.height = 20;
-    hitbox.width = 20;
-    radius = 10;
+    health = ROACH_HEALTH;
+    hitbox.height = ROACH_SIZE;
+    hitbox.width = ROACH_SIZE;
+    radius = ROACH_RADIUS;
     xSpeed = 0;
     ySpeed = 0;
-    damage = 50;
+    damage = ROACH_DAMAGE;
 }
 
 // updates the object
@@ -58,6 +58,6 @@ void Roach::UpdateAI(Rectangle phitbox) {
     }
 
     // set the speed based on speed
-    xSpeed = dx * 2;
-    ySpeed = dy * 2;
+    xSpeed = dx * ROACH_SPEED;
+    ySpeed = dy * ROACH_SPEED;
 }
