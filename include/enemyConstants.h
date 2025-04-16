@@ -69,4 +69,13 @@ static const int EXPLOSIONPROJECTILE_SPEED = 0;
 static const int EXPLOSIONPROJECTILE_DAMAGE = 100;
 static const int EXPLOSIONPROJECTILE_LIFETIME = 60;
 
+// Charger
+static const int CHARGER_SIZE =   50;
+static const int CHARGER_RADIUS = 25;
+static const int CHARGER_SPEED =  3;
+static const int CHARGER_HEALTH = 300;
+static const int CHARGER_DAMAGE = 100;
+static const int CHARGER_CHARGE_SPEED =  5;
+static const int CHARGER_CHARGEDURATION = 50;
+
 #endif 
