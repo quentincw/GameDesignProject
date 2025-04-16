@@ -7,6 +7,7 @@
 #include "gameDoor.h"
 #include <random>
 #include <ctime>
+#include "healthPickup.h"
 //#include <algorithm> // reverse
 #include <set>
 using namespace std;
@@ -95,6 +96,7 @@ void LevelManager::genFloor(int level) {
         for (size_t j = 0; j < roomPos[i].size(); ++j) {
             // if there is not a gap in this spot
             if(roomPos[i][j] == 1) {
+                
                 // get the next rectangle
                 Rectangle curRect = rooms[count];
                 cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
@@ -165,13 +167,15 @@ void LevelManager::genFloor(int level) {
             }
         }
     }
-    //cout << "out of geen" << endl;
+
+    
     // reverse y vectors
     for (size_t i = 0; i < roomPos.size(); ++i) {
         reverse(roomLists[i].begin(), roomLists[i].end());
     }
     
-
+    // flag for deleting first room
+    startDelete = false;
 
 }
 
@@ -186,12 +190,6 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
     // potential position (tile)
     int x,y;
 
-    cout << rectangle.x << endl;
-    cout << rectangle.y << endl;
-    cout << rectangle.width << endl;
-    cout << rectangle.height << endl;
-    cout << "generate" << endl;
-
     // vector of valid/ invalid locations
     vector<vector<int>> roomsCol = curfloor.getRoomsCol();
 
@@ -200,9 +198,7 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
         // generate a position
         x = width(gen) + rectangle.x;
         y = height(gen) + rectangle.y;
-        cout << x << endl;
-        cout << y << endl;
-        cout << roomsCol[x][y] << endl;
+
         // cheeck if valid
         while(roomsCol[x][y] == 1){
             // repeat until valid
@@ -305,7 +301,11 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
         // add enemy to the list
         curList.push_back(enemy);
 
+
     }
+    // temporary
+    HealthPickup* health = new HealthPickup(0,0,100,0,0);
+    curList.push_back(health);
 }
 
 
@@ -322,7 +322,6 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
     // get the current room
     RoomPosition newPos = curfloor.getRoomPos();
 
-
     // check if the player entered a different room
     if ((roomX != newPos.x) || (roomY != newPos.y)) {
 
@@ -334,6 +333,12 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
         cout << "saved list" << endl;
 
         // load new list
+
+        // delete the list if it is the first room
+        if(startDelete == false){
+            roomLists[newPos.x][newPos.y].clear();
+            startDelete = true;
+        }
         pm->loadProcessList(roomLists[newPos.x][newPos.y]);
 
         cout << "loaded list" << endl;
