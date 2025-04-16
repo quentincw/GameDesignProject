@@ -78,4 +78,13 @@ static const int CHARGER_DAMAGE = 100;
 static const int CHARGER_CHARGE_SPEED =  5;
 static const int CHARGER_CHARGEDURATION = 50;
 
+// ALPHA Charger
+static const int ALPHACHARGER_SIZE =   100;
+static const int ALPHACHARGER_RADIUS = 50;
+static const int ALPHACHARGER_SPEED =  4;
+static const int ALPHACHARGER_HEALTH = 1000;
+static const int ALPHACHARGER_DAMAGE = 150;
+static const int ALPHACHARGER_CHARGE_SPEED =  10;
+static const int ALPHACHARGER_CHARGEDURATION = 80;
+
 #endif 
