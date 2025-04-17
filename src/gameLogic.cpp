@@ -6,11 +6,12 @@
 #include "constants.h"
 #include "entity.h"
 
-GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
-    : processManager(pm), levelManager(lm)
+GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm, Player1* pl)
+    : processManager(pm), levelManager(lm), player(pl)
 {
     processManager = pm;
     levelManager = lm;
+    player = pl;
 }
 
 void GameLogic::update()
@@ -24,12 +25,24 @@ bool contains(const std::vector<std::string>& vec, const std::string& target) {
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
 {
+    //std::cout << "checking collision" << std::endl;
     auto a_hitbox = a->getHitbox();
     auto b_hitbox = b->getHitbox();
-    return (a_hitbox.x < (b_hitbox.x + b_hitbox.width)) &&
+
+    // std::cout << "A hitbox: (" << a_hitbox.x << ", " << a_hitbox.y << ", "
+    //           << a_hitbox.width << ", " << a_hitbox.height << ")" << std::endl;
+
+    // std::cout << "B hitbox: (" << b_hitbox.x << ", " << b_hitbox.y << ", "
+    //           << b_hitbox.width << ", " << b_hitbox.height << ")" << std::endl;
+
+
+    bool t = (a_hitbox.x < (b_hitbox.x + b_hitbox.width)) &&
            ((a_hitbox.x + a_hitbox.width) > b_hitbox.x) &&
            (a_hitbox.y < (b_hitbox.y + b_hitbox.height)) &&
            ((a_hitbox.y + a_hitbox.height) > b_hitbox.y);
+
+    //std::cout << t << endl;
+    return t;
 }
 
 bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const
@@ -44,6 +57,18 @@ bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw,
 void GameLogic::checkCollisions()
 {
     auto processes = processManager->getProcessList();
+
+    // for (auto* proc : processes) {
+    // if (!proc) {
+    //     std::cout << "nullptr process" << std::endl;
+    //     continue;
+    // }
+
+    // std::cout << " | Tags: ";
+    // for (const auto& tag : proc->getTags()) std::cout << tag << " ";
+    // std::cout << std::endl;
+    // }
+
     for (size_t i = 0; i < processes.size(); ++i)
     {
         GameProcess* p1 = processes[i];
@@ -55,14 +80,35 @@ void GameLogic::checkCollisions()
                 continue;
 
             const auto& interactions = p1->getInteractions();
-            
+
+
+            if (interactions.find("player") != interactions.end())
+            {
+                for (auto i: p1->getTags()) {
+                    std::cout << i;
+                }
+
+                std::cout << std::endl;
+                if (isColliding(p1, player))
+                {
+
+                    std::cout << "player collision" << std::endl;
+                    handleCollision(p1, player, "player");
+                }
+            }
+
             for (const auto& kv : interactions)
             {
-                if (contains(p2->getTags(), kv))
+                //std::cout << kv << std::endl;
+                auto tags = p2->getTags();
+                if (tags.find(kv) != tags.end())
                 {
+
                     if (isColliding(p1, p2))
                     {
                         handleCollision(p1, p2, kv);
+
+                        std::cout << "process collision" << std::endl;
                     }
                 }
             }
@@ -77,14 +123,6 @@ void GameLogic::checkCollisions()
 
     for (GameProcess* proc : processes)
     {
-        //testing
-        auto tags = proc->getTags();
-        for (std::string s: tags) {
-            std::cout << s << std::endl;
-        }
-
-        std::cout << std::endl;
-
         if (!proc) continue;
 
         auto procHitbox = proc->getHitbox();
@@ -111,6 +149,13 @@ void GameLogic::checkCollisions()
                 {
                     float rx = tx * TILE_SIZE;
                     float ry = ty * TILE_SIZE;
+                    
+                    // std::cout << tx << std::endl;
+                    // std::cout << ty << std::endl;
+                    // std::cout << rx << std::endl;
+                    // std::cout << ry << std::endl;
+                    // std::cout << std::endl;
+
                     if (isColliding(proc, rx, ry, TILE_SIZE, TILE_SIZE))
                     {
                         proc->handleInteraction("wall");
@@ -123,7 +168,8 @@ void GameLogic::checkCollisions()
 
 void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag)
 {
-    if (contains(p2->getTags(), "entity"))
+    auto tags = p2->getTags();
+    if (tags.find("entity") != tags.end())
     {
         Entity* entity = dynamic_cast<Entity*>(p2);
         if (entity)

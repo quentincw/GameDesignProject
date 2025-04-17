@@ -5,9 +5,8 @@
 
 // constructor
 Enemy::Enemy(int x, int y) : Entity() {
-    interactions.push_back("player");
-    interactions.push_back("wall");
-    tags.push_back("enemy");
+    interactions.insert("player");
+    tags.insert("enemy");
     hitbox.x = x;
     hitbox.y = y;
     damage = 0;

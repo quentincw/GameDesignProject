@@ -8,7 +8,7 @@
 
 
 Entity::Entity() : GameProcess() {
-    tags.push_back("entity");
+    tags.insert("entity");
     health = 0;
     maxHealth = 0;
     isAlive = true;
@@ -28,6 +28,8 @@ void Entity::adjustHealth(int healthDamage) {
     if (health <= 0) {
         isAlive = false;
     }
+
+    std::cout << "health" << health << std::endl;
 }
 
 void Entity::spawnBloodStain() {

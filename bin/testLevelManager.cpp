@@ -10,6 +10,7 @@
 #include "levelManager.h"
 #include "playerView.h"
 #include "gameLogic.h"
+#include "Player1.h"
 
 
 using namespace std;
@@ -68,9 +69,10 @@ int main(int argc, char** argv) {
     Floor* curFloor = levelManager.getCurrentFloor();
     SDL_Rect curRoom = curFloor->getCurRoom();
     processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
+    processManager.addProcess(processManager.getPlayer());
 
     // make game logic
-    GameLogic gameLogic(&processManager, &levelManager);
+    GameLogic gameLogic(&processManager, &levelManager, dynamic_cast<Player1*>(processManager.getPlayer()));
 
     /*** Main Loop ***/
     bool running = true;

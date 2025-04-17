@@ -12,8 +12,7 @@ PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startY
     hitbox.height = 30;
     hitbox.width = 30;
     damage = 10;
-    tags.push_back("Player");
-    tags.push_back("Enemy");
+    interactions.insert("enemy");
 }
 
 // updates the object

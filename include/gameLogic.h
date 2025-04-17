@@ -7,13 +7,14 @@
 class GameLogic
 {
 public:
-    GameLogic(ProcessManager* pm, LevelManager* lm);
+    GameLogic(ProcessManager* pm, LevelManager* lm, Player1* pl);
     
     void update();
 
 private:
     ProcessManager* processManager;
-    LevelManager*   levelManager;
+    LevelManager* levelManager;
+    Player1* player;
 
     void checkCollisions();
 

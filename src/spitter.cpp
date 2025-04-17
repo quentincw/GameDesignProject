@@ -18,7 +18,7 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
     damage = 50;
     cooldown = 240;
     windup = 0;
-    spitSpeed = 5;
+    spitSpeed = 1.5;
 }
 
 // updates the object
