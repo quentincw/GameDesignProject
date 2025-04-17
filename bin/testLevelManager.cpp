@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
     processManager.addProcess(processManager.getPlayer());
 
     // make game logic
-    GameLogic gameLogic(&processManager, &levelManager, dynamic_cast<Player1*>(processManager.getPlayer()));
+    GameLogic gameLogic(&processManager, &levelManager);
 
     /*** Main Loop ***/
     bool running = true;

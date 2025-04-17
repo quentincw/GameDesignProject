@@ -34,8 +34,8 @@ void Player1::Update(float deltaTime) {
 		dx = xSpeed;
 		dy = ySpeed;
 	}
-    hitbox.x = hitbox.x + dx;
-    hitbox.y = hitbox.y + dy;
+
+    Entity::Update(deltaTime);
 	cooldown-=1;
 }
 

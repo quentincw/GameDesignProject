@@ -17,6 +17,15 @@ Entity::Entity() : GameProcess() {
     ySpeed = 0;
 }
 
+// updates the position of an entity
+void Entity::Update(float deltaTime) {
+    lastX = hitbox.x;
+    lastY = hitbox.y;
+
+    hitbox.x += xSpeed;
+    hitbox.y += ySpeed;
+}
+
 // gets the current health
 int Entity::getHealth() const {
     return health;

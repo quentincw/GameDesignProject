@@ -24,8 +24,7 @@ AlphaSpitter::AlphaSpitter(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void AlphaSpitter::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     cooldown = cooldown - 1;
 }
 
