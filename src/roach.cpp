@@ -58,6 +58,6 @@ void Roach::UpdateAI(Rectangle phitbox) {
     }
 
     // set the speed based on speed
-    xSpeed = dx * 3;
-    ySpeed = dy * 3;
+    xSpeed = dx * 2;
+    ySpeed = dy * 2;
 }
