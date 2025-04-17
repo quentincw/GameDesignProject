@@ -5,7 +5,7 @@
 
 // constructor
 Enemy::Enemy(int x, int y) : Entity() {
-    interactions.insert("player1");
+    interactions.insert("player");
     tags.insert("enemy");
     hitbox.x = x;
     hitbox.y = y;
@@ -16,4 +16,7 @@ Enemy::Enemy(int x, int y) : Entity() {
 Enemy::~Enemy() {} 
 
 void Enemy::handleInteraction(const std::string tag) {
+    if (tag == "wall") {
+        revertPosition();
+    }
 }

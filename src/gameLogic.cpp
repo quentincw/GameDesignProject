@@ -15,6 +15,21 @@ void GameLogic::update()
     handleProcessCollisions(processes);
     handleWallAndDoorCollisions(processes);
     handleWallAndDoorCollisions({player});
+
+    const auto& tilemap = levelManager->getCurrentFloor()->getRoomsCol();
+auto hitbox = player->getHitbox();
+
+// Apply +32 offset if you're still doing that elsewhere
+int tileX = (hitbox.x + 32) / TILE_SIZE;
+int tileY = (hitbox.y + 32) / TILE_SIZE;
+
+// Bounds check to avoid crash
+if (tileX >= 0 && tileX < tilemap.size() && tileY >= 0 && tileY < tilemap[0].size()) {
+    int tileValue = tilemap[tileX][tileY];
+    std::cout << "Player is at tile (" << tileX << ", " << tileY << ") = " << tileValue << std::endl;
+} else {
+    std::cout << "Player is outside tilemap bounds at (" << tileX << ", " << tileY << ")\n";
+}
 }
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
@@ -30,10 +45,10 @@ bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
 bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const
 {
     auto obj_hitbox = obj->getHitbox();
-    return (obj_hitbox.x < (rx + rw)) &&
-           ((obj_hitbox.x + obj_hitbox.width) > rx) &&
-           (obj_hitbox.y < (ry + rh)) &&
-           ((obj_hitbox.y + obj_hitbox.height) > ry);
+    return (obj_hitbox.x < rx + rw) &&
+           (obj_hitbox.x + obj_hitbox.width > rx) &&
+           (obj_hitbox.y < ry + rh) &&
+           (obj_hitbox.y + obj_hitbox.height > ry);
 }
 
 void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& processes)
@@ -91,10 +106,10 @@ void GameLogic::handleWallAndDoorCollisions(const std::vector<GameProcess*>& pro
         float px2 = px1 + procHitbox.width;
         float py2 = py1 + procHitbox.height;
 
-        int leftTile = std::max(0, static_cast<int>(px1 / TILE_SIZE));
-        int rightTile = std::min(mapWidth - 1, static_cast<int>((px2 - 1) / TILE_SIZE));
-        int topTile = std::max(0, static_cast<int>(py1 / TILE_SIZE));
-        int bottomTile = std::min(mapHeight - 1, static_cast<int>((py2 - 1) / TILE_SIZE));
+        int leftTile = std::max(0, (int)((procHitbox.x + 32) / TILE_SIZE));
+        int rightTile = std::min(mapWidth - 1, (int)((procHitbox.x + procHitbox.width - 1 + 32) / TILE_SIZE));
+        int topTile = std::max(0, (int)((procHitbox.y + 32) / TILE_SIZE));
+        int bottomTile = std::min(mapHeight - 1, (int)((procHitbox.y + procHitbox.height - 1 + 32) / TILE_SIZE));
 
         for (int tx = leftTile; tx <= rightTile; tx++)
         {
