@@ -9,6 +9,7 @@
 #include "alphaSpitter.h"
 #include "charger.h"
 #include "alphaCharger.h"
+#include "alphaSpewer.h"
 
 class EnemyFactory {
 
@@ -23,7 +24,8 @@ class EnemyFactory {
             EXPLODER,
             ALPHASPITTER,
             CHARGER,
-            ALPHACHARGER
+            ALPHACHARGER,
+            ALPHASPEWER
         };
 
         // create and return an enemy of the type provided

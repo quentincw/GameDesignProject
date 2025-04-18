@@ -238,6 +238,7 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
             curList.push_back(enemy);
             break;
+        /*
         case 1:
             // Alpha Spitter Trio
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
@@ -245,6 +246,11 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
             curList.push_back(enemy);
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+            curList.push_back(enemy);
+            break;*/
+        case 1:
+            // Alpha Spewer
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
             curList.push_back(enemy);
             break;
     }
@@ -255,7 +261,7 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
 
     // random enemy generator
     // increase for every enemy added
-    uniform_int_distribution<> enemyDist(0, 6);
+    uniform_int_distribution<> enemyDist(0, 7);
 
     cout << "made it" << endl;
  
@@ -295,6 +301,10 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
             case 6:
                 // spawn Charger
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::CHARGER);
+                break;
+            case 7:
+                // spawn AlphaSpewer (remove later)
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
                 break;
 
 

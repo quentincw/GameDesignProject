@@ -46,6 +46,16 @@ static const int SPEWER_COOLDOWN = 300;
 // SPEWER PROJECTILE
 static const int SPEWERPROJECTILE_SPEED = 3;
 
+// ALPHA SPEWER
+static const int ALPHASPEWER_SIZE = 70;
+static const int ALPHASPEWER_RADIUS = 35;
+static const int ALPHASPEWER_SPEED = 3;
+static const int ALPHASPEWER_HEALTH = 650;
+static const int ALPHASPEWER_DAMAGE = 100;
+static const int ALPHASPEWER_COOLDOWN = 250;
+static const int ALPHASPEWER_PROJECTILE_NUMBER = 20;
+static const int ALPHASPEWER_SPIT_INTERVAL = 10;
+
 // SPAWNER
 static const int SPAWNER_SIZE = 40;
 static const int SPAWNER_RADIUS = 20;

@@ -37,7 +37,7 @@ class Spitter : public Enemy {
         float spitSpeed;
 
         // creates a projectile object
-        virtual void spitProjectile(Rectangle phitbox);
+        void spitProjectile(Rectangle phitbox);
 
 
 
