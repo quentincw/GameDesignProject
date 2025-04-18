@@ -34,6 +34,9 @@ GameProcess* EnemyFactory::createEnemy(EnemyType type) {
         case EnemyType::ALPHASPEWER:
             enemy = new AlphaSpewer(0,0);
             return enemy;
+        case EnemyType::BURROWER:
+            enemy = new Burrower(0,0);
+            return enemy;
         default:
             // return nullptr if invalid type
             return enemy;

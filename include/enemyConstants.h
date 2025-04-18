@@ -97,4 +97,12 @@ static const int ALPHACHARGER_DAMAGE = 150;
 static const int ALPHACHARGER_CHARGE_SPEED =  10;
 static const int ALPHACHARGER_CHARGEDURATION = 80;
 
+// BURROWER
+static const int BURROWER_SIZE = 40;
+static const int BURROWER_RADIUS = 20;
+static const int BURROWER_SPEED = 3;
+static const int BURROWER_HEALTH = 400;
+static const int BURROWER_DAMAGE = 100;
+static const int BURROWER_COOLDOWN = 60;
+
 #endif 

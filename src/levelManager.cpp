@@ -303,8 +303,8 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::CHARGER);
                 break;
             case 7:
-                // spawn AlphaSpewer (remove later)
-                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
+                // spawn Burrower
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::BURROWER);
                 break;
 
 
