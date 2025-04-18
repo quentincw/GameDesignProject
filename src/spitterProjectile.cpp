@@ -10,9 +10,9 @@ SpitterProjectile::SpitterProjectile(int x, int y, float startXSpeed, float star
 
     radius = 10;
     damage = 10;
-    hitbox.height = 20;
-    hitbox.width = 20;
-    tags.push_back("Player");
+    hitbox.height = 10;
+    hitbox.width = 10;
+    interactions.insert("player");
 }
 
 // updates the object

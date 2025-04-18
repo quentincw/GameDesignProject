@@ -20,8 +20,7 @@ Roach::Roach(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void Roach::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
 }
 
 // draws the object

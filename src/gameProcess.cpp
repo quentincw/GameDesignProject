@@ -9,7 +9,8 @@
 
 // constructor
 GameProcess::GameProcess() : tags{}, childrenList{} {
-    tags.push_back("Wall");
+    interactions.insert("wall");
+    interactions.insert("door");
     deleteFlag = false;
     children = false;
     radius = 0;
@@ -42,12 +43,12 @@ std::vector<GameProcess*> GameProcess::getChildren(){
 }
 
 // returns the vector of interactions
-std::vector<std::string> GameProcess::getInteractions() const {
+std::unordered_set<std::string> GameProcess::getInteractions() const {
     return interactions;
 }
 
 // returns a vector of tags associated with the process
-std::vector<std::string> GameProcess::getTags() const {
+std::unordered_set<std::string> GameProcess::getTags() const {
     return tags;
 }
 
@@ -58,3 +59,4 @@ int GameProcess::getDamage() const {
 
 void GameProcess::handleInteraction(const std::string tag) {
 }
+

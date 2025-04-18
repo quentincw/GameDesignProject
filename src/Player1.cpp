@@ -18,6 +18,7 @@ Player1::Player1(int x, int y) : Entity() {
     xSpeed = 0;
     ySpeed = 0;
 	cooldown = 40;
+    tags.insert("player");
 }
 
 // updates the object
@@ -33,8 +34,8 @@ void Player1::Update(float deltaTime) {
 		dx = xSpeed;
 		dy = ySpeed;
 	}
-    hitbox.x = hitbox.x + dx;
-    hitbox.y = hitbox.y + dy;
+
+    Entity::Update(deltaTime);
 	cooldown-=1;
 }
 
@@ -58,11 +59,6 @@ void Player1::Render(SDL_Renderer* renderer) {
 void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 55, 200, 255);
-}
-
-// handles the interactions with other objects
-void Player1::handleInteractions(int tag) {
-
 }
 
 void Player1::updateMouse(float x, float y){
