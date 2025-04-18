@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "entity.h"
+#include "enemyConstants.h"
 
 class Enemy : public Entity {
 

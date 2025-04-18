@@ -1,5 +1,5 @@
-#ifndef SPEWER_H
-#define SPEWER_H
+#ifndef EXPLODER_H
+#define EXPLODER_H
 
 #include <stdlib.h>
 #include <SDL.h>
@@ -9,12 +9,12 @@
 #include "enemy.h"
 #include "projectile.h"
 
-class Spewer : public Enemy {
+class Exploder : public Enemy {
 
     public:
 
         // constructor
-        Spewer(int x, int y);
+        Exploder(int x, int y);
 
         // updates the object
         void Update(float deltaTime);
@@ -30,14 +30,9 @@ class Spewer : public Enemy {
 
     private:
 
-        // time inbetween spitting, time the Spewer is stationary while spitting
-        float cooldown, windup;
+        // creates a projectile object, explosion
+        virtual void explode();
 
-        // how fast the projectile will be
-        float spitSpeed;
-
-        // creates a projectile object
-        void spitProjectile(Rectangle phitbox);
 
 
 

@@ -81,13 +81,13 @@ void LevelManager::genFloor(int level) {
     GameProcess* gameDoor = nullptr;
 
     cout << "roomsCol size x: " << roomsCol.size() << endl;
-    
+    /*
     for (size_t i = 0; i < roomsCol.size(); ++i) {
         for (size_t j = 0; j < 70; ++j) {
             cout << roomsCol[i][j] << " ";
         }
         cout << "\n";
-    }
+    }*/
 
 
     // loop through every room
@@ -98,8 +98,15 @@ void LevelManager::genFloor(int level) {
                 // get the next rectangle
                 Rectangle curRect = rooms[count];
                 cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
-                // level filler call (fill list using the rectangle)
-                fillProcessList(roomLists[i][j], 2);
+                // boss room check
+                if((curRect.height == 24) && (curRect.width == 24)){
+                    // fill room with boss encounter
+                    fillProcessListBoss(roomLists[i][j]);
+                }
+                else {
+                    // level filler call (fill list using the rectangle)
+                    fillProcessList(roomLists[i][j], 2);
+                }
                 // find valid places for each enemy
                 findValidSpots(roomLists[i][j], curRect);
 
@@ -202,15 +209,51 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
             x = width(gen) + rectangle.x;
             y = height(gen) + rectangle.y;
         }
-        cout << "found spot" << endl;
+        // null pointer check
         if (curList[i] != nullptr) {
             curList[i]->setPosition(x * TILE_SIZE, y * TILE_SIZE);
         } else {
             cout << "Null pointer encountered at index " << i << endl;
         }
-        cout << "seet spot" << endl;
+        
     }
-    cout << "fin spots" << endl;
+
+}
+// fills a process list with a boss encounter
+void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
+    // random enemy generator
+    // increase for every boss encounter added
+    uniform_int_distribution<> enemyDist(0, 1);
+
+    GameProcess* enemy = nullptr;
+
+    // generate an enemy number
+    int encounter = enemyDist(gen);
+
+    switch (encounter) {
+        case 0:
+            // Alpha Charger Duo
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
+            curList.push_back(enemy);
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
+            curList.push_back(enemy);
+            break;
+        /*
+        case 1:
+            // Alpha Spitter Trio
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+            curList.push_back(enemy);
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+            curList.push_back(enemy);
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+            curList.push_back(enemy);
+            break;*/
+        case 1:
+            // Alpha Spewer
+            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
+            curList.push_back(enemy);
+            break;
+    }
 }
 
 // fills a process list based on a difficulty level
@@ -218,7 +261,7 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
 
     // random enemy generator
     // increase for every enemy added
-    uniform_int_distribution<> enemyDist(0, 2);
+    uniform_int_distribution<> enemyDist(0, 7);
 
     cout << "made it" << endl;
  
@@ -243,6 +286,28 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
                 // spawn spewer
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPEWER);
                 break;
+            case 3:
+                // spawn spawner
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPAWNER);
+                break;
+            case 4:
+                // spawn Exploder
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::EXPLODER);
+                break;
+            case 5:
+                // spawn Alpha Spitter
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+                break;
+            case 6:
+                // spawn Charger
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::CHARGER);
+                break;
+            case 7:
+                // spawn Burrower
+                enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::BURROWER);
+                break;
+
+
             default:
                 break;
         }

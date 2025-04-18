@@ -1,20 +1,17 @@
-#ifndef SPEWER_H
-#define SPEWER_H
+#ifndef ALPHACHARGER_H
+#define ALPHACHARGER_H
 
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
-#include <cmath>
-#include <vector>
 #include "enemy.h"
-#include "projectile.h"
 
-class Spewer : public Enemy {
+class AlphaCharger : public Enemy {
 
     public:
 
         // constructor
-        Spewer(int x, int y);
+        AlphaCharger(int x, int y);
 
         // updates the object
         void Update(float deltaTime);
@@ -28,21 +25,16 @@ class Spewer : public Enemy {
         // updates the ai based on the player's position
         void UpdateAI(Rectangle phitbox);
 
-    private:
+    protected:
 
-        // time inbetween spitting, time the Spewer is stationary while spitting
-        float cooldown, windup;
+        // boolean for identifying which state the charger is in
+        bool charging;
 
-        // how fast the projectile will be
-        float spitSpeed;
+        // how long the charger should charge for
+        int chargeDuration;
 
-        // creates a projectile object
-        void spitProjectile(Rectangle phitbox);
-
-
-
-
-
+        // how long the charger should move in one direction before turning
+        int moveDuration;
 };
 
 

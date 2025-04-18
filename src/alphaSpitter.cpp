@@ -10,16 +10,15 @@
 // constructor
 AlphaSpitter::AlphaSpitter(int x, int y) : Enemy(x, y) {
 
-    health = 250;
-    radius = 25;
-    hitbox.height = 50;
-    hitbox.width = 50;
+    health = ALPHASPITTER_HEALTH;
+    radius = ALPHASPITTER_RADIUS;
+    hitbox.height = ALPHASPITTER_SIZE;
+    hitbox.width = ALPHASPITTER_SIZE;
     xSpeed = 0;
     ySpeed = 0;
-    damage = 50;
-    cooldown = 300;
-    windup = 0;
-    spitSpeed = 5;
+    damage = ALPHASPITTER_DAMAGE;
+    cooldown = ALPHASPITTER_COOLDOWN;
+    spitSpeed = ALPHASPITTERPROJECTILE_SPEED;
 }
 
 // updates the object
@@ -49,7 +48,7 @@ void AlphaSpitter::UpdateAI(Rectangle phitbox) {
 
     if(cooldown <= 0){
         spitProjectile(phitbox);
-        cooldown = 300;
+        cooldown = ALPHASPITTER_COOLDOWN;
     }
 
     // get center of hitboxes
@@ -69,16 +68,16 @@ void AlphaSpitter::UpdateAI(Rectangle phitbox) {
     }
 
     // set the speed based on speed
-    xSpeed = dx * 3;
-    ySpeed = dy * 3;
+    xSpeed = dx * ALPHASPITTER_SPEED;
+    ySpeed = dy * ALPHASPITTER_SPEED;
 
     // if the player is too close, reverse
-    if(length <= 250){
+    if(length <= 150){
         xSpeed = -xSpeed;
         ySpeed = -ySpeed;
     }
     // buffer to stop stuttering when on the boundary of too close/far to player
-    else if(length < 300){
+    else if(length < 200){
         xSpeed = 0;
         ySpeed = 0;
     }
@@ -87,7 +86,7 @@ void AlphaSpitter::UpdateAI(Rectangle phitbox) {
 // creates a projectile object
 void AlphaSpitter::spitProjectile(Rectangle phitbox) {
 
-
+    
     // get center of hitboxes
     Point playerCenter = getCenter(&phitbox);
     Point enemyCenter = getCenter(&hitbox);
@@ -108,14 +107,54 @@ void AlphaSpitter::spitProjectile(Rectangle phitbox) {
     float projXspeed = dx * spitSpeed;
     float projYspeed = dy * spitSpeed;
 
+    // spawn explosion centered on the enemy
+    int x = enemyCenter.x - (SPITTERPROJECTILE_SIZE / 2);
+    int y = enemyCenter.y - (SPITTERPROJECTILE_SIZE / 2);
+
     // create spit at spitter's location w/ calculated speeds
-    //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    //child = spit;
-    // put spit in childrenList
-    //childrenList.clear();
+    SpitterProjectile* spit = new SpitterProjectile(x, y, projXspeed, projYspeed);
+
     childrenList.push_back(spit);
 
+
+    // rotate 
+    float angle = 45.0f; 
+    float radians = angle * (M_PI / 180.0f); 
+    float cosAngle = cos(radians);
+    float sinAngle = sin(radians);
+    
+    // Apply the rotation
+    float rotatedDx = dx * cosAngle - dy * sinAngle;
+    float rotatedDy = dx * sinAngle + dy * cosAngle;
+    
+    // Set the speed based on spitSpeed
+    projXspeed = rotatedDx * spitSpeed;
+    projYspeed = rotatedDy * spitSpeed;
+
+    // create spit at spitter's location w/ calculated speeds
+    spit = new SpitterProjectile(x, y, projXspeed, projYspeed);
+
+    childrenList.push_back(spit);
+
+
+    // rotate other direction
+    angle = -45.0f; 
+    radians = angle * (M_PI / 180.0f); 
+    cosAngle = cos(radians);
+    sinAngle = sin(radians);
+    
+    // Apply the rotation
+    rotatedDx = dx * cosAngle - dy * sinAngle;
+    rotatedDy = dx * sinAngle + dy * cosAngle;
+    
+    // Set the speed based on spitSpeed
+    projXspeed = rotatedDx * spitSpeed;
+    projYspeed = rotatedDy * spitSpeed;
+
+    // create spit at spitter's location w/ calculated speeds
+    spit = new SpitterProjectile(x, y, projXspeed, projYspeed);
+
+    childrenList.push_back(spit);
     
     // set the flag for child to true
     children = true;

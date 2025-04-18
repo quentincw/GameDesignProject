@@ -16,6 +16,27 @@ GameProcess* EnemyFactory::createEnemy(EnemyType type) {
         case EnemyType::SPEWER:
             enemy = new Spewer(0,0);
             return enemy;
+        case EnemyType::SPAWNER:
+            enemy = new Spawner(0,0);
+            return enemy;
+        case EnemyType::EXPLODER:
+            enemy = new Exploder(0,0);
+            return enemy;
+        case EnemyType::ALPHASPITTER:
+            enemy = new AlphaSpitter(0,0);
+            return enemy;
+        case EnemyType::CHARGER:
+            enemy = new Charger(0,0);
+            return enemy;
+        case EnemyType::ALPHACHARGER:
+            enemy = new AlphaCharger(0,0);
+            return enemy;
+        case EnemyType::ALPHASPEWER:
+            enemy = new AlphaSpewer(0,0);
+            return enemy;
+        case EnemyType::BURROWER:
+            enemy = new Burrower(0,0);
+            return enemy;
         default:
             // return nullptr if invalid type
             return enemy;

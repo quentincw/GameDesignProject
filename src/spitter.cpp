@@ -9,16 +9,15 @@
 // constructor
 Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
-    health = 150;
-    radius = 15;
-    hitbox.height = 30;
-    hitbox.width = 30;
+    health = SPITTER_HEALTH;
+    radius = SPITTER_RADIUS;
+    hitbox.height = SPITTER_SIZE;
+    hitbox.width = SPITTER_SIZE;
     xSpeed = 0;
     ySpeed = 0;
-    damage = 50;
-    cooldown = 240;
-    windup = 0;
-    spitSpeed = 1.5;
+    damage = SPITTER_DAMAGE;
+    cooldown = SPITTER_COOLDOWN;
+    spitSpeed = SPITTERPROJECTILE_SPEED;
 }
 
 // updates the object
@@ -48,7 +47,7 @@ void Spitter::UpdateAI(Rectangle phitbox) {
 
     if(cooldown <= 0){
         spitProjectile(phitbox);
-        cooldown = 240;
+        cooldown = SPITTER_COOLDOWN;
     }
 
     // get center of hitboxes
@@ -68,8 +67,8 @@ void Spitter::UpdateAI(Rectangle phitbox) {
     }
 
     // set the speed based on speed
-    xSpeed = dx * 3;
-    ySpeed = dy * 3;
+    xSpeed = dx * SPITTER_SPEED;
+    ySpeed = dy * SPITTER_SPEED;
 
     // if the player is too close, reverse
     if(length <= 250){
@@ -107,9 +106,13 @@ void Spitter::spitProjectile(Rectangle phitbox) {
     float projXspeed = dx * spitSpeed;
     float projYspeed = dy * spitSpeed;
 
+    // spawn explosion centered on the enemy
+    int x = enemyCenter.x - (SPITTERPROJECTILE_SIZE / 2);
+    int y = enemyCenter.y - (SPITTERPROJECTILE_SIZE / 2);
+
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, projXspeed, projYspeed);
+    SpitterProjectile* spit = new SpitterProjectile(x, y, projXspeed, projYspeed);
     //child = spit;
     // put spit in childrenList
     //childrenList.clear();
