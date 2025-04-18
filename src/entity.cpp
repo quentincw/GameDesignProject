@@ -35,10 +35,11 @@ int Entity::getHealth() const {
 void Entity::adjustHealth(int healthDamage) {
     health = health - healthDamage;
     if (health <= 0) {
+        health = 0;
         isAlive = false;
     }
 
-    std::cout << "health" << health << std::endl;
+    //std::cout << "health" << health << std::endl;
 }
 
 void Entity::spawnBloodStain() {

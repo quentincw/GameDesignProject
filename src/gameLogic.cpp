@@ -13,29 +13,15 @@ void GameLogic::update()
 {
     auto processes = processManager->getProcessList();
     handleProcessCollisions(processes);
-    handleWallAndDoorCollisions(processes);
-    handleWallAndDoorCollisions({player});
-
-    const auto& tilemap = levelManager->getCurrentFloor()->getRoomsCol();
-auto hitbox = player->getHitbox();
-
-// Apply +32 offset if you're still doing that elsewhere
-int tileX = (hitbox.x + 32) / TILE_SIZE;
-int tileY = (hitbox.y + 32) / TILE_SIZE;
-
-// Bounds check to avoid crash
-if (tileX >= 0 && tileX < tilemap.size() && tileY >= 0 && tileY < tilemap[0].size()) {
-    int tileValue = tilemap[tileX][tileY];
-    std::cout << "Player is at tile (" << tileX << ", " << tileY << ") = " << tileValue << std::endl;
-} else {
-    std::cout << "Player is outside tilemap bounds at (" << tileX << ", " << tileY << ")\n";
-}
+    handleWallCollisions(processes);
+    handleWallCollisions({player});
 }
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
 {
     auto a_hitbox = a->getHitbox();
     auto b_hitbox = b->getHitbox();
+
     return (a_hitbox.x < (b_hitbox.x + b_hitbox.width)) &&
            ((a_hitbox.x + a_hitbox.width) > b_hitbox.x) &&
            (a_hitbox.y < (b_hitbox.y + b_hitbox.height)) &&
@@ -76,6 +62,7 @@ void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& process
             if (!p2) continue;
 
             const auto& tags = p2->getTags();
+
             for (const auto& tag : tags)
             {
                 if (interactions.find(tag) != interactions.end() && isColliding(p1, p2))
@@ -85,9 +72,28 @@ void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& process
             }
         }
     }
+
+    // Player interacting with other objects
+    const auto& playerInteractions = player->getInteractions();
+    for (GameProcess* proc : processes)
+    {
+        if (!proc) continue;
+
+        const auto& procTags = proc->getTags();
+        for (const auto& tag : procTags)
+        {
+            if (playerInteractions.find(tag) != playerInteractions.end())
+            {
+                if (isColliding(player, proc))
+                {
+                    handleCollision(player, proc, tag);
+                }
+            }
+        }
+    }
 }
 
-void GameLogic::handleWallAndDoorCollisions(const std::vector<GameProcess*>& processes)
+void GameLogic::handleWallCollisions(const std::vector<GameProcess*>& processes)
 {
     const auto& floor = levelManager->getCurrentFloor();
     const auto& tilemapData = floor->getRoomsCol();
