@@ -13,14 +13,17 @@ public:
 
 private:
     ProcessManager* processManager;
-    LevelManager*   levelManager;
+    LevelManager* levelManager;
+    GameProcess* player;
 
     void checkCollisions();
 
     bool isColliding(const GameObject* a, const GameObject* b) const;
-
     bool isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const;
 
+    void handleProcessCollisions(const std::vector<GameProcess*>& processes);
+    void handleWallCollisions(const std::vector<GameProcess*>& processes);
+    
     void handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag);
 };
 

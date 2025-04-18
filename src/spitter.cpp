@@ -6,7 +6,6 @@
 #include "spitter.h"
 #include "spitterProjectile.h"
 
-
 // constructor
 Spitter::Spitter(int x, int y) : Enemy(x, y) {
 
@@ -19,13 +18,12 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
     damage = 50;
     cooldown = 240;
     windup = 0;
-    spitSpeed = 5;
+    spitSpeed = 1.5;
 }
 
 // updates the object
 void Spitter::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     cooldown = cooldown - 1;
 }
 

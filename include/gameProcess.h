@@ -40,10 +40,10 @@ class GameProcess : public GameObject {
         std::vector<GameProcess*> getChildren();
 
         // returns a vector of target tags the proccess can interact with
-        std::vector<std::string> getInteractions() const;
+        std::unordered_set<std::string> getInteractions() const;
 
         // returns the vector of tags of the process
-        std::vector<std::string> getTags() const;
+        std::unordered_set<std::string> getTags() const;
 
         // handles interaction with a given tag
         virtual void handleInteraction(std::string tag);
@@ -54,10 +54,10 @@ class GameProcess : public GameObject {
     protected:
 
         // list of tags associated with the process
-        std::vector<std::string> tags;
+        std::unordered_set<std::string> tags;
 
         // list of tags process can interact with
-        std::vector<std::string> interactions;
+        std::unordered_set<std::string> interactions;
 
         // map of all possible interactions a process can have
         //map<string, int> interactions;

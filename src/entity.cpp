@@ -8,13 +8,22 @@
 
 
 Entity::Entity() : GameProcess() {
-    tags.push_back("entity");
+    tags.insert("entity");
     health = 0;
     maxHealth = 0;
     isAlive = true;
     speed = 0;
     xSpeed = 0;
     ySpeed = 0;
+}
+
+// updates the position of an entity
+void Entity::Update(float deltaTime) {
+    lastX = hitbox.x;
+    lastY = hitbox.y;
+
+    hitbox.x += xSpeed;
+    hitbox.y += ySpeed;
 }
 
 // gets the current health
@@ -26,8 +35,11 @@ int Entity::getHealth() const {
 void Entity::adjustHealth(int healthDamage) {
     health = health - healthDamage;
     if (health <= 0) {
+        health = 0;
         isAlive = false;
     }
+
+    //std::cout << "health" << health << std::endl;
 }
 
 void Entity::spawnBloodStain() {

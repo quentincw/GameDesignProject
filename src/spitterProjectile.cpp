@@ -12,7 +12,7 @@ SpitterProjectile::SpitterProjectile(int x, int y, float startXSpeed, float star
     damage = 10;
     hitbox.height = 10;
     hitbox.width = 10;
-    tags.push_back("Player");
+    interactions.insert("player");
 }
 
 // updates the object

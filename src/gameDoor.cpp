@@ -13,7 +13,8 @@ GameDoor::GameDoor(int x, int y, int height, int width)  {
     hitbox.y = y;
     hitbox.height = height;
     hitbox.width = width;
-    tags.push_back("door");
+    tags.insert("door");
+    tags.insert("wall");
 }
 // draw the wall
 void GameDoor::Render(SDL_Renderer* renderer) {
