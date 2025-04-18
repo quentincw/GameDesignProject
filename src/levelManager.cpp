@@ -120,7 +120,7 @@ void LevelManager::genFloor(int level) {
                     if((door == false) && (roomsCol[curRect.x + w][curRect.y] == 0)) {
                         door = true;
                         // create a door at the position
-                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
+                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y - 2) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
                         roomLists[i][j].push_back(gameDoor);
                     }
                 }
@@ -132,7 +132,7 @@ void LevelManager::genFloor(int level) {
                     if((door == false) && (roomsCol[curRect.x][curRect.y + h] == 0)) {
                         door = true;
                         // create a door at the position
-                        gameDoor = new GameDoor((curRect.x - 1) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
+                        gameDoor = new GameDoor((curRect.x - 2) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
                         roomLists[i][j].push_back(gameDoor);
                     }
                 }
@@ -143,7 +143,7 @@ void LevelManager::genFloor(int level) {
                     if((door == false) && (roomsCol[curRect.x + w][curRect.y + curRect.height] == 0)) {
                         door = true;
                         // create a door at the position
-                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y + curRect.height) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
+                        gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y + curRect.height + 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3);
                         roomLists[i][j].push_back(gameDoor);
                     }
                 }
@@ -154,7 +154,7 @@ void LevelManager::genFloor(int level) {
                     if((door == false) && (roomsCol[curRect.x + curRect.width][curRect.y + h] == 0)) {
                         door = true;
                         // create a door at the position
-                        gameDoor = new GameDoor((curRect.x + curRect.width) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
+                        gameDoor = new GameDoor((curRect.x + curRect.width + 1) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE);
                         roomLists[i][j].push_back(gameDoor);
                     }
                 }
