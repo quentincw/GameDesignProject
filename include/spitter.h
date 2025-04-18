@@ -30,8 +30,8 @@ class Spitter : public Enemy {
 
     private:
 
-        // time inbetween spitting, time the spitter is stationary while spitting
-        float cooldown, windup;
+        // time inbetween spitting
+        float cooldown;
 
         // how fast the projectile will be
         float spitSpeed;

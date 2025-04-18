@@ -18,7 +18,6 @@ AlphaSpitter::AlphaSpitter(int x, int y) : Enemy(x, y) {
     ySpeed = 0;
     damage = ALPHASPITTER_DAMAGE;
     cooldown = ALPHASPITTER_COOLDOWN;
-    windup = 0;
     spitSpeed = ALPHASPITTERPROJECTILE_SPEED;
 }
 

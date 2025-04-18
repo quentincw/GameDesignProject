@@ -18,7 +18,6 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
     ySpeed = 0;
     damage = SPITTER_DAMAGE;
     cooldown = SPITTER_COOLDOWN;
-    windup = 0;
     spitSpeed = SPITTERPROJECTILE_SPEED;
 }
 
