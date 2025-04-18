@@ -30,14 +30,14 @@ class Spitter : public Enemy {
 
     private:
 
-        // time inbetween spitting, time the spitter is stationary while spitting
-        float cooldown, windup;
+        // time inbetween spitting
+        float cooldown;
 
         // how fast the projectile will be
         float spitSpeed;
 
         // creates a projectile object
-        virtual void spitProjectile(Rectangle phitbox);
+        void spitProjectile(Rectangle phitbox);
 
 
 
