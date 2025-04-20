@@ -16,7 +16,5 @@ Enemy::Enemy(int x, int y) : Entity() {
 Enemy::~Enemy() {} 
 
 void Enemy::handleInteraction(const std::string tag) {
-    if (tag == "wall") {
-        revertPosition();
-    }
+    Entity::handleInteraction(tag);
 }

@@ -31,10 +31,10 @@ bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
 bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const
 {
     auto obj_hitbox = obj->getHitbox();
-    return (obj_hitbox.x < rx + rw) &&
-           (obj_hitbox.x + obj_hitbox.width > rx) &&
-           (obj_hitbox.y < ry + rh) &&
-           (obj_hitbox.y + obj_hitbox.height > ry);
+    return (obj_hitbox.x <= rx + rw) &&
+           (obj_hitbox.x + obj_hitbox.width >= rx) &&
+           (obj_hitbox.y <= ry + rh) &&
+           (obj_hitbox.y + obj_hitbox.height >= ry);
 }
 
 void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& processes)
@@ -56,7 +56,7 @@ void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& process
         }
 
         // General tag-based interaction
-        for (size_t j = i + 1; j < processes.size(); ++j)
+        for (size_t j = 0; j < processes.size(); ++j)
         {
             GameProcess* p2 = processes[j];
             if (!p2) continue;
@@ -112,10 +112,11 @@ void GameLogic::handleWallCollisions(const std::vector<GameProcess*>& processes)
         float px2 = px1 + procHitbox.width;
         float py2 = py1 + procHitbox.height;
 
-        int leftTile = std::max(0, (int)((procHitbox.x + 32) / TILE_SIZE));
-        int rightTile = std::min(mapWidth - 1, (int)((procHitbox.x + procHitbox.width - 1 + 32) / TILE_SIZE));
-        int topTile = std::max(0, (int)((procHitbox.y + 32) / TILE_SIZE));
-        int bottomTile = std::min(mapHeight - 1, (int)((procHitbox.y + procHitbox.height - 1 + 32) / TILE_SIZE));
+        int leftTile   = std::max(0, (int)(px1 / TILE_SIZE));
+        int rightTile  = std::min(mapWidth - 1, (int)((px2 - 1) / TILE_SIZE));
+        int topTile    = std::max(0, (int)(py1 / TILE_SIZE));
+        int bottomTile = std::min(mapHeight - 1, (int)((py2 - 1) / TILE_SIZE));
+
 
         for (int tx = leftTile; tx <= rightTile; tx++)
         {

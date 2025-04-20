@@ -104,7 +104,5 @@ void Player1::shootProj(int camX, int camY) {
 }
 
 void Player1::handleInteraction(std::string tag) {
-    if (tag == "wall") {
-        revertPosition();
-    }
+    Entity::handleInteraction(tag);
 }
