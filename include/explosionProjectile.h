@@ -1,5 +1,5 @@
-#ifndef PLAYER_PROJECTILE_H
-#define PLAYER_PROJECTILE_H
+#ifndef EXPLOSION_PROJECTILE_H
+#define EXPLOSION_PROJECTILE_H
 
 #include <stdlib.h>
 #include <SDL.h>
@@ -7,12 +7,12 @@
 #include "projectile.h"
 
 
-class PlayerProjectile : public Projectile {
+class ExplosionProjectile : public Projectile {
 
     public:
 
         // constructor
-        PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed);
+        ExplosionProjectile(int x, int y);
 
         // updates the object
         void Update(float deltaTime);
@@ -22,10 +22,12 @@ class PlayerProjectile : public Projectile {
 
         // draws the object based on the camera's position
         void RenderCam(SDL_Renderer* renderer, int camX, int camY);
+    
+    protected:
 
-        void bounceX(int newX);
+        // how long the explosion should last before disappearing
+        int lifeTime;
 
-        void bounceY(int newY);
 };
 
 

@@ -6,13 +6,14 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
+#include "rectangle.h"
 
-struct Rectangle {
+/*struct Rectangle {
     int x;
     int y;
     int width;
     int height;
-};
+};*/
 
 struct Point {
     int x;
@@ -42,13 +43,18 @@ class GameObject {
         // calculates and returns the center point of the hitbox
         Point getCenter(Rectangle* rectangle) const;
 
+        // reverts to previous position
+        void revertPosition();
+
     
     protected:
 
         // hitbox for game object
         Rectangle hitbox;
 
-        
+        // the last position
+        float lastX;
+        float lastY;  
 };
 
 

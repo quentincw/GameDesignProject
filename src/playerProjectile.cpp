@@ -12,8 +12,7 @@ PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startY
     hitbox.height = 30;
     hitbox.width = 30;
     damage = 10;
-    tags.push_back("Player");
-    tags.push_back("Enemy");
+    interactions.insert("enemy");
 }
 
 // updates the object
@@ -33,19 +32,6 @@ void PlayerProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 0, 255, 255);
 }
-
-// handles the interactions with other objects
-void PlayerProjectile::handleInteractions(int tag) {
-    switch (tag) {
-        case 1: //Wall X
-            bounceX(hitbox.x);
-            break;
-        case 2: // Wall Y
-            bounceY(hitbox.y);
-            break;
-    }
-}
-
 
 // projectile collided with top/bottom of obstacle
 void PlayerProjectile::bounceX(int newX){

@@ -10,22 +10,21 @@
 // constructor
 Spewer::Spewer(int x, int y) : Enemy(x, y) {
 
-    health = 250;
-    radius = 20;
-    hitbox.height = 40;
-    hitbox.width = 40;
+    health = SPEWER_HEALTH;
+    radius = SPEWER_RADIUS;
+    hitbox.height = SPEWER_SIZE;
+    hitbox.width = SPEWER_SIZE;
     xSpeed = 0;
     ySpeed = 0;
-    damage = 50;
-    cooldown = 300;
+    damage = SPEWER_DAMAGE;
+    cooldown = SPEWER_COOLDOWN;
     windup = 0;
-    spitSpeed = 3;
+    spitSpeed = SPEWERPROJECTILE_SPEED;
 }
 
 // updates the object
 void Spewer::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     cooldown = cooldown - 1;
 }
 
@@ -50,7 +49,7 @@ void Spewer::UpdateAI(Rectangle phitbox) {
 
     if(cooldown <= 0){
         spitProjectile(phitbox);
-        cooldown = 300;
+        cooldown = SPEWER_COOLDOWN;
     }
 
     // get center of hitboxes
@@ -70,8 +69,8 @@ void Spewer::UpdateAI(Rectangle phitbox) {
     }
 
     // set the speed based on speed
-    xSpeed = dx * 2;
-    ySpeed = dy * 2;
+    xSpeed = dx * SPEWER_SPEED;
+    ySpeed = dy * SPEWER_SPEED;
 
     // if the player is too close, reverse
     if(length <= 150){
@@ -89,34 +88,39 @@ void Spewer::UpdateAI(Rectangle phitbox) {
 void Spewer::spitProjectile(Rectangle phitbox) {
 
 
+    // get the center of the enemy
+    Point center = getCenter(&hitbox);
+
+    // spawn explosion centered on the enemy
+    int x = center.x - (SPITTERPROJECTILE_SIZE / 2);
+    int y = center.y - (SPITTERPROJECTILE_SIZE / 2);
+
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
-    SpitterProjectile* spit = new SpitterProjectile(hitbox.x, hitbox.y, spitSpeed, spitSpeed);
-    //child = spit;
-    // put spit in childrenList
-    //childrenList.clear();
+    SpitterProjectile* spit = new SpitterProjectile(x, y, spitSpeed, spitSpeed);
+
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, -spitSpeed, spitSpeed);
+    spit = new SpitterProjectile(x, y, -spitSpeed, spitSpeed);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, -spitSpeed, -spitSpeed);
+    spit = new SpitterProjectile(x, y, -spitSpeed, -spitSpeed);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, spitSpeed, -spitSpeed);
+    spit = new SpitterProjectile(x, y, spitSpeed, -spitSpeed);
     childrenList.push_back(spit);
 
     // up, down, left, right
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, -spitSpeed, 0);
+    spit = new SpitterProjectile(x, y, -spitSpeed, 0);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, 0, -spitSpeed);
+    spit = new SpitterProjectile(x, y, 0, -spitSpeed);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, spitSpeed, 0);
+    spit = new SpitterProjectile(x, y, spitSpeed, 0);
     childrenList.push_back(spit);
 
-    spit = new SpitterProjectile(hitbox.x, hitbox.y, 0, spitSpeed);
+    spit = new SpitterProjectile(x, y, 0, spitSpeed);
     childrenList.push_back(spit);
 
 
@@ -124,12 +128,3 @@ void Spewer::spitProjectile(Rectangle phitbox) {
     // set the flag for child to true
     children = true;
 }
-
-
-// handles the interactions with other objects
-void Spewer::handleInteractions(int tag) {
-
-}
-
-
-

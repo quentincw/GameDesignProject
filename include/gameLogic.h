@@ -1,25 +1,30 @@
-// #ifndef GAMELOGIC_H
-// #define GAMELOGIC_H
+#ifndef GAMELOGIC_H
+#define GAMELOGIC_H
 
-// #include "processManager.h"
-// #include "levelManager.h"
+#include "processManager.h"
+#include "levelManager.h"
 
-// class GameLogic
-// {
-// public:
-//     GameLogic(ProcessManager* pm, LevelManager* lm);
+class GameLogic
+{
+public:
+    GameLogic(ProcessManager* pm, LevelManager* lm);
     
-//     void update();
+    void update();
 
-// private:
-//     ProcessManager* processManager;
-//     LevelManager*   levelManager;
+private:
+    ProcessManager* processManager;
+    LevelManager* levelManager;
+    GameProcess* player;
 
-//     void checkCollisions();
+    void checkCollisions();
 
-//     bool isColliding(const GameObject* a, const GameObject* b) const;
+    bool isColliding(const GameObject* a, const GameObject* b) const;
+    bool isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const;
 
-//     void handleCollision(Process* p1, Process* p2, const std::string& matchedTag);
-// };
+    void handleProcessCollisions(const std::vector<GameProcess*>& processes);
+    void handleWallCollisions(const std::vector<GameProcess*>& processes);
+    
+    void handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag);
+};
 
-// #endif
+#endif

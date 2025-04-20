@@ -1,18 +1,18 @@
-#ifndef PLAYER_PROJECTILE_H
-#define PLAYER_PROJECTILE_H
+#ifndef GAMEDOOR_H
+#define GAMEDOOR_H
 
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
-#include "projectile.h"
+#include "gameProcess.h"
 
-
-class PlayerProjectile : public Projectile {
+// put player into interactions
+class GameDoor : public GameProcess {
 
     public:
 
-        // constructor
-        PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed);
+        // default constructor
+        GameDoor(int x, int y, int height, int width);
 
         // updates the object
         void Update(float deltaTime);
@@ -23,9 +23,14 @@ class PlayerProjectile : public Projectile {
         // draws the object based on the camera's position
         void RenderCam(SDL_Renderer* renderer, int camX, int camY);
 
-        void bounceX(int newX);
+        // handles the interactions with other objects
+        void handleInteraction(std::string tag) override;
 
-        void bounceY(int newY);
+
+    protected:
+
+
+
 };
 
 

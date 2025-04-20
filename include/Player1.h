@@ -30,6 +30,9 @@ class Player1 : public Entity {
 		// Adjust player speed
 		void setSpeedX(float x);
 		void setSpeedY(float y);
+
+        // handles the interactions with other objects
+        void handleInteraction(std::string tag) override;
 		
 	protected:
 		float mouseX;

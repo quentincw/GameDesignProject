@@ -3,7 +3,7 @@
 #include <SDL2_gfxPrimitives.h>
 #include <cmath>
 #include "Player1.h"
-#include "PlayerProjectile.h"
+#include "playerProjectile.h"
 #include <iostream>
 
 // constructor
@@ -18,12 +18,24 @@ Player1::Player1(int x, int y) : Entity() {
     xSpeed = 0;
     ySpeed = 0;
 	cooldown = 40;
+    tags.insert("player");
 }
 
 // updates the object
 void Player1::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+	float dx, dy;
+	if (abs(xSpeed) == abs(ySpeed)){
+		dx = sqrt(xSpeed*xSpeed/2);
+		dy = sqrt(ySpeed*ySpeed/2);
+		if (xSpeed<0) dx*=-1;
+		if (ySpeed<0) dy*=-1;
+	}
+	else{
+		dx = xSpeed;
+		dy = ySpeed;
+	}
+
+    Entity::Update(deltaTime);
 	cooldown-=1;
 }
 
@@ -47,11 +59,6 @@ void Player1::Render(SDL_Renderer* renderer) {
 void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 55, 200, 255);
-}
-
-// handles the interactions with other objects
-void Player1::handleInteractions(int tag) {
-
 }
 
 void Player1::updateMouse(float x, float y){
@@ -79,8 +86,8 @@ void Player1::shootProj(int camX, int camY) {
     }
 
     // set the speed based on spitSpeed
-    float projXspeed = dx * 3;
-    float projYspeed = dy * 3;
+    float projXspeed = dx * 3 + xSpeed;
+    float projYspeed = dy * 3 + ySpeed;
 
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
@@ -94,4 +101,10 @@ void Player1::shootProj(int camX, int camY) {
     children = true;
 	cooldown = 40;
 	}
+}
+
+void Player1::handleInteraction(std::string tag) {
+    if (tag == "wall") {
+        revertPosition();
+    }
 }

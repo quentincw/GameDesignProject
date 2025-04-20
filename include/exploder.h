@@ -1,18 +1,20 @@
-#ifndef PLAYER_PROJECTILE_H
-#define PLAYER_PROJECTILE_H
+#ifndef EXPLODER_H
+#define EXPLODER_H
 
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
+#include <cmath>
+#include <vector>
+#include "enemy.h"
 #include "projectile.h"
 
-
-class PlayerProjectile : public Projectile {
+class Exploder : public Enemy {
 
     public:
 
         // constructor
-        PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed);
+        Exploder(int x, int y);
 
         // updates the object
         void Update(float deltaTime);
@@ -23,9 +25,19 @@ class PlayerProjectile : public Projectile {
         // draws the object based on the camera's position
         void RenderCam(SDL_Renderer* renderer, int camX, int camY);
 
-        void bounceX(int newX);
+        // updates the ai based on the player's position
+        void UpdateAI(Rectangle phitbox);
 
-        void bounceY(int newY);
+    private:
+
+        // creates a projectile object, explosion
+        virtual void explode();
+
+
+
+
+
+
 };
 
 

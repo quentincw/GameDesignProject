@@ -192,6 +192,7 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
         grid[x][y] = room.gen(dimensions[r][0], dimensions[r][1], door_map[x][y], dimensions[r][2]);
         grid_col[x][y] = room.getTilemapCollision();
     }
+    cout << "grid: " << grid.size() << " grid y: " << grid[0].size() << endl;
 
     for (int iy = 0; iy < grid_height; ++iy) {
         y = grid_height - 1 - iy;
@@ -201,6 +202,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 else cout << "0 ";
             } else {
                 cout << "- ";
+                curRoomPos.x = x;
+                curRoomPos.y = y;
             }
         }
         cout << endl;
@@ -235,6 +238,10 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     // since render boxes overlap in connected doors, both rooms will render for doors
     vector<vector<SDL_Rect>> render_grid(grid_width, vector<SDL_Rect>(grid_height, SDL_Rect()));
     
+    // vector of rectangles that stores x,y, height, width of each room for level manager
+    //vector<Rectangle> roomDimensions;
+    // rectangle for populating vector of room dimensions for the level manager
+    Rectangle roomRectangle;
 
     int x_offset = 0;
     int y_offset = 0;
@@ -259,6 +266,12 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 render_grid[x][y] = {x_offset, y_offset, int(grid[x][y].size()), int(grid[x][y][0].size())};
 
                 std::cout << "grid: x = "<< x << ", "<< y << " | "<< "Render grid: x = " << render_grid[x][y].x << ", y = " << render_grid[x][y].y << ", w = " << render_grid[x][y].w << ", h = " << render_grid[x][y].h << std::endl;
+                roomRectangle.x = render_grid[x][y].x;
+                roomRectangle.y = render_grid[x][y].y;
+                roomRectangle.width = render_grid[x][y].w;
+                roomRectangle.height = render_grid[x][y].h;
+                roomDimensions.push_back(roomRectangle);
+
             }
             if (max_row[y] > 0) y_offset += max_row[y] + pad;
         }
@@ -274,6 +287,33 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
     roomCoord = {layout[0][0], layout[0][1]};
     curRoom = render_grid[roomCoord[0]][roomCoord[1]];
 
+    // 2D vector to hold the room positions
+    vector<vector<int>> roomPos(grid_width, vector<int>(grid_height, 0));
+    // iterate the possible positions to find which x,y have a room
+    int count = 0;
+    for (int gridX = 0; gridX < grid_width; gridX++) {
+        for (int gridY = 0; gridY < grid_height; gridY++) {
+            for(int roomC = 0; roomC < layout.size(); roomC++) {
+                // check if the coordinates map to a room in the layout
+                if((gridX == layout[roomC][0] && (gridY == layout[roomC][1]))) {
+                    //cout << gridX << ' ' << gridY << endl;
+                    roomPos[gridX][gridY] = 1;
+                    count++;
+                }
+            }
+        }
+    }
+    this->roomPosCoords = roomPos;
+    /*
+    // print out each room in the coordinate grid
+    for (int i = 0; i < roomPos.size(); i++) {
+        for (int j = 0; j < roomPos[i].size(); j++) {
+          cout << roomPos[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << count;
+    */
     return grid;
 }
 
@@ -312,12 +352,30 @@ void Floor::setCurRoom(int posX, int posY)
     }
 
     curRoom = render_grid[roomCoord[0]][roomCoord[1]];
+    curRoomPos.x = roomCoord[0];
+    curRoomPos.y = roomCoord[1];
+    //cout<<curRoomPos.x<<", "<<curRoomPos.x<<endl;
     return;    
+}
+
+// returns a 2D vector representing where each room is
+vector<vector<int>> Floor::getRoomsPos() {
+    return roomPosCoords;
 }
 
 SDL_Rect Floor::getCurRoom()
 {
     return curRoom;
+}
+
+// returns the current room's position in the 2D array
+RoomPosition Floor::getRoomPos() {
+    return curRoomPos;
+}
+
+// returns a vector containing rectangles that represent each room
+vector<Rectangle> Floor::getRoomDimensions() {
+    return roomDimensions;
 }
 
 vector<vector<int>> Floor::getRooms() {
