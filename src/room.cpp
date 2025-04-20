@@ -405,16 +405,16 @@ vector<vector<int>> Room::genPassageCol(int startX, int startY, int offsetX, int
 {
     // right
     if (door[1] != -1) {
-        for (int x = startX; x < maxX ; x++) {
-            floor_grid_col[x][offsetY + door[1] - 1] = 1;
-            floor_grid_col[x][offsetY + door[1] - 1 + pad] = 1;
+        for (int x = startX * 2; x < maxX * 2 ; x++) {
+            floor_grid_col[x][(offsetY + door[1] - 1) * 2] = 1;
+            floor_grid_col[x][((offsetY + door[1] - 1 + pad) * 2) - 1] = 1;
         }
     }
     // down
     if (door[2] != -1) {
-        for (int y = startY; y < maxY; y++) {
-            floor_grid_col[offsetX + door[2] - 1][y] = 1;
-            floor_grid_col[offsetX + door[2] - 1 + pad][y] = 1;
+        for (int y = startY * 2; y < maxY * 2; y++) {
+            floor_grid_col[(offsetX + door[2] - 1) * 2][y] = 1;
+            floor_grid_col[((offsetX + door[2] - 1 + pad) * 2) - 1][y] = 1;
         }
     }
 
@@ -487,21 +487,26 @@ bool Room::is_contiguous(int width, int height, vector<vector<vector<int>>> grid
 
 vector<vector<int>> Room::getTilemapCollision() {
     // subtile x, y (1 = wall, 0 = none)
+
+    // 1 = wall, 2 = wall up/left, 3 = wall down/right, 4 = none
+    // [up, right, down, left]
     vector<vector<int>> tilemap_collision(grid_width * 2, vector<int>(grid_height * 2, 0));
-    int size = TILE_SIZE / 2;
-    for (int x = 0; x < grid_width; x++) {
-        for (int y = 0; y < grid_height; y++) {
+    for (int x = 0; x < grid_width; x += 1) {
+        for (int y = 0; y < grid_height; y += 1) {
+            int x2 = x * 2;
+            int y2 = y * 2;
+
             if (grid[x][y][0] == 1 || grid[x][y][0] == 2) {
-                tilemap_collision[x][y] = 1;
+                tilemap_collision[x2][y2] = 1;
             }
             if (grid[x][y][0] == 1 || grid[x][y][0] == 3) {
-                tilemap_collision[x + 1][y] = 1;
+                tilemap_collision[x2 + 1][y2] = 1;
             }
             if (grid[x][y][2] == 1 || grid[x][y][2] == 2) {
-                tilemap_collision[x][y + 1] = 1;
+                tilemap_collision[x2][y2 + 1] = 1;
             }
             if (grid[x][y][2] == 1 || grid[x][y][2] == 3) {
-                tilemap_collision[x + 1][y + 1] = 1;
+                tilemap_collision[x2 + 1][y2 + 1] = 1;
             }
         }
     }
