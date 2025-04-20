@@ -9,8 +9,6 @@
 
 // constructor
 GameProcess::GameProcess() : tags{}, childrenList{} {
-    interactions.insert("wall");
-    interactions.insert("door");
     deleteFlag = false;
     children = false;
     radius = 0;

@@ -13,15 +13,14 @@ Projectile::Projectile(int x, int y, float startXSpeed, float startYSpeed) : Gam
     ySpeed = startYSpeed;
     damage = 10;
     tags.insert("projectile");
+    interactions.insert("wall");
+    interactions.insert("door");
 }
 
 // updates the object
 void Projectile::Update(float deltaTime) {
     hitbox.x = hitbox.x + xSpeed;
     hitbox.y = hitbox.y + ySpeed;
-    
-    std::cout << hitbox.x << std::endl;
-    std::cout << hitbox.y << std::endl;
 }
 
 // get the damage the projectile causes to the player on contact
@@ -30,10 +29,7 @@ int Projectile::getDamage() const {
 }
 
 void Projectile::handleInteraction(std::string tag) {
-    if (tag == "enemy") {
-        std::cout << "hit enemy";
-    }
-    if (tag == "wall" || tag == "player" || tag == "enemy") {
+    if (tag == "wall" || tag == "player" || tag == "enemy" || tag == "door") {
         markForDeletion();
     }
 }
