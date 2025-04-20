@@ -12,9 +12,9 @@ GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
 void GameLogic::update()
 {
     auto processes = processManager->getProcessList();
-    handleProcessCollisions(processes);
-    handleWallCollisions(processes);
-    handleWallCollisions({player});
+    checkProcessCollisions(processes);
+    checkWallCollisions(processes);
+    checkWallCollisions({player});
 }
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
@@ -37,7 +37,7 @@ bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw,
            (obj_hitbox.y + obj_hitbox.height >= ry);
 }
 
-void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& processes)
+void GameLogic::checkProcessCollisions(const std::vector<GameProcess*>& processes)
 {
     for (size_t i = 0; i < processes.size(); ++i)
     {
@@ -93,7 +93,7 @@ void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& process
     }
 }
 
-void GameLogic::handleWallCollisions(const std::vector<GameProcess*>& processes)
+void GameLogic::checkWallCollisions(const std::vector<GameProcess*>& processes)
 {
     const auto& floor = levelManager->getCurrentFloor();
     const auto& tilemapData = floor->getRoomsCol();
@@ -116,7 +116,6 @@ void GameLogic::handleWallCollisions(const std::vector<GameProcess*>& processes)
         int rightTile  = std::min(mapWidth - 1, (int)((px2 - 1) / TILE_SIZE));
         int topTile    = std::max(0, (int)(py1 / TILE_SIZE));
         int bottomTile = std::min(mapHeight - 1, (int)((py2 - 1) / TILE_SIZE));
-
 
         for (int tx = leftTile; tx <= rightTile; tx++)
         {
