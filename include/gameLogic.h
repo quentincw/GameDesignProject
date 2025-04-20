@@ -21,8 +21,8 @@ private:
     bool isColliding(const GameObject* a, const GameObject* b) const;
     bool isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const;
 
-    void handleProcessCollisions(const std::vector<GameProcess*>& processes);
-    void handleWallCollisions(const std::vector<GameProcess*>& processes);
+    void checkProcessCollisions(const std::vector<GameProcess*>& processes);
+    void checkWallCollisions(const std::vector<GameProcess*>& processes);
     
     void handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag);
 };
