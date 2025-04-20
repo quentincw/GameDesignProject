@@ -5,6 +5,7 @@
 #include "floor.h"
 #include "enemyFactory.h"
 #include "gameDoor.h"
+#include "stairway.h"
 #include <random>
 #include <ctime>
 //#include <algorithm> // reverse
@@ -68,10 +69,6 @@ void LevelManager::genFloor(int level) {
 
     // get the dimensions of the floor
     vector<Rectangle> rooms = curfloor.getRoomDimensions();
-    /*
-    for (size_t i = 0; i < rooms.size(); ++i) {
-        cout << "x: " << rooms[i].x << " y: " << rooms[i].y << " width: " << rooms[i].width << " height: " << rooms[i].height << endl;
-    }*/
 
     // 1 == room, 0 == gap
     int count = 0;
@@ -80,15 +77,7 @@ void LevelManager::genFloor(int level) {
     vector<vector<int>> roomsCol = curfloor.getRoomsCol();
     GameProcess* gameDoor = nullptr;
 
-    cout << "roomsCol size x: " << roomsCol.size() << endl;
-    /*
-    for (size_t i = 0; i < roomsCol.size(); ++i) {
-        for (size_t j = 0; j < 70; ++j) {
-            cout << roomsCol[i][j] << " ";
-        }
-        cout << "\n";
-    }*/
-
+    //cout << "roomsCol size x: " << roomsCol.size() << endl;
 
     // loop through every room
     for (size_t i = 0; i < roomPos.size(); ++i) {
@@ -97,11 +86,14 @@ void LevelManager::genFloor(int level) {
             if(roomPos[i][j] == 1) {
                 // get the next rectangle
                 Rectangle curRect = rooms[count];
-                cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
+                // cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
                 // boss room check
                 if((curRect.height == 24) && (curRect.width == 24)){
                     // fill room with boss encounter
                     fillProcessListBoss(roomLists[i][j]);
+                    // add stairway to next floor
+                    gameDoor = new Stairway(0, 0, 100, 100);
+                    roomLists[i][j].push_back(gameDoor);
                 }
                 else {
                     // level filler call (fill list using the rectangle)
@@ -110,7 +102,7 @@ void LevelManager::genFloor(int level) {
                 // find valid places for each enemy
                 findValidSpots(roomLists[i][j], curRect);
 
-                cout << "RoomPos h/w: " << i << " " << j << ": " << curRect.width << " " << curRect.height << endl;
+                //cout << "RoomPos h/w: " << i << " " << j << ": " << curRect.width << " " << curRect.height << endl;
                 
                 
                 // check for door on top side
@@ -253,7 +245,7 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
             curList.push_back(enemy);
             break;
-    }
+    }              
 }
 
 // fills a process list based on a difficulty level

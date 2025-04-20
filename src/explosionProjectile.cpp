@@ -14,7 +14,7 @@ ExplosionProjectile::ExplosionProjectile(int x, int y) : Projectile(x, y, 0, 0) 
     hitbox.height = EXPLOSIONPROJECTILE_SIZE;
     hitbox.width = EXPLOSIONPROJECTILE_SIZE;
     lifeTime = EXPLOSIONPROJECTILE_LIFETIME;
-    interactions.insert("Player");
+    interactions.insert("player");
 }
 
 // updates the object
