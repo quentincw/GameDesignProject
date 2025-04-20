@@ -5,7 +5,6 @@
 #include "gameProcess.h"
 #include "gameObject.h"
 #include "floor.h"
-#include <iostream>
 
 PlayerView::PlayerView() {}
 
