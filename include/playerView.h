@@ -21,7 +21,9 @@ public:
 
     void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
-	int handleInputs(ProcessManager* pm);
+	int handleInputs(ProcessManager* pm, int state);
+	
+	void renderPause();
 
 private:
 
@@ -32,8 +34,6 @@ private:
     void testLevelRendering(Floor* floor);
 
     void renderProcesses(ProcessManager* pm);
-	
-	//void renderMinimap(LevelManager* lm);
 
     // updates the camera's position based on the player's position
     void updateCameraPosition(ProcessManager* pm);

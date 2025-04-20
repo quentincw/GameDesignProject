@@ -44,7 +44,7 @@ void PlayerView::cleanup()
     SDL_Quit();
 }
 
-int PlayerView::handleInputs(ProcessManager* pm)
+int PlayerView::handleInputs(ProcessManager* pm, int state)
 {
 	SDL_Event e;
 	auto player = dynamic_cast<Player1*>(pm->getPlayer());
@@ -56,33 +56,12 @@ int PlayerView::handleInputs(ProcessManager* pm)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-
+				if (state==0) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
-                    /*case SDLK_s:
-                        // check which list is active (true = room1)
-                        if(curRoom){
-                            room1 = manager.getProcessList();
-                            manager.loadProcessList(room2);
-                            curRoom = false;
-                        }
-                        else{
-                            room2 = manager.getProcessList();
-                            manager.loadProcessList(room1);
-                            curRoom = true;
-                        }
-                        break;*/
-                    case SDLK_k:
-                        //kill all the current processes
-                        for(int i = 0; i < curProcesses.size(); i++){
-                            auto curProcess = curProcesses[i];
-                            curProcess->markForDeletion();
-                        }
-                        break;
-                    case SDLK_y:
-                        cout << "x: " << player->getHitbox().x << "y: " << player->getHitbox().y << endl;
-                        break;
+					case SDLK_p:
+						return -2;
                     case SDLK_w:
                         player->setSpeedY(-3);
                         break;
@@ -147,22 +126,6 @@ void PlayerView::render(Floor* floor, ProcessManager* pm)
 	SDL_RenderPresent( renderer );
 }
 
-void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
-{
-	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-    SDL_RenderClear( renderer );
-	
-    updateCameraPosition(pm);
-
-	renderLevel(walls);
-
-    renderProcesses(pm);
-	
-	//renderMinimap(walls);
-	
-	SDL_RenderPresent( renderer );
-}
-
 void PlayerView::renderLevel(Floor* floor)
 {
     testLevelRendering(floor);
@@ -179,41 +142,17 @@ void PlayerView::renderLevel(Floor* floor)
     }*/
 }
 
-void PlayerView::renderLevel(std::vector<GameObject*> walls)
-{
-    
-	GameObject* curWall;
-	for(int i = 0; i < walls.size(); i++){
-        curWall = walls[i];
-        curWall->RenderCam(renderer, cameraX, cameraY );
-    }
-    /*const auto& walls = levelManager->getWalls();
-    for (const auto& tile : walls)
-    {
-        tile.RenderCam( renderer, cameraX, cameraY);  
-    }*/
-}
-
 void PlayerView::renderProcesses(ProcessManager* pm)
 {
 	pm->renderProcessesCam( renderer, cameraX, cameraY );
-    /*const auto& processes = pm->getProcessList();
-    for (GameProcess* process : processes)
-    {
-        if (!process) 
-            continue;
-
-        process->Render(renderer);
-    }
-	pm->getPlayer()->Render(renderer);*/
 }
 
-/*
-void PlayerView::renderMinimap(walls)
+
+void PlayerView::renderPause()
 {
-	
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 128);
+	SDL_RenderPresent( renderer );
 }
-*/
 
 // updates the camera's position based on the player's position
 void PlayerView::updateCameraPosition(ProcessManager* pm)
