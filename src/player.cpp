@@ -17,8 +17,8 @@ void Player::move(vector<vector<int>> tilemap_collision)
     int tileRange = 2;
 
     // tile coordinates of the player's position
-    int tileX = posX / (TILE_SIZE / 2);
-    int tileY = posY / (TILE_SIZE / 2);
+    int tileX = posX / TILE_SIZE;
+    int tileY = posY / TILE_SIZE;
 
     // limit tileRange such that it does not reach out of bounds
     for (int x = max(0, tileX - tileRange); x < min(int(tilemap_collision.size()), tileX + tileRange); x++) {
@@ -72,21 +72,34 @@ void Player::setVelY(int y)
 
 bool Player::checkCollision(int xs, int ys)
 {
-    int x = xs * (TILE_SIZE / 2);
-    int y = ys * (TILE_SIZE / 2);
+    int x = xs * TILE_SIZE;
+    int y = ys * TILE_SIZE;
     
-    if (posX + rad < x) {
-        return false;
+    // for circle/rect
+    int cX, cY;
+    if (posX < x - (TILE_SIZE / 2)) {
+        cX = x - (TILE_SIZE / 2);
     }
-    if (posX - rad > x + (TILE_SIZE / 2)) {
-        return false;
+    else if (posX > x + (TILE_SIZE / 2)) {
+        cX = x + (TILE_SIZE / 2);
     }
-    if (posY + rad < y) {
-        return false;
+    else {
+        cX = posX;
     }
-    if (posY - rad > y + (TILE_SIZE / 2)) {
-        return false;
+    if (posY < y - (TILE_SIZE / 2)) {
+        cY = y - (TILE_SIZE / 2);
     }
-    
-    return true;
+    else if (posY > y + (TILE_SIZE / 2)) {
+        cY = y + (TILE_SIZE / 2);
+    }
+    else {
+        cY = posY;
+    }
+
+    int deltaX = cX - posX;
+    int deltaY = cY - posY;
+    if (deltaX * deltaX + deltaY * deltaY < rad * rad) {
+        return true;
+    }
+    return false;
 }

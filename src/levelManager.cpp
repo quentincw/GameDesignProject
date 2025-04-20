@@ -5,10 +5,10 @@
 #include "floor.h"
 #include "enemyFactory.h"
 #include "gameDoor.h"
+#include <random>
 #include <ctime>
 //#include <algorithm> // reverse
 #include <set>
-#include <iostream>
 using namespace std;
 
 LevelManager::LevelManager() {

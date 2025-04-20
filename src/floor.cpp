@@ -192,7 +192,6 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
         grid[x][y] = room.gen(dimensions[r][0], dimensions[r][1], door_map[x][y], dimensions[r][2]);
         grid_col[x][y] = room.getTilemapCollision();
     }
-
     cout << "grid: " << grid.size() << " grid y: " << grid[0].size() << endl;
 
     for (int iy = 0; iy < grid_height; ++iy) {
@@ -254,12 +253,10 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 for (int i = 0; i < grid[x][y].size(); i++) {
                     for (int j = 0; j < grid[x][y][i].size(); j++) {
                         rooms[i + x_offset][j + y_offset] = grid[x][y][i][j];
-                        int i2 = i * 2;
-                        int j2 = j * 2;
-                        rooms_col[i2 + (x_offset * 2)][j2 + (y_offset * 2)] = grid_col[x][y][i2][j2];
-                        rooms_col[i2 + (x_offset * 2) + 1][j2 + (y_offset * 2)] = grid_col[x][y][i2 + 1][j2];
-                        rooms_col[i2 + (x_offset * 2)][j2 + (y_offset * 2) + 1] = grid_col[x][y][i2][j2 + 1];
-                        rooms_col[i2 + (x_offset * 2) + 1][j2 + (y_offset * 2) + 1] = grid_col[x][y][i2 + 1][j2 + 1];
+                        rooms_col[i + x_offset][j + y_offset] = grid_col[x][y][i][j];
+                        rooms_col[i + x_offset + 1][j + y_offset] = grid_col[x][y][i + 1][j];
+                        rooms_col[i + x_offset][j + y_offset + 1] = grid_col[x][y][i][j + 1];
+                        rooms_col[i + x_offset + 1][j + y_offset + 1] = grid_col[x][y][i + 1][j + 1];
                     }
                 }
                 // create passages and passage collisions
