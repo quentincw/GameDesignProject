@@ -14,35 +14,65 @@ using namespace std;
 
 LevelManager::LevelManager() {
     mt19937 gen(rd()); 
+    floorNumber = 1;
+}
+
+void LevelManager::genNextFloor(GameProcess* player) {
+
+    if(floorNumber > 3) {
+        return;
+    }
+    // generate the next floor
+    switch (floorNumber) {
+        case 1:
+            // first floor - easy
+            genFloor(1);
+            break;
+        case 2:
+            // second floor - medium
+            genFloor(2);
+            break;
+        case 3:
+            // third floor - hard + final boss
+            genFloor(3);
+            break;
+    }
+    //player->setPosition((roomX) * TILE_SIZE, (roomY) * TILE_SIZE);
+    // increment the floor number for next generation
+    Rectangle rect = curfloor->getCurRoomRect();
+    player->setPosition((rect.x * TILE_SIZE) + 100, (rect.y * TILE_SIZE) + 100);
+    floorNumber = floorNumber + 1;
+
 }
 
 
 void LevelManager::genFloor(int level) {
+    curfloor = new Floor();
     // different parameters for floor generation
     switch (level) {
         case 1:
             // 3, 4, 5
-            curfloor.gen(3, 5, 14);
+            curfloor->gen(3, 5, 14);
             break;
         case 2:
             // 4, 5, 6
-            curfloor.gen(6, 6, 16);
+            curfloor->gen(6, 6, 16);
             break;
         case 3:
             // 4, 5, 6
-            curfloor.gen(5, 5, 18);
+            curfloor->gen(3, 3, 2);
             break;
         default:
-            curfloor.gen(5, 5, 14);
+            curfloor->gen(5, 5, 14);
     }
 
     // set the current room to the start room
-    RoomPosition newPos = curfloor.getRoomPos();
+    RoomPosition newPos = curfloor->getRoomPos();
     roomX = newPos.x;
     roomY = newPos.y;
 
     // get the room coordinates
-    vector<vector<int>> roomPos = curfloor.getRoomsPos();
+    vector<vector<int>> roomPos = curfloor->getRoomsPos();
     
     // reverse y vector
     //reverse(roomPos.begin(), roomPos.end());
@@ -68,16 +98,17 @@ void LevelManager::genFloor(int level) {
     //fillProcessLists();
 
     // get the dimensions of the floor
-    vector<Rectangle> rooms = curfloor.getRoomDimensions();
+    vector<Rectangle> rooms = curfloor->getRoomDimensions();
 
     // 1 == room, 0 == gap
     int count = 0;
     Rectangle curRect;
     GameProcess* enemy = nullptr;
-    vector<vector<int>> roomsCol = curfloor.getRoomsCol();
+    vector<vector<int>> roomsCol = curfloor->getRoomsCol();
     GameProcess* gameDoor = nullptr;
 
     //cout << "roomsCol size x: " << roomsCol.size() << endl;
+    cout << "how many rooms: " << rooms.size() << endl;
 
     // loop through every room
     for (size_t i = 0; i < roomPos.size(); ++i) {
@@ -178,23 +209,14 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
     // potential position (tile)
     int x,y;
 
-    cout << rectangle.x << endl;
-    cout << rectangle.y << endl;
-    cout << rectangle.width << endl;
-    cout << rectangle.height << endl;
-    cout << "generate" << endl;
-
     // vector of valid/ invalid locations
-    vector<vector<int>> roomsCol = curfloor.getRoomsCol();
+    vector<vector<int>> roomsCol = curfloor->getRoomsCol();
 
     // loop through each process
     for (size_t i = 0; i < curList.size(); ++i) {
         // generate a position
         x = width(gen) + rectangle.x;
         y = height(gen) + rectangle.y;
-        cout << x << endl;
-        cout << y << endl;
-        cout << roomsCol[x][y] << endl;
         // cheeck if valid
         while(roomsCol[x][y] == 1){
             // repeat until valid
@@ -254,8 +276,6 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty
     // random enemy generator
     // increase for every enemy added
     uniform_int_distribution<> enemyDist(0, 7);
-
-    cout << "made it" << endl;
  
     GameProcess* enemy = nullptr;
 
@@ -319,10 +339,10 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
     int pY = player->getHitbox().y;
 
     // set the current room within the floor
-    curfloor.setCurRoom(pX / TILE_SIZE, pY / TILE_SIZE);
+    curfloor->setCurRoom(pX / TILE_SIZE, pY / TILE_SIZE);
 
     // get the current room
-    RoomPosition newPos = curfloor.getRoomPos();
+    RoomPosition newPos = curfloor->getRoomPos();
 
 
     // check if the player entered a different room
@@ -348,5 +368,5 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 
 // returns the current floor
 Floor* LevelManager::getCurrentFloor() {
-    return &curfloor;
+    return curfloor;
 }

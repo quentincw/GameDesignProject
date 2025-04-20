@@ -11,6 +11,7 @@
 #include "playerView.h"
 #include "gameLogic.h"
 #include "Player1.h"
+#include "processManager.h"
 
 
 using namespace std;
@@ -63,13 +64,13 @@ int main(int argc, char** argv) {
     playerView.initialize();
 
     // generate the floor
-    levelManager.genFloor(1);
+    levelManager.genNextFloor(processManager.getPlayer());
 
     // set the players position in the starting room
-    Floor* curFloor = levelManager.getCurrentFloor();
-    SDL_Rect curRoom = curFloor->getCurRoom();
-    processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
-    processManager.addProcess(processManager.getPlayer());
+    //Floor* curFloor = levelManager.getCurrentFloor();
+    //SDL_Rect curRoom = curFloor->getCurRoom();
+    //processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
+    //processManager.addProcess(processManager.getPlayer());
 
     // make game logic
     GameLogic gameLogic(&processManager, &levelManager);
@@ -88,6 +89,14 @@ int main(int argc, char** argv) {
 		int ret = playerView.handleInputs(&processManager);
         if (ret == -1) {
             running = false;
+        }
+        if (ret == 5) {
+            // test genereating a new floor
+            levelManager.genNextFloor(processManager.getPlayer());
+            // set the players position in the starting room
+            //curFloor = levelManager.getCurrentFloor();
+            //curRoom = curFloor->getCurRoom();
+            //processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
         }
 
         // update the player and current process list
