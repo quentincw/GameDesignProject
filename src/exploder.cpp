@@ -21,8 +21,7 @@ Exploder::Exploder(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void Exploder::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
 }
 
 // draws the object

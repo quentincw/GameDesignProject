@@ -28,8 +28,7 @@ Burrower::Burrower(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void Burrower::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     if(burrowing) {
         burrowDuration = burrowDuration - 1;
     }
