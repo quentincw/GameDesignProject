@@ -12,9 +12,9 @@ GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
 void GameLogic::update()
 {
     auto processes = processManager->getProcessList();
-    handleProcessCollisions(processes);
-    handleWallCollisions(processes);
-    handleWallCollisions({player});
+    checkProcessCollisions(processes);
+    checkWallCollisions(processes);
+    checkWallCollisions({player});
 }
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
@@ -31,26 +31,13 @@ bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
 bool GameLogic::isColliding(const GameObject* obj, float rx, float ry, float rw, float rh) const
 {
     auto obj_hitbox = obj->getHitbox();
-    int x = rx * (TILE_SIZE / 2);
-    int y = ry * (TILE_SIZE / 2);
-    
-    if (obj_hitbox.x + obj_hitbox.width < x) {
-        return false;
-    }
-    if (obj_hitbox.x > x + (TILE_SIZE / 2)) {
-        return false;
-    }
-    if (obj_hitbox.y + obj_hitbox.height < y) {
-        return false;
-    }
-    if (obj_hitbox.y > y + (TILE_SIZE / 2)) {
-        return false;
-    }
-    
-    return true;
+    return (obj_hitbox.x <= rx + rw) &&
+           (obj_hitbox.x + obj_hitbox.width >= rx) &&
+           (obj_hitbox.y <= ry + rh) &&
+           (obj_hitbox.y + obj_hitbox.height >= ry);
 }
 
-void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& processes)
+void GameLogic::checkProcessCollisions(const std::vector<GameProcess*>& processes)
 {
     for (size_t i = 0; i < processes.size(); ++i)
     {
@@ -69,7 +56,7 @@ void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& process
         }
 
         // General tag-based interaction
-        for (size_t j = i + 1; j < processes.size(); ++j)
+        for (size_t j = 0; j < processes.size(); ++j)
         {
             GameProcess* p2 = processes[j];
             if (!p2) continue;
@@ -106,7 +93,7 @@ void GameLogic::handleProcessCollisions(const std::vector<GameProcess*>& process
     }
 }
 
-void GameLogic::handleWallCollisions(const std::vector<GameProcess*>& processes)
+void GameLogic::checkWallCollisions(const std::vector<GameProcess*>& processes)
 {
     const auto& floor = levelManager->getCurrentFloor();
     const auto& tilemapData = floor->getRoomsCol();
@@ -120,19 +107,27 @@ void GameLogic::handleWallCollisions(const std::vector<GameProcess*>& processes)
         if (!proc) continue;
 
         auto procHitbox = proc->getHitbox();
-        
-        // check collisions with x tiles
-        int tileRange = 2;
+        float px1 = procHitbox.x;
+        float py1 = procHitbox.y;
+        float px2 = px1 + procHitbox.width;
+        float py2 = py1 + procHitbox.height;
 
-        // tile coordinates of the player's position
-        int tileX = (procHitbox.x + (procHitbox.width / 2)) / (TILE_SIZE / 2);
-        int tileY = (procHitbox.y + (procHitbox.height / 2)) / (TILE_SIZE / 2);
+        int leftTile   = std::max(0, (int)(px1 / TILE_SIZE));
+        int rightTile  = std::min(mapWidth - 1, (int)((px2 - 1) / TILE_SIZE));
+        int topTile    = std::max(0, (int)(py1 / TILE_SIZE));
+        int bottomTile = std::min(mapHeight - 1, (int)((py2 - 1) / TILE_SIZE));
 
-        // limit tileRange such that it does not reach out of bounds
-        for (int x = max(0, tileX - tileRange); x < min(int(tilemapData.size()), tileX + tileRange); x++) {
-            for (int y = max(0, tileY - tileRange); y < min(int(tilemapData[x].size()), tileY + tileRange); y++) {
-                if (tilemapData[x][y]) {
-                    if (isColliding(proc, x, y, TILE_SIZE / 2, TILE_SIZE / 2)) {
+        for (int tx = leftTile; tx <= rightTile; tx++)
+        {
+            for (int ty = topTile; ty <= bottomTile; ty++)
+            {
+                if (tilemapData[tx][ty] == 1)
+                {
+                    float rx = tx * TILE_SIZE;
+                    float ry = ty * TILE_SIZE;
+
+                    if (isColliding(proc, rx, ry, TILE_SIZE, TILE_SIZE))
+                    {
                         proc->handleInteraction("wall");
                     }
                 }

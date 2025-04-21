@@ -3,6 +3,7 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
+#include <bits/stdc++.h>
 #include "gameProcess.h"
 #include "bloodStain.h"
 #include <constants.h>

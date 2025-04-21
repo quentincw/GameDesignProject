@@ -3,13 +3,12 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
+#include <bits/stdc++.h>
 #include "gameObject.h"
 #include "gameProcess.h"
 
 // constructor
 GameProcess::GameProcess() : tags{}, childrenList{} {
-    interactions.insert("wall");
-    interactions.insert("door");
     deleteFlag = false;
     children = false;
     radius = 0;

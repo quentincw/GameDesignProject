@@ -9,6 +9,8 @@
 
 Entity::Entity() : GameProcess() {
     tags.insert("entity");
+    interactions.insert("wall");
+    interactions.insert("door");
     health = 0;
     maxHealth = 0;
     isAlive = true;
@@ -49,7 +51,7 @@ void Entity::spawnBloodStain() {
 }
 
 void Entity::handleInteraction(std::string tag) {
-    if (tag == "wall") {
+    if (tag == "wall" || tag == "door") {
         revertPosition();
     }
 }

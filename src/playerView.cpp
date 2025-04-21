@@ -5,7 +5,6 @@
 #include "gameProcess.h"
 #include "gameObject.h"
 #include "floor.h"
-#include <iostream>
 
 PlayerView::PlayerView() {}
 
@@ -67,6 +66,8 @@ int PlayerView::handleInputs(ProcessManager* pm)
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
+                    case SDLK_g:
+                        return 5;
                     /*case SDLK_s:
                         // check which list is active (true = room1)
                         if(curRoom){
