@@ -368,6 +368,17 @@ SDL_Rect Floor::getCurRoom()
     return curRoom;
 }
 
+Rectangle Floor::getCurRoomRect()
+{
+    Rectangle rect;
+    SDL_Rect rect2 = getCurRoom();
+    rect.x = rect2.x;
+    rect.y = rect2.y;
+    rect.height = rect2.h;
+    rect.width = rect2.w;
+    return rect;
+}
+
 // returns the current room's position in the 2D array
 RoomPosition Floor::getRoomPos() {
     return curRoomPos;

@@ -28,8 +28,7 @@ void AlphaSpewer::Update(float deltaTime) {
 
     // check if the spewer is still spitting
     if(projectileAmount <= 0){
-        hitbox.x = hitbox.x + xSpeed;
-        hitbox.y = hitbox.y + ySpeed;
+        Entity::Update(deltaTime);
         cooldown = cooldown - 1;
     }
     // time inbetween projectiles

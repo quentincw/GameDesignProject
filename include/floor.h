@@ -22,6 +22,10 @@ class Floor {
     vector<vector<vector<vector<int>>>> gen(int width, int height, int gen_rooms);
     void setCurRoom(int posX, int posY);
     SDL_Rect getCurRoom();
+
+    // returns a rectangle represing the current room
+    Rectangle getCurRoomRect();
+
     vector<vector<int>> getRooms();
     vector<vector<int>> getRoomsCol();
 

@@ -8,6 +8,8 @@
 #include "playerProjectile.h"
 #include "enemy.h"
 #include "Player1.h"
+#include "stairway.h"
+#include "gameDoor.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
@@ -139,6 +141,19 @@ void ProcessManager::updateEnemyAI() {
         if (auto enemy = dynamic_cast<Enemy*>(curProcess)) {
             enemy->UpdateAI(player->getHitbox());
             enemyCount++;
+        }
+    }
+    // all enemies are dead
+    if(enemyCount == 0){
+        for (auto& curProcess : processList) {
+            // check if the current process is an door
+            if (auto door = dynamic_cast<GameDoor*>(curProcess)) {
+                door->markForDeletion();
+            }
+            // check if current process is a stairway
+            else if (auto stairs = dynamic_cast<Stairway*>(curProcess)) {
+                stairs->openStairs();
+            }
         }
     }
 }

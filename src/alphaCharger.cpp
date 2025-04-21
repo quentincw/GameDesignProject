@@ -23,8 +23,7 @@ AlphaCharger::AlphaCharger(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void AlphaCharger::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     if(charging) {
         chargeDuration = chargeDuration - 1;
     }
