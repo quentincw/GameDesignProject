@@ -39,9 +39,8 @@ void Entity::adjustHealth(int healthDamage) {
     if (health <= 0) {
         health = 0;
         isAlive = false;
+        markForDeletion();
     }
-
-    //std::cout << "health" << health << std::endl;
 }
 
 void Entity::spawnBloodStain() {

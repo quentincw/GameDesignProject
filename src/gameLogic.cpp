@@ -107,8 +107,8 @@ void GameLogic::checkWallCollisions(const std::vector<GameProcess*>& processes)
         if (!proc) continue;
 
         auto procHitbox = proc->getHitbox();
-        float px1 = procHitbox.x;
-        float py1 = procHitbox.y;
+        float px1 = procHitbox.x + 32;
+        float py1 = procHitbox.y + 32;
         float px2 = px1 + procHitbox.width;
         float py2 = py1 + procHitbox.height;
 
@@ -123,8 +123,8 @@ void GameLogic::checkWallCollisions(const std::vector<GameProcess*>& processes)
             {
                 if (tilemapData[tx][ty] == 1)
                 {
-                    float rx = tx * TILE_SIZE;
-                    float ry = ty * TILE_SIZE;
+                    float rx = tx * TILE_SIZE - 32;
+                    float ry = ty * TILE_SIZE - 32;
 
                     if (isColliding(proc, rx, ry, TILE_SIZE, TILE_SIZE))
                     {
