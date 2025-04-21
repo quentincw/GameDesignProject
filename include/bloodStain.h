@@ -28,8 +28,11 @@ class BloodStain : public GameProcess {
 
         // handles the interactions with other objects
         void handleInteractions(int tag);
-
-
+    
+    private:
+    
+        int currentSpriteIndex;
+        
 };
 
 

@@ -45,6 +45,9 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
+
+    const int total_frames = 24;
+    vector<SDL_Texture*> frames;
 };
 
 #endif

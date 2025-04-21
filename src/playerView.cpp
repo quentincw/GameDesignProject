@@ -22,15 +22,21 @@ void PlayerView::initialize()
     SDL_Delay(100);
     
     // Create renderer
-    renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+    renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED );
     if (renderer == NULL) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // render tiles
-    SDL_Surface* tile_surface = SDL_LoadBMP("../resource/tile.bmp");
-  
+    SDL_Surface* tile_surface = SDL_LoadBMP("../resource/tile_f4.bmp");
     // convert to texture
     tile_texture = SDL_CreateTextureFromSurface( renderer, tile_surface );
 
+    SDL_Texture* texture;
+
+    for (int i = 1; i <= total_frames; ++i) {
+        SDL_Surface* surface = SDL_LoadBMP(("../resource/frames/" + to_string(i) + ".bmp").c_str());
+        texture = SDL_CreateTextureFromSurface( renderer, surface );
+        frames.push_back(texture);
+    };
 }
 
 void PlayerView::cleanup()
@@ -136,16 +142,29 @@ int PlayerView::handleInputs(ProcessManager* pm)
 
 void PlayerView::render(Floor* floor, ProcessManager* pm)
 {
-	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-    SDL_RenderClear( renderer );
-	
+	SDL_RenderClear( renderer );
+
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        frame = (frame + 1) % total_frames;
+        startTicks = curTicks;
+    }
+
+    SDL_RenderCopy(renderer, frames[frame], NULL, NULL);
+    
     updateCameraPosition(pm);
 
-	renderLevel(floor);
+    renderLevel(floor);
 
     renderProcesses(pm);
 	
-	SDL_RenderPresent( renderer );
+    SDL_RenderPresent( renderer );
 }
 
 void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
