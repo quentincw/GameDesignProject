@@ -4,6 +4,7 @@
 #include "gameProcess.h"
 #include "projectile.h"
 #include "playerProjectile.h"
+#include <constants.h>
 
 // constructor
 PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {
@@ -30,7 +31,13 @@ void PlayerProjectile::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void PlayerProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 0, 255, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/projectile.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_Rect dst = { point.x - camX - (TILE_SIZE / 4), point.y - camY - (TILE_SIZE / 4), TILE_SIZE / 2, TILE_SIZE / 2 };
+
+    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
 }
 
 // projectile collided with top/bottom of obstacle

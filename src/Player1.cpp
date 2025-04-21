@@ -5,6 +5,7 @@
 #include "Player1.h"
 #include "playerProjectile.h"
 #include <iostream>
+#include <constants.h>
 
 // constructor
 Player1::Player1(int x, int y) : Entity() {
@@ -58,7 +59,89 @@ void Player1::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 55, 200, 255);
+
+    static SDL_Surface* player_surface = SDL_LoadBMP( "../resource/player.bmp" );
+    static SDL_Texture* player_texture = SDL_CreateTextureFromSurface( renderer, player_surface );
+
+    static SDL_Rect idle = {0, 0, 16, 16};
+
+    static SDL_Rect spriteTextures[6] = {
+        {0, 16, 16, 16},
+        {16, 16, 16, 16},
+        {32, 16, 16, 16},
+        {48, 16, 16, 16},
+        {64, 16, 16, 16},
+        {80, 16, 16, 16}
+    };
+
+    SDL_Rect dst_player = { point.x - camX - (TILE_SIZE / 2), point.y - camY - (TILE_SIZE / 2), TILE_SIZE, TILE_SIZE };
+
+    static const int total_frames = 6;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        // play walk anim
+        if (xSpeed != 0 || ySpeed != 0) {
+            frame = (frame + 1) % total_frames;
+        }
+        // use idle sprite
+        else {
+            frame = 0;
+        }
+        startTicks = curTicks;
+    }
+
+    static SDL_Point flip_offset = {0, 0};
+
+    if (xSpeed != 0 || ySpeed != 0) {
+        if (xSpeed > 0) {
+            flip = SDL_FLIP_NONE;
+            flip_offset = {0, 0};
+        }
+        if (xSpeed < 0) {
+            flip = SDL_FLIP_HORIZONTAL;
+            flip_offset = {24, 0};
+        }
+        SDL_RenderCopyEx(renderer, player_texture, &spriteTextures[frame], &dst_player, NULL, NULL, flip);
+    }
+    else {
+        SDL_RenderCopyEx(renderer, player_texture, &idle, &dst_player, NULL, NULL, flip);
+    }
+
+    static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
+    static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
+
+    SDL_Rect dst_weapon = { point.x - camX - 20 + flip_offset.x, point.y - camY - 12 + flip_offset.y, TILE_SIZE, TILE_SIZE };
+
+    SDL_Rect dst_weapon_2 = { point.x - camX - 68 + flip_offset.x, point.y - camY - 12 + flip_offset.y, TILE_SIZE, TILE_SIZE };
+
+    static const SDL_Point pivot = {8, 28};
+
+    static const SDL_Point pivot_2 = {56, 28};
+
+    int mX = 0;
+    int mY = 0;
+    Uint32 mouse = SDL_GetMouseState(&mX, &mY);
+    float deltaX = point.x - camX - mX;
+    float deltaY = point.y - camY - mY;
+
+    float angle = 0.0f;
+
+    if (deltaX != 0) angle = atanf(deltaY / deltaX) * (180 / M_PI);
+
+    if (deltaX > 0) {
+        SDL_RenderCopyEx(renderer, weapon_texture, NULL, &dst_weapon_2, angle, &pivot_2, SDL_FLIP_HORIZONTAL);
+    }
+    else {
+        SDL_RenderCopyEx(renderer, weapon_texture, NULL, &dst_weapon, angle, &pivot, SDL_FLIP_NONE);
+    }
 }
 
 void Player1::updateMouse(float x, float y){
@@ -86,8 +169,8 @@ void Player1::shootProj(int camX, int camY) {
     }
 
     // set the speed based on spitSpeed
-    float projXspeed = dx * 3 + xSpeed;
-    float projYspeed = dy * 3 + ySpeed;
+    float projXspeed = dx * 3;
+    float projYspeed = dy * 3;
 
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);

@@ -3,7 +3,6 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h>
 #include "gameObject.h"
 #include "testWall.h"
 

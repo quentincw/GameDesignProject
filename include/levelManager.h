@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "floor.h"
 #include "processManager.h"
+#include <random>
 using namespace std;
 
 class LevelManager {
