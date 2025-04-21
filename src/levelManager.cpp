@@ -60,7 +60,7 @@ void LevelManager::genFloor(int level) {
             break;
         case 3:
             // 4, 5, 6
-            curfloor->gen(3, 3, 2);
+            curfloor->gen(4, 4, 7);
             break;
         default:
             curfloor->gen(5, 5, 14);
