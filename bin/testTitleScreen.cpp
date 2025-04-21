@@ -67,39 +67,42 @@ int main(int argc, char** argv) {
         int startMS = SDL_GetTicks();
         // Handle events on queue
 		int ret = playerView.handleInputs(&processManager, state);
-		if (state == 0 && ret==1){
-			state = 1;
-			continue;
-		}
         if (ret == -1) {
             running = false;
         }
 		if (ret == -2) {
 			paused = !paused;
 		}
-
-		if (!paused){
-			// update the player and current process list
-			processManager.updateProcesses(1);
-
-			// update game logic
-			gameLogic.update();
-
-			// check if the player moved to a new room
-			levelManager.setCurrentRoom(&processManager);
+		if (state == 0) {
+			if (ret==1) {
+				state = 1;
+				continue;
+			}
 		}
+		else{
+			if (!paused){
+				// update the player and current process list
+				processManager.updateProcesses(1);
 
-        playerView.render(levelManager.getCurrentFloor(), &processManager);
-		
-		if (paused){
-			playerView.renderPause();
+				// update game logic
+				gameLogic.update();
+
+				// check if the player moved to a new room
+				levelManager.setCurrentRoom(&processManager);
+			}
+
+			playerView.render(levelManager.getCurrentFloor(), &processManager);
+			
+			if (paused){
+				playerView.renderPause();
+			}
+
+			// delta time calculation
+			int deltaMS = SDL_GetTicks() - startMS;
+			if(deltaMS < TARGETMS){
+				SDL_Delay(TARGETMS - deltaMS);
+			}
 		}
-
-        // delta time calculation
-        int deltaMS = SDL_GetTicks() - startMS;
-        if(deltaMS < TARGETMS){
-            SDL_Delay(TARGETMS - deltaMS);
-        }
     }
     return 0;
 }
