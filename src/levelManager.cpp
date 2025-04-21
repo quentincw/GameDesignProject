@@ -8,7 +8,7 @@
 #include "stairway.h"
 #include <random>
 #include <ctime>
-//#include <algorithm> // reverse
+#include <algorithm>
 #include <set>
 #include <iostream>
 using namespace std;
