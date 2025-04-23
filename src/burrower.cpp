@@ -21,8 +21,8 @@ Burrower::Burrower(int x, int y) : Enemy(x, y) {
     burrowing = false;
     burrowDuration = 0;
     moveDuration = 0;
-    spitAmount = 0;
-    cooldown = 0;
+    spitAmount = 4;
+    cooldown = 100;
     spitSpeed = 4;
 }
 
@@ -82,14 +82,14 @@ void Burrower::UpdateAI(Rectangle phitbox) {
                 burrowDuration = 170;
             }
             // if the burrower has fired less than 3 projectiles
-            if(spitAmount > 0) {
+            else if(spitAmount > 0) {
                 spitProjectile(phitbox);
                 cooldown = 8;
                 spitAmount = spitAmount - 1;
-            }
-            // the burrower should remain exposed for a time
-            else {
-                cooldown = 100;
+                // the burrower should remain exposed for a time
+                if (spitAmount == 0) {
+                    cooldown = 100;
+                }
             }
         }
         return;
