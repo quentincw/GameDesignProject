@@ -6,6 +6,7 @@
 #include "gameObject.h"
 #include "floor.h"
 #include <iostream>
+#include <SDL_mixer.h>
 
 PlayerView::PlayerView() {}
 
@@ -37,6 +38,16 @@ void PlayerView::initialize()
         texture = SDL_CreateTextureFromSurface( renderer, surface );
         frames.push_back(texture);
     };
+
+    // initialize SDL audio and mixer
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+    }
+
 }
 
 void PlayerView::cleanup()
@@ -49,6 +60,16 @@ void PlayerView::cleanup()
 
     // Quit SDL subsystems
     SDL_Quit();
+}
+
+// plays sounds from processes in the process manager
+void PlayerView::playSounds(ProcessManager* pm) {
+    SoundType testSound = SoundType::ROACH_NOISE;
+    vector<SoundType> testSoundList;
+    testSoundList.push_back(testSound);
+
+    soundPlayer.playSounds(testSoundList);
+
 }
 
 int PlayerView::handleInputs(ProcessManager* pm)

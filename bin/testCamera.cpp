@@ -1,3 +1,7 @@
+int main(int argc, char** argv)
+{}
+
+/*
 //Using SDL and standard IO
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
@@ -24,8 +28,8 @@
 using namespace std;
 
 //Screen dimension constants
-/*const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;*/
+//const int SCREEN_WIDTH = 1024;
+//const int SCREEN_HEIGHT = 768;
 
 const int TOTAL_WIDTH = 1500;
 const int TOTAL_HEIGHT = 1500;
@@ -114,7 +118,7 @@ void projectileCollision(PlayerProjectile* ball){
 int main(int argc, char** argv)
 {
 
-    /*** Initialization ***/
+
 	PlayerView pv;
 	pv.initialize();
 
@@ -216,7 +220,7 @@ int main(int argc, char** argv)
 
 
 
-    /*** Main Loop ***/
+    // Main Loop 
     bool running = true;
     SDL_Event e;
     const int FPS = 60;
@@ -305,3 +309,4 @@ int main(int argc, char** argv)
     // Done.
     return 0;
 }
+*/

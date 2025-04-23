@@ -42,6 +42,8 @@ void ProcessManager::updateProcesses(float deltaTime) {
     // add any children to the list
     findChildren();
 
+    // add any sounds to the sound list
+
     // remove marked processes
     removeMarkedProcesses();
 
