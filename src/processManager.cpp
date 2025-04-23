@@ -131,6 +131,44 @@ void ProcessManager::findChildren() {
 
 }
 
+// iterate through the processList for any that have children (add to process list)
+std::vector<SoundType> ProcessManager::getSoundList() const {
+
+    // list of all the sounds
+    std::vector<SoundType> soundList;
+    // the sounds of the current process
+    std::vector<SoundType> curSoundList;
+    // the current process
+    GameProcess* curProcess;
+
+	// getting the player sounds
+	if (player->hasSounds()){
+		curSoundList = player->getSounds();
+        // iterate through the sound vector and add them to full list of sounds
+        for(int j = 0; j < curSoundList.size(); j++){
+            soundList.push_back(curSoundList[j]);
+        }
+	}
+
+    // iterate through the vector
+    for(int i = 0; i < processList.size(); i++){
+        curProcess = processList[i];
+        // check for sounds
+        if(curProcess->hasSounds()){
+            // get the children vector
+            curSoundList = curProcess->getSounds();
+            // iterate through the sound vector and add them to full list of sounds
+            for(int j = 0; j < curSoundList.size(); j++){
+                soundList.push_back(curSoundList[j]);
+            }
+        }
+    }
+    
+    return soundList;
+    
+
+}
+
 // gets the enemy count
 int ProcessManager::getEnemyCount() const {
     return enemyCount;

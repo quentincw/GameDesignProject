@@ -38,6 +38,9 @@ class ProcessManager {
         // returns the process list
         std::vector<GameProcess*> getProcessList() const;
 
+        // iterate through the processList and get every sound
+        std::vector<SoundType> getSoundList() const;
+
         // adds a new process to the process list
         void addProcess(GameProcess* newProcess);
 

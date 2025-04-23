@@ -183,6 +183,10 @@ void Player1::shootProj(int camX, int camY) {
     // set the flag for child to true
     children = true;
 	cooldown = 40;
+
+    // add sound to list
+    soundList.push_back(SoundType::PLAYER_SHOOT);
+    sounds = true;
 	}
 }
 

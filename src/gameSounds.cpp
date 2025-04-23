@@ -5,6 +5,10 @@ const char* toFilePath(SoundType sound) {
     switch (sound) {
         case SoundType::ROACH_NOISE:
             return "../resource/sounds/jews_harp_boing-7111.mp3";
+        case SoundType::SPIT_NOISE:
+            return "../resource/sounds/jews_harp_boing-7111.mp3";
+        case SoundType::PLAYER_SHOOT:
+            return "../resource/sounds/jews_harp_boing-7111.mp3";
         default:
             return "";
     }

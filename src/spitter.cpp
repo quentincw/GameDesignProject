@@ -121,4 +121,8 @@ void Spitter::spitProjectile(Rectangle phitbox) {
     
     // set the flag for child to true
     children = true;
+
+    // add sound for spitting
+    soundList.push_back(SoundType::SPIT_NOISE);
+    sounds = true;
 }

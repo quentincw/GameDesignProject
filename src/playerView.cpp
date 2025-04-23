@@ -64,11 +64,8 @@ void PlayerView::cleanup()
 
 // plays sounds from processes in the process manager
 void PlayerView::playSounds(ProcessManager* pm) {
-    SoundType testSound = SoundType::ROACH_NOISE;
-    vector<SoundType> testSoundList;
-    testSoundList.push_back(testSound);
 
-    soundPlayer.playSounds(testSoundList);
+    soundPlayer.playSounds(pm->getSoundList());
 
 }
 
