@@ -43,8 +43,8 @@ void Entity::adjustHealth(int healthDamage) {
     }
 }
 
-void Entity::spawnBloodStain() {
-    BloodStain* blood = new BloodStain(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
+void Entity::spawnBloodStain(int color) {
+    BloodStain* blood = new BloodStain(hitbox.x, hitbox.y, hitbox.height, hitbox.width, color);
     childrenList.push_back(blood);
     children = true;
 }

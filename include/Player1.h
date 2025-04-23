@@ -18,9 +18,6 @@ class Player1 : public Entity {
         // draws the object based on the camera's position
         void RenderCam(SDL_Renderer* renderer, int camX, int camY);
 
-        // handles the interactions with other objects
-        void handleInteractions(int tag);
-
 		// updates angle for firing based on mouse position
 		void updateMouse(float x, float y);
 
@@ -33,11 +30,27 @@ class Player1 : public Entity {
 
         // handles the interactions with other objects
         void handleInteraction(std::string tag) override;
+
+        // causes the player to roll, dodging all attacks and moving quickly in one direction
+        void dodgeRoll();
+
+        void adjustHealth(int healthDamage) override;
 		
 	protected:
 		float mouseX;
 		float mouseY;
 		float cooldown;
+        float dodgeCooldown;
+        // speeds for dodge
+        float dodgeX, dodgeY;
+
+        // timer for tracking how long the player should be invulnerable
+        float invulnerability;
+
+        // whether the player is dodging or not
+        bool dodging;
+
+
 };
 
 
