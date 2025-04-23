@@ -8,13 +8,6 @@
 #include <string>
 #include "rectangle.h"
 
-/*struct Rectangle {
-    int x;
-    int y;
-    int width;
-    int height;
-};*/
-
 struct Point {
     int x;
     int y;
@@ -38,7 +31,7 @@ class GameObject {
         Rectangle getHitbox() const;
 
         // sets the position of the rectangle
-        void setPosition(int x, int y);
+        void setPosition(float x, float y);
 
         // calculates and returns the center point of the hitbox
         Point getCenter(Rectangle* rectangle) const;
