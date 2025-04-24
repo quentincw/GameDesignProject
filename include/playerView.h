@@ -38,6 +38,9 @@ private:
     // updates the camera's position based on the player's position
     void updateCameraPosition(ProcessManager* pm);
 
+    // renders HUD for healthbar
+    void renderHealthBar(Player1* player);
+
     // The x and y of the camera
     int cameraX;
     int cameraY;
