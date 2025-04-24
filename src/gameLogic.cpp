@@ -5,7 +5,7 @@
 #include "levelManager.h"
 #include "constants.h"
 #include "entity.h"
-#include "iostream"
+#include "stairway.h"
 
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
     : processManager(pm), levelManager(lm), player(pm->getPlayer()) {}
@@ -22,6 +22,9 @@ void GameLogic::update()
     checkProcessCollisions(processes);
     checkWallCollisions(processes);
     checkWallCollisions({player});
+
+    // Floor Completion
+    checkFloorCompletion(processes);
 }
 
 TileRange GameLogic::getTileRange(float x, float y, float w, float h) const
@@ -237,6 +240,21 @@ void GameLogic::updateLastPositions(const std::vector<GameProcess*>& processes)
         else if (isLegalPosition(proc, lastX, currY))
         {
             proc->setLastPosition(lastX, currY);
+        }
+    }
+}
+
+void GameLogic::checkFloorCompletion(const std::vector<GameProcess*>& processes)
+{
+    for (GameProcess* proc : processes)
+    {
+        auto tags = proc->getTags();
+
+        if (tags.find("stairway") != tags.end())
+        {
+            if (dynamic_cast<Stairway*>(proc)->isTriggered()) {
+                levelManager->genNextFloor(player);           
+            }
         }
     }
 }
