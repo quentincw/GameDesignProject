@@ -5,6 +5,7 @@
 #include "gameProcess.h"
 #include "gameObject.h"
 #include "floor.h"
+#include "Player1.h"
 #include <iostream>
 
 PlayerView::PlayerView() {}
@@ -165,6 +166,8 @@ void PlayerView::render(Floor* floor, ProcessManager* pm)
     renderLevel(floor);
 
     renderProcesses(pm);
+
+    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
 	
     SDL_RenderPresent( renderer );
 }
@@ -181,6 +184,8 @@ void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
     renderProcesses(pm);
 	
 	//renderMinimap(walls);
+
+    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
 	
 	SDL_RenderPresent( renderer );
 }
@@ -387,3 +392,34 @@ void PlayerView::testLevelRendering(Floor* floor) {
     }
 }
 
+void PlayerView::renderHealthBar(Player1* player)
+{
+    int health = player->getHealth();
+    int maxHealth = 100;
+
+    float percent = std::max(0.0f, std::min(1.0f, health / (float)maxHealth));
+
+    int barWidth = 200;
+    int barHeight = 20;
+    int margin = 20;
+
+    int x = SCREEN_WIDTH - barWidth - margin;
+    int y = margin;
+
+    SDL_Rect bg = {x, y, barWidth, barHeight};
+    SDL_Rect fill = {x, y, static_cast<int>(barWidth * percent), barHeight};
+
+    // Background
+    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    SDL_RenderFillRect(renderer, &bg);
+
+    // Health color (green to red)
+    Uint8 red = static_cast<Uint8>((1.0f - percent) * 255);
+    Uint8 green = static_cast<Uint8>(percent * 255);
+    SDL_SetRenderDrawColor(renderer, red, green, 0, 255);
+    SDL_RenderFillRect(renderer, &fill);
+
+    // Optional: border
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawRect(renderer, &bg);
+}

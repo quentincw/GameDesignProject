@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "entity.h"
 #include "stairway.h"
+#include "iostream"
 
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
     : processManager(pm), levelManager(lm), player(pm->getPlayer()) {}
@@ -206,6 +207,8 @@ void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::str
         if (entity && !entity->getMarkForDeletion())
         {
             entity->adjustHealth(p1->getDamage());
+
+            std::cout << "doing damage: " << p1->getDamage() << ::endl;
         }
     }
     
