@@ -53,6 +53,13 @@ void Stairway::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
 // handles the interactions with other objects
 void Stairway::handleInteraction(std::string tag) {
+    if (tag == "player") {
+        triggered = true;
+    }
+}
+
+bool Stairway::isTriggered() {
+    return triggered;
 }
 
 void Stairway::openStairs() {

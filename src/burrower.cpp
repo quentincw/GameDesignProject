@@ -31,13 +31,16 @@ void Burrower::Update(float deltaTime) {
     Entity::Update(deltaTime);
     if(burrowing) {
         burrowDuration = burrowDuration - 1;
+        interactions.erase("player");
+        tags.erase("enemy");
     }
     else {
         cooldown = cooldown - 1;
+        interactions.insert("player");
+        tags.insert("enemy");
     }
 
     moveDuration = moveDuration - 1;
-
 }
 
 // draws the object
