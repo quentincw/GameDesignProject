@@ -5,6 +5,7 @@
 #include "levelManager.h"
 #include "constants.h"
 #include "entity.h"
+#include "iostream"
 
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
     : processManager(pm), levelManager(lm), player(pm->getPlayer()) {}
@@ -12,9 +13,65 @@ GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
 void GameLogic::update()
 {
     auto processes = processManager->getProcessList();
+
+    // Positional updates
+    updateLastPositions(processes);
+    updateLastPositions({player});
+
+    // Collisions
     checkProcessCollisions(processes);
     checkWallCollisions(processes);
     checkWallCollisions({player});
+}
+
+bool GameLogic::isLegalPosition(const GameObject* obj, float x, float y) const
+{
+    // Check against tilemap
+    const auto& floor = levelManager->getCurrentFloor();
+    const auto& tilemapData = floor->getRoomsCol();
+    if (tilemapData.empty()) return true;
+
+    auto hb = obj->getHitbox();
+    float w = hb.width;
+    float h = hb.height;
+
+    float px1 = x + 32;
+    float py1 = y + 32;
+    float px2 = px1 + w;
+    float py2 = py1 + h;
+
+    int mapWidth = tilemapData.size();
+    int mapHeight = tilemapData[0].size();
+
+    int leftTile   = std::max(0, (int)(px1 / TILE_SIZE));
+    int rightTile  = std::min(mapWidth - 1, (int)((px2 - 1) / TILE_SIZE));
+    int topTile    = std::max(0, (int)(py1 / TILE_SIZE));
+    int bottomTile = std::min(mapHeight - 1, (int)((py2 - 1) / TILE_SIZE));
+
+    for (int tx = leftTile; tx <= rightTile; tx++) {
+        for (int ty = topTile; ty <= bottomTile; ty++) {
+            if (tilemapData[tx][ty] == 1) {
+                return false;
+            }
+        }
+    }
+
+    // Check against doors
+    const auto& processes = processManager->getProcessList();
+    for (const auto* process : processes)
+    {
+        if (!process) continue;
+        const auto& tags = process->getTags();
+        if (tags.find("door") != tags.end())
+        {
+            if (isColliding(obj, process))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 bool GameLogic::isColliding(const GameObject* a, const GameObject* b) const
@@ -149,4 +206,36 @@ void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::str
     }
     
     p1->handleInteraction(matchedTag);
+}
+
+void GameLogic::updateLastPositions(const std::vector<GameProcess*>& processes)
+{
+    for (GameProcess* proc : processes)
+    {
+        if (!proc) continue;
+
+        auto hb = proc->getHitbox();
+        float currX = hb.x;
+        float currY = hb.y;
+        float lastX = proc->getLastX();
+        float lastY = proc->getLastY();
+
+        // Full position is legal
+        if (isLegalPosition(proc, currX, currY))
+        {
+            proc->setLastPosition(currX, currY);
+        }
+
+        // Only X is legal (slide vertically)
+        else if (isLegalPosition(proc, currX, lastY))
+        {
+            proc->setLastPosition(currX, lastY);
+        }
+
+        // Only Y is legal (slide horizontally)
+        else if (isLegalPosition(proc, lastX, currY))
+        {
+            proc->setLastPosition(lastX, currY);
+        }
+    }
 }

@@ -40,13 +40,17 @@ class GameObject {
         // sets the position of the rectangle
         void setPosition(int x, int y);
 
+        // getters and setters for last position
+        void setLastPosition(float x, float y);
+        float getLastX();
+        float getLastY();
+
         // calculates and returns the center point of the hitbox
         Point getCenter(Rectangle* rectangle) const;
 
         // reverts to previous position
         void revertPosition();
 
-    
     protected:
 
         // hitbox for game object
