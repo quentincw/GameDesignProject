@@ -21,6 +21,19 @@ void GameObject::setPosition(int x, int y) {
     hitbox.y = y;
 }
 
+void GameObject::setLastPosition(float x, float y) {
+    lastX = x;
+    lastY = y;
+}
+
+float GameObject::getLastX() {
+    return lastX;
+}
+
+float GameObject::getLastY() {
+    return lastY;
+}
+
 void GameObject::revertPosition() {
     hitbox.x = lastX;
     hitbox.y = lastY;

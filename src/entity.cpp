@@ -21,9 +21,6 @@ Entity::Entity() : GameProcess() {
 
 // updates the position of an entity
 void Entity::Update(float deltaTime) {
-    lastX = hitbox.x;
-    lastY = hitbox.y;
-
     hitbox.x += xSpeed;
     hitbox.y += ySpeed;
 }
