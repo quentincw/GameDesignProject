@@ -419,7 +419,7 @@ void PlayerView::renderHealthBar(Player1* player)
     SDL_SetRenderDrawColor(renderer, red, green, 0, 255);
     SDL_RenderFillRect(renderer, &fill);
 
-    // Optional: border
+    // Border
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderDrawRect(renderer, &bg);
 }
