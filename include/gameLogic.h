@@ -4,6 +4,10 @@
 #include "processManager.h"
 #include "levelManager.h"
 
+struct TileRange {
+    int left, right, top, bottom;
+};
+
 class GameLogic
 {
 public:
@@ -29,6 +33,8 @@ private:
     void handleCollision(GameProcess* p1, GameProcess* p2, const std::string& matchedTag);
 
     void updateLastPositions(const std::vector<GameProcess*>& processes);
+
+    TileRange getTileRange(float x, float y, float w, float h) const;
 };
 
 #endif
