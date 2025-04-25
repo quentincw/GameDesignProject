@@ -8,6 +8,7 @@
 #include <string>
 #include "gameObject.h"
 #include <unordered_set>
+#include "gameSounds.h"
 
 class GameProcess : public GameObject {
 
@@ -36,8 +37,14 @@ class GameProcess : public GameObject {
         // returns whether the process has children
         bool hasChildren() const;
 
+        // returns whether the process has children
+        bool hasSounds() const;
+
         // returns a vector of all the children of a process
         std::vector<GameProcess*> getChildren();
+
+        // returns a vector of all the sounds of a process
+        std::vector<SoundType> getSounds();
 
         // returns a vector of target tags the proccess can interact with
         std::unordered_set<std::string> getInteractions() const;
@@ -59,8 +66,8 @@ class GameProcess : public GameObject {
         // list of tags process can interact with
         std::unordered_set<std::string> interactions;
 
-        // map of all possible interactions a process can have
-        //map<string, int> interactions;
+        // vector of all the sounds currently produced by a process
+        std::vector<SoundType> soundList;
 
         // the radius of the circle for rendering
         int radius;
@@ -73,6 +80,9 @@ class GameProcess : public GameObject {
 
         // vector of all the children of a process
         std::vector<GameProcess*> childrenList;
+
+        // flag for if a process has sounds
+        bool sounds;
 
         // the damage a process does on collision
         int damage;

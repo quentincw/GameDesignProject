@@ -7,6 +7,7 @@
 #include "processManager.h"
 #include "constants.h"
 #include "floor.h"
+#include "soundPlayer.h"
 
 class PlayerView
 {
@@ -22,6 +23,9 @@ public:
     void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
 	int handleInputs(ProcessManager* pm);
+
+    // plays sounds from processes in the process manager
+    void playSounds(ProcessManager* pm);
 
 private:
 
@@ -51,6 +55,9 @@ private:
 
     const int total_frames = 24;
     vector<SDL_Texture*> frames;
+
+    // the sound player
+    SoundPlayer soundPlayer;
 };
 
 #endif
