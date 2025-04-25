@@ -38,6 +38,7 @@ class Player1 : public Entity {
 		float mouseX;
 		float mouseY;
 		float cooldown;
+		float stepCooldown;
 };
 
 

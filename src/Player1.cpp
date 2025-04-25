@@ -19,6 +19,7 @@ Player1::Player1(int x, int y) : Entity() {
     xSpeed = 0;
     ySpeed = 0;
 	cooldown = 40;
+	stepCooldown = 0;
     tags.insert("player");
 }
 
@@ -35,6 +36,13 @@ void Player1::Update(float deltaTime) {
 		dx = xSpeed;
 		dy = ySpeed;
 	}
+	
+	if ((xSpeed!=0 || ySpeed!=0) && stepCooldown<=0){
+		soundList.push_back(SoundType::FOOTSTEPS);
+		sounds = true;
+		stepCooldown = 20;
+	}
+	stepCooldown-=1;
 
     Entity::Update(deltaTime);
 	cooldown-=1;
