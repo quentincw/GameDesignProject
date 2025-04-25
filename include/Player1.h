@@ -34,6 +34,9 @@ class Player1 : public Entity {
         // handles the interactions with other objects
         void handleInteraction(std::string tag) override;
 		
+		// override adjust health to play voice lines
+		void adjustHealth(int healthDamage);
+		
 	protected:
 		float mouseX;
 		float mouseY;

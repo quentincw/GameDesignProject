@@ -49,8 +49,7 @@ void Charger::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(2);
     }
 
     // if the charger is charging, don't change direction

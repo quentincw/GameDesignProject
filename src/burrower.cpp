@@ -60,8 +60,7 @@ void Burrower::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(3);
     }
 
     // stop burrowing if enough time has passed

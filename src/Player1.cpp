@@ -57,6 +57,12 @@ void Player1::setSpeedY(float y) {
 	ySpeed = y;
 }
 
+void Player1::adjustHealth(int healthDamage) {
+	soundList.push_back(SoundType::PLAYER_DAMAGE1);
+	sounds = true;
+    Entity::adjustHealth(healthDamage);
+}
+
 // draws the object
 void Player1::Render(SDL_Renderer* renderer) {
     Point point = getCenter(&hitbox);

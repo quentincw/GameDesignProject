@@ -43,8 +43,7 @@ void Spitter::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(5);
     }
 
     if(cooldown <= 0){
