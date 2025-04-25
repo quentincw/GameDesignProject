@@ -38,6 +38,9 @@ class Player1 : public Entity {
 		float mouseX;
 		float mouseY;
 		float cooldown;
+
+    private:
+        SDL_Rect dst_weapon;
 };
 
 
