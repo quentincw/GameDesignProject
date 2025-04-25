@@ -24,6 +24,8 @@ public:
 	int handleInputs(ProcessManager* pm, int state);
 	
 	void renderPause();
+	
+	void renderTitle();
 
 private:
 

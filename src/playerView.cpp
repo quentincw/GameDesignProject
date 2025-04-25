@@ -154,6 +154,12 @@ void PlayerView::renderPause()
 	SDL_RenderPresent( renderer );
 }
 
+void PlayerView::renderTitle()
+{
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 255, 0, 255);
+	SDL_RenderPresent( renderer );
+}
+
 // updates the camera's position based on the player's position
 void PlayerView::updateCameraPosition(ProcessManager* pm)
 {
