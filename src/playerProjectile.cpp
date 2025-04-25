@@ -9,9 +9,9 @@
 // constructor
 PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {
 
-    radius = 15;
-    hitbox.height = 30;
-    hitbox.width = 30;
+    radius = 8;
+    hitbox.height = 16;
+    hitbox.width = 16;
     damage = 10;
     interactions.insert("enemy");
 }
@@ -35,9 +35,11 @@ void PlayerProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/projectile.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
 
-    SDL_Rect dst = { point.x - camX - (TILE_SIZE / 4), point.y - camY - (TILE_SIZE / 4), TILE_SIZE / 2, TILE_SIZE / 2 };
+    SDL_Rect dst = { point.x - camX - 8, point.y - camY - 8, TILE_SIZE / 4, TILE_SIZE / 4 };
 
     SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 0, 255, 100);
 }
 
 // projectile collided with top/bottom of obstacle
