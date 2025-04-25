@@ -90,6 +90,9 @@ int PlayerView::handleInputs(ProcessManager* pm)
                             curProcess->markForDeletion();
                         }
                         break;
+                    case SDLK_SPACE:
+                        player->dodgeRoll();
+                        break;
                     case SDLK_y:
                         cout << "x: " << player->getHitbox().x << "y: " << player->getHitbox().y << endl;
                         break;

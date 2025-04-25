@@ -30,7 +30,7 @@ class Entity : public GameProcess {
         int getHealth() const;
 
         // subtracts the health damage from the current health
-        void adjustHealth(int healthDamage);
+        virtual void adjustHealth(int healthDamage);
 
         // handles the interactions with other objects
         void handleInteraction(std::string tag) override;
@@ -53,7 +53,7 @@ class Entity : public GameProcess {
         float xSpeed, ySpeed;
 
         // spawns a bloodstain child process
-        void spawnBloodStain();
+        void spawnBloodStain(int color = 0);
 
 };
 
