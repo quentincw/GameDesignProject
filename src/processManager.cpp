@@ -43,6 +43,7 @@ void ProcessManager::updateProcesses(float deltaTime) {
     findChildren();
 
     // add any sounds to the sound list
+	findSounds();
 
     // remove marked processes
     removeMarkedProcesses();
@@ -132,10 +133,9 @@ void ProcessManager::findChildren() {
 }
 
 // iterate through the processList for any that have children (add to process list)
-std::vector<SoundType> ProcessManager::getSoundList() const {
+void ProcessManager::findSounds() {
 
-    // list of all the sounds
-    std::vector<SoundType> soundList;
+	soundList.clear();
     // the sounds of the current process
     std::vector<SoundType> curSoundList;
     // the current process
@@ -163,10 +163,11 @@ std::vector<SoundType> ProcessManager::getSoundList() const {
             }
         }
     }
-    
-    return soundList;
-    
+}
 
+// iterate through the processList and get every sound
+std::vector<SoundType> ProcessManager::getSoundList() const {
+	return soundList;
 }
 
 // gets the enemy count

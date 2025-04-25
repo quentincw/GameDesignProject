@@ -27,7 +27,7 @@ Mix_Chunk* SoundPlayer::load(SoundType sound) {
     // load the sound
     Mix_Chunk* chunk = Mix_LoadWAV(path);
     if (!chunk) {
-        cout << "failed to load sound: chunk" << endl;
+        cout << "failed to load sound: chunk " << path << endl;
         return nullptr;
     }
 

@@ -54,6 +54,9 @@ class ProcessManager {
 
         // list of all the processes
         std::vector<GameProcess*> processList;
+		
+		// list of all the sounds
+        std::vector<SoundType> soundList;
 
         // player object
         Player1* player;
@@ -66,6 +69,9 @@ class ProcessManager {
 
         // iterate through the processList for any that have children (add to process list)
         void findChildren();
+		
+		// iterate through the processList for any sounds (add to sound list)
+        void findSounds();
 
         // gives the player's position any enemies
         void updateEnemyAI();

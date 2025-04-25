@@ -43,6 +43,8 @@ void Spitter::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		soundList.push_back(SoundType::BUG_DEATH1);
+		sounds = true;
     }
 
     if(cooldown <= 0){
@@ -123,6 +125,6 @@ void Spitter::spitProjectile(Rectangle phitbox) {
     children = true;
 
     // add sound for spitting
-    soundList.push_back(SoundType::SPIT_NOISE);
+    soundList.push_back(SoundType::SPIT_HIGH);
     sounds = true;
 }

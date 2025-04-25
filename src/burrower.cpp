@@ -60,6 +60,8 @@ void Burrower::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		soundList.push_back(SoundType::BUG_DEATH1);
+		sounds = true;
     }
 
     // stop burrowing if enough time has passed
@@ -169,4 +171,8 @@ void Burrower::spitProjectile(Rectangle phitbox) {
     
     // set the flag for child to true
     children = true;
+	
+    // add sound for spitting
+    soundList.push_back(SoundType::SPIT_HIGH);
+    sounds = true;
 }
