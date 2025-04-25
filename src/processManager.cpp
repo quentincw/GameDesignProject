@@ -42,6 +42,9 @@ void ProcessManager::updateProcesses(float deltaTime) {
     // add any children to the list
     findChildren();
 
+    // add any sounds to the sound list
+	findSounds();
+
     // remove marked processes
     removeMarkedProcesses();
 
@@ -127,6 +130,44 @@ void ProcessManager::findChildren() {
     processList.insert(processList.end(), childrenList.begin(), childrenList.end());
     
 
+}
+
+// iterate through the processList for any that have children (add to process list)
+void ProcessManager::findSounds() {
+
+	soundList.clear();
+    // the sounds of the current process
+    std::vector<SoundType> curSoundList;
+    // the current process
+    GameProcess* curProcess;
+
+	// getting the player sounds
+	if (player->hasSounds()){
+		curSoundList = player->getSounds();
+        // iterate through the sound vector and add them to full list of sounds
+        for(int j = 0; j < curSoundList.size(); j++){
+            soundList.push_back(curSoundList[j]);
+        }
+	}
+
+    // iterate through the vector
+    for(int i = 0; i < processList.size(); i++){
+        curProcess = processList[i];
+        // check for sounds
+        if(curProcess->hasSounds()){
+            // get the children vector
+            curSoundList = curProcess->getSounds();
+            // iterate through the sound vector and add them to full list of sounds
+            for(int j = 0; j < curSoundList.size(); j++){
+                soundList.push_back(curSoundList[j]);
+            }
+        }
+    }
+}
+
+// iterate through the processList and get every sound
+std::vector<SoundType> ProcessManager::getSoundList() const {
+	return soundList;
 }
 
 // gets the enemy count

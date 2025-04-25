@@ -62,6 +62,8 @@ void AlphaSpewer::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		soundList.push_back(SoundType::BUG_DEATH1);
+		sounds = true;
     }
 
     if(cooldown <= 0){
@@ -166,6 +168,10 @@ void AlphaSpewer::spitProjectile(Rectangle phitbox) {
     children = true;
     // decrement projectiles to shoot
     projectileAmount = projectileAmount - 1;
+	
+	// add sound for spitting
+    soundList.push_back(SoundType::SPIT_LOW);
+    sounds = true;
 }
 
 

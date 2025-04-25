@@ -7,6 +7,7 @@
 #include "floor.h"
 #include "Player1.h"
 #include <iostream>
+#include <SDL_mixer.h>
 
 PlayerView::PlayerView() {}
 
@@ -38,6 +39,16 @@ void PlayerView::initialize()
         texture = SDL_CreateTextureFromSurface( renderer, surface );
         frames.push_back(texture);
     };
+
+    // initialize SDL audio and mixer
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+    }
+
 }
 
 void PlayerView::cleanup()
@@ -50,6 +61,13 @@ void PlayerView::cleanup()
 
     // Quit SDL subsystems
     SDL_Quit();
+}
+
+// plays sounds from processes in the process manager
+void PlayerView::playSounds(ProcessManager* pm) {
+
+    soundPlayer.playSounds(pm->getSoundList());
+
 }
 
 int PlayerView::handleInputs(ProcessManager* pm)
@@ -89,6 +107,9 @@ int PlayerView::handleInputs(ProcessManager* pm)
                             auto curProcess = curProcesses[i];
                             curProcess->markForDeletion();
                         }
+                        break;
+                    case SDLK_SPACE:
+                        player->dodgeRoll();
                         break;
                     case SDLK_y:
                         cout << "x: " << player->getHitbox().x << "y: " << player->getHitbox().y << endl;

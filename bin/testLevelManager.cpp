@@ -108,7 +108,11 @@ int main(int argc, char** argv) {
         // check if the player moved to a new room
         levelManager.setCurrentRoom(&processManager);
 
+        // render the level and processes
         playerView.render(levelManager.getCurrentFloor(), &processManager);
+
+        // play sounds
+        playerView.playSounds(&processManager);
 
         // delta time calculation
         int deltaMS = SDL_GetTicks() - startMS;
