@@ -129,7 +129,7 @@ void LevelManager::genFloor(int level) {
                 }
                 else {
                     // level filler call (fill list using the rectangle)
-                    fillProcessList(roomLists[i][j], 2);
+                    fillProcessList(roomLists[i][j]);
                 }
                 // find valid places for each enemy
                 findValidSpots(roomLists[i][j], curRect);
@@ -292,63 +292,86 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 }
 
 // fills a process list based on a difficulty level
-void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty) {
+void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
 
     // random enemy generator
     // increase for every enemy added
     uniform_int_distribution<> enemyDist(0, 7);
+
+    // get difficulty
+    int difficulty;
+    switch (floorNumber) {
+        case 1:
+            // first floor = easy
+            difficulty = 10;
+            break;
+        case 2:
+            // second floor = medium
+            difficulty = 15;
+            break;
+        case 3:
+            // third floor = hard
+            difficulty = 20;
+            break;
+        default:
+            difficulty = 15;
+            break;
+    }
  
     GameProcess* enemy = nullptr;
 
-    // loop for generating enemies
-    // spawns difficulty * 2 enemies
-    for (int i = 0; i < difficulty * 2; ++i) { 
+    while(difficulty > 2) {
         // generate an enemy number
         int enemyType = enemyDist(gen);
-
         switch (enemyType) {
             case 0:
                 // spawn roach
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ROACH);
+                difficulty-=1;
                 break;
             case 1:
                 // spawn spitter
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+                difficulty-=2;
                 break;
             case 2:
                 // spawn spewer
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPEWER);
+                difficulty-=3;
                 break;
             case 3:
                 // spawn spawner
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPAWNER);
+                difficulty-=3;
                 break;
             case 4:
                 // spawn Exploder
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::EXPLODER);
+                difficulty-=2;
                 break;
             case 5:
                 // spawn Alpha Spitter
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+                difficulty-=5;
                 break;
             case 6:
                 // spawn Charger
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::CHARGER);
+                difficulty-=5;
                 break;
             case 7:
                 // spawn Burrower
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::BURROWER);
+                difficulty-=4;
                 break;
-
-
             default:
                 break;
         }
-
         // add enemy to the list
+        cout << "adding enemy" << endl;
         curList.push_back(enemy);
-
     }
+    cout << "retrun" << endl;
 }
 
 
@@ -374,7 +397,7 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 
         // delete the list if it is the first room
         if(startDelete == false){
-            //roomLists[newPos.x][newPos.y].clear();
+            roomLists[newPos.x][newPos.y].clear();
             startDelete = true;
         }
 

@@ -49,8 +49,8 @@ private:
     // takes a process list and a room. Finds valid locations inside the room to place the enemies
     void findValidSpots(vector<GameProcess*>& curList, Rectangle rectangle);
 
-    // fills a process list based on a difficulty level
-    void fillProcessList(vector<GameProcess*>& curList, int difficulty);
+    // fills a process list based on a current floor number
+    void fillProcessList(vector<GameProcess*>& curList);
 
     // fills a process list with a boss encounter
     void fillProcessListBoss(vector<GameProcess*>& curList);
