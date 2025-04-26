@@ -195,6 +195,8 @@ void LevelManager::genFloor(int level) {
         reverse(roomLists[i].begin(), roomLists[i].end());
     }
     
+    // flag for deleting first room enemies
+    startDelete = false;
 
 
 }
@@ -349,17 +351,18 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
     // check if the player entered a different room
     if ((roomX != newPos.x) || (roomY != newPos.y)) {
 
-        cout << "entered new room: " << newPos.x << " " << newPos.y << endl;
-
         // save process list
         roomLists[roomX][roomY] = pm->getProcessList();
 
-        cout << "saved list" << endl;
+        // delete the list if it is the first room
+        if(startDelete == false){
+            roomLists[newPos.x][newPos.y].clear();
+            startDelete = true;
+        }
+
 
         // load new list
         pm->loadProcessList(roomLists[newPos.x][newPos.y]);
-
-        cout << "loaded list" << endl;
 
         // update current room
         roomX = newPos.x;

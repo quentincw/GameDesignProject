@@ -35,6 +35,10 @@ private:
     // the coordinates of the current room
     int roomX, roomY;
 
+    // flag for deleting first room
+    bool startDelete;
+
+
     // the current floor number (1, 2, 3)
     int floorNumber;
 
