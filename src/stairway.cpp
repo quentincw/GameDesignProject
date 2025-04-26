@@ -14,6 +14,7 @@ Stairway::Stairway(int x, int y, int height, int width)  {
     hitbox.height = height;
     hitbox.width = width;
     open = false;
+    triggered = false;
     tags.insert("stairway");
 }
 // draw the wall
