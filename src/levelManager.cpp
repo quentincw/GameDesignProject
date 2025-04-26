@@ -211,24 +211,42 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
 
     // potential position (tile)
     int x,y;
+    // boolean for loop
+    bool invalid = true;
+    // height and width of process
+    int pHeight, pWidth;
 
     // vector of valid/ invalid locations
     vector<vector<int>> roomsCol = curfloor->getRoomsCol();
 
     // loop through each process
     for (size_t i = 0; i < curList.size(); ++i) {
-        // generate a position
-        x = width(gen) + rectangle.x;
-        y = height(gen) + rectangle.y;
-        // cheeck if valid
-        while(roomsCol[x][y] == 1){
-            // repeat until valid
+        invalid = true;
+        while(invalid){
+
+            // generate a position
             x = width(gen) + rectangle.x;
             y = height(gen) + rectangle.y;
+
+            pHeight = curList[i]->getHitbox().height / TILE_SIZE;
+            pWidth = curList[i]->getHitbox().width / TILE_SIZE;
+
+            // loop through each tile that touches the hitbox
+            invalid = false;
+            for(int i = x - 2; i < x + pWidth + 2; i++){
+                for(int j = y - 2; j < y + pHeight + 2; j++) {
+                    if(roomsCol[i][j] == 1){
+                        // intersects with wall
+                        invalid = true;
+                    }
+                }
+            }
+            // repeat until valid
         }
         // null pointer check
         if (curList[i] != nullptr) {
             curList[i]->setPosition(x * TILE_SIZE, y * TILE_SIZE);
+            curList[i]->setLastPosition(x * TILE_SIZE, y * TILE_SIZE);
         } else {
             cout << "Null pointer encountered at index " << i << endl;
         }
@@ -356,7 +374,7 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 
         // delete the list if it is the first room
         if(startDelete == false){
-            roomLists[newPos.x][newPos.y].clear();
+            //roomLists[newPos.x][newPos.y].clear();
             startDelete = true;
         }
 
