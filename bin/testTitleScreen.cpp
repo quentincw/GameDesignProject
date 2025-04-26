@@ -41,6 +41,9 @@ int main(int argc, char** argv) {
 
     // create process manager w/ player at 0,0
     ProcessManager processManager;
+	
+	// generates the first floor
+	floorGen(&levelManager, &processManager);
 
     // create player view
     PlayerView playerView;
@@ -71,38 +74,29 @@ int main(int argc, char** argv) {
 		if (ret == -2) {
 			paused = !paused;
 		}
-		if (state == 0) {
-			if (ret==1) {
-				state = 1;
-				// Generate a new floor
-				floorGen(&levelManager, &processManager);
-				continue;
-			}
-			playerView.renderTitle();
+		if (ret >=1 ) state+=ret;
+		
+		if (!paused){
+			// update the player and current process list
+			processManager.updateProcesses(deltaMS);
+
+			// update game logic
+			gameLogic.update();
+
+			// check if the player moved to a new room
+			levelManager.setCurrentRoom(&processManager);
 		}
-		else{
-			if (!paused){
-				// update the player and current process list
-				processManager.updateProcesses(deltaMS);
 
-				// update game logic
-				gameLogic.update();
+		playerView.render(state, levelManager.getCurrentFloor(), &processManager);
+		
+		if (paused){
+			playerView.renderPause();
+		}
 
-				// check if the player moved to a new room
-				levelManager.setCurrentRoom(&processManager);
-			}
-
-			playerView.render(levelManager.getCurrentFloor(), &processManager);
-			
-			if (paused){
-				playerView.renderPause();
-			}
-
-			// delta time calculation
-			deltaMS = SDL_GetTicks() - startMS;
-			if(deltaMS < TARGETMS){
-				SDL_Delay(TARGETMS - deltaMS);
-			}
+		// delta time calculation
+		deltaMS = SDL_GetTicks() - startMS;
+		if(deltaMS < TARGETMS){
+			SDL_Delay(TARGETMS - deltaMS);
 		}
     }
     return 0;

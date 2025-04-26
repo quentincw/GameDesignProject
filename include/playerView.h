@@ -17,17 +17,18 @@ public:
 	
 	void cleanup();
 
-    void render(Floor* floor, ProcessManager* pm);
+    void render(int state, Floor* floor, ProcessManager* pm);
 
     void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
 	int handleInputs(ProcessManager* pm, int state);
 	
 	void renderPause();
-	
-	void renderTitle();
 
 private:
+	void renderTitle();
+	
+	void renderStory();
 
     void renderLevel(Floor* floor);
 
@@ -47,6 +48,12 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
+	
+	SDL_Surface* continueText;
+	SDL_Surface* pauseText;
+	
+	SDL_Texture* continueTexture;
+	SDL_Texture* pauseTexture;
 };
 
 #endif

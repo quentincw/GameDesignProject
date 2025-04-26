@@ -30,10 +30,23 @@ void PlayerView::initialize()
     // convert to texture
     tile_texture = SDL_CreateTextureFromSurface( renderer, tile_surface );
 
+	// preload title screen, story screen, and text
+	TTF_Font* font = TTF_OpenFont("../resource/Arial.ttf", 50);
+	SDL_Color color = { 255, 255, 255 };
+	
+	continueText = TTF_RenderText_Solid( font, "[Press any button to continue]", color );
+	pauseText = TTF_RenderText_Solid( font, "[Press P to continue or ESC to quit]", color );
+	
+	continueTexture = SDL_CreateTextureFromSurface( renderer, continueText );
+	pauseTexture = SDL_CreateTextureFromSurface( renderer, pauseText );
 }
 
 void PlayerView::cleanup()
 {
+	// Destroy text textures
+	SDL_DestroyTexture( continueTexture );
+	SDL_DestroyTexture( pauseTexture );
+	
 	// Destroy renderer
 	SDL_DestroyRenderer( renderer );
   
@@ -56,7 +69,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-				if (state==0) return 1;
+				if (state!=2) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
@@ -112,34 +125,27 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 	return 0;
 }
 
-void PlayerView::render(Floor* floor, ProcessManager* pm)
+void PlayerView::render(int state, Floor* floor, ProcessManager* pm)
 {
-	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-    SDL_RenderClear( renderer );
-	
-    updateCameraPosition(pm);
+	switch (state){
+		case 0:
+			renderTitle();
+			break;
+		case 1:
+			renderStory();
+			break;
+		case 2:
+			SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+			SDL_RenderClear( renderer );
+			
+			updateCameraPosition(pm);
 
-	renderLevel(floor);
+			renderLevel(floor);
 
-    renderProcesses(pm);
-	
-	SDL_RenderPresent( renderer );
-}
-
-void PlayerView::renderLevel(Floor* floor)
-{
-    testLevelRendering(floor);
-    /*
-	GameObject* curWall;
-	for(int i = 0; i < walls.size(); i++){
-        curWall = walls[i];
-        curWall->RenderCam(renderer, cameraX, cameraY );
-    }*/
-    /*const auto& walls = levelManager->getWalls();
-    for (const auto& tile : walls)
-    {
-        tile.RenderCam( renderer, cameraX, cameraY);  
-    }*/
+			renderProcesses(pm);
+			
+			SDL_RenderPresent( renderer );
+	}
 }
 
 void PlayerView::renderProcesses(ProcessManager* pm)
@@ -160,6 +166,13 @@ void PlayerView::renderTitle()
 	SDL_RenderPresent( renderer );
 }
 
+void PlayerView::renderStory()
+{
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 0, 255, 255);
+	SDL_RenderPresent( renderer );
+}
+
+
 // updates the camera's position based on the player's position
 void PlayerView::updateCameraPosition(ProcessManager* pm)
 {
@@ -168,7 +181,7 @@ void PlayerView::updateCameraPosition(ProcessManager* pm)
     cameraY = (player->getHitbox().y + player->getHitbox().height / 2) - SCREEN_HEIGHT / 2;
 }
 
-void PlayerView::testLevelRendering(Floor* floor) {
+void PlayerView::renderLevel(Floor* floor) {
     vector<vector<int>> rooms = floor->getRooms();
     int rooms_width = rooms.size();
     int rooms_height = rooms[0].size();
