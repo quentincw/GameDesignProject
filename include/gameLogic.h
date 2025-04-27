@@ -34,7 +34,7 @@ private:
 
     void updateLastPositions(const std::vector<GameProcess*>& processes);
 
-    TileRange getTileRange(float x, float y, float w, float h) const;
+    inline TileRange getTileRange(float x, float y, float w, float h) const;
 };
 
 #endif

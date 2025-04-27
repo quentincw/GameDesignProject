@@ -24,7 +24,7 @@ void GameLogic::update()
     checkWallCollisions({player});
 }
 
-TileRange GameLogic::getTileRange(float x, float y, float w, float h) const
+inline TileRange GameLogic::getTileRange(float x, float y, float w, float h) const
 {
     const auto& floor = levelManager->getCurrentFloor();
     const auto& tilemapData = floor->getRoomsCol();
