@@ -40,6 +40,8 @@ void Exploder::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		soundList.push_back(SoundType::BUG_DEATH1);
+		sounds = true;
         //explode();
     }
 
@@ -87,4 +89,8 @@ void Exploder::explode() {
     
     // set the flag for child to true
     children = true;
+	
+	// add sound for exploding
+    soundList.push_back(SoundType::EXPLOSION);
+    sounds = true;
 }

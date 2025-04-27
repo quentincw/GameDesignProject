@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "enemy.h"
+#include <iostream>
 
 // constructor
 Enemy::Enemy(int x, int y) : Entity() {

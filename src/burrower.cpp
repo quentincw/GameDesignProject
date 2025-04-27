@@ -21,8 +21,8 @@ Burrower::Burrower(int x, int y) : Enemy(x, y) {
     burrowing = false;
     burrowDuration = 0;
     moveDuration = 0;
-    spitAmount = 0;
-    cooldown = 0;
+    spitAmount = 4;
+    cooldown = 100;
     spitSpeed = 4;
 }
 
@@ -31,13 +31,16 @@ void Burrower::Update(float deltaTime) {
     Entity::Update(deltaTime);
     if(burrowing) {
         burrowDuration = burrowDuration - 1;
+        interactions.erase("player");
+        tags.erase("enemy");
     }
     else {
         cooldown = cooldown - 1;
+        interactions.insert("player");
+        tags.insert("enemy");
     }
 
     moveDuration = moveDuration - 1;
-
 }
 
 // draws the object
@@ -60,6 +63,8 @@ void Burrower::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		soundList.push_back(SoundType::BUG_DEATH1);
+		sounds = true;
     }
 
     // stop burrowing if enough time has passed
@@ -82,14 +87,14 @@ void Burrower::UpdateAI(Rectangle phitbox) {
                 burrowDuration = 170;
             }
             // if the burrower has fired less than 3 projectiles
-            if(spitAmount > 0) {
+            else if(spitAmount > 0) {
                 spitProjectile(phitbox);
                 cooldown = 8;
                 spitAmount = spitAmount - 1;
-            }
-            // the burrower should remain exposed for a time
-            else {
-                cooldown = 100;
+                // the burrower should remain exposed for a time
+                if (spitAmount == 0) {
+                    cooldown = 100;
+                }
             }
         }
         return;
@@ -169,4 +174,8 @@ void Burrower::spitProjectile(Rectangle phitbox) {
     
     // set the flag for child to true
     children = true;
+	
+    // add sound for spitting
+    soundList.push_back(SoundType::SPIT_HIGH);
+    sounds = true;
 }

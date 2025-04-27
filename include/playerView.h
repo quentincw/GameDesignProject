@@ -7,6 +7,7 @@
 #include "processManager.h"
 #include "constants.h"
 #include "floor.h"
+#include "soundPlayer.h"
 
 class PlayerView
 {
@@ -23,6 +24,9 @@ public:
 	
 	int handleInputs(ProcessManager* pm);
 
+    // plays sounds from processes in the process manager
+    void playSounds(ProcessManager* pm);
+
 private:
 
     void renderLevel(Floor* floor);
@@ -38,6 +42,9 @@ private:
     // updates the camera's position based on the player's position
     void updateCameraPosition(ProcessManager* pm);
 
+    // renders HUD for healthbar
+    void renderHealthBar(Player1* player);
+
     // The x and y of the camera
     int cameraX;
     int cameraY;
@@ -48,6 +55,9 @@ private:
 
     const int total_frames = 24;
     vector<SDL_Texture*> frames;
+
+    // the sound player
+    SoundPlayer soundPlayer;
 };
 
 #endif

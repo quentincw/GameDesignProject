@@ -15,7 +15,7 @@ class BloodStain : public GameProcess {
     public:
 
         // constructor for process
-        BloodStain(int x, int y, int height, int width);
+        BloodStain(int x, int y, int height, int width, int type);
 
         // draws the object
         void Render(SDL_Renderer* renderer);
@@ -32,6 +32,9 @@ class BloodStain : public GameProcess {
     private:
     
         int currentSpriteIndex;
+
+        // 0 = green, 1 = red
+        int color;
         
 };
 

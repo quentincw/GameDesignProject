@@ -5,7 +5,9 @@
 #include "gameProcess.h"
 #include "gameObject.h"
 #include "floor.h"
+#include "Player1.h"
 #include <iostream>
+#include <SDL_mixer.h>
 
 PlayerView::PlayerView() {}
 
@@ -37,6 +39,16 @@ void PlayerView::initialize()
         texture = SDL_CreateTextureFromSurface( renderer, surface );
         frames.push_back(texture);
     };
+
+    // initialize SDL audio and mixer
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+    }
+
 }
 
 void PlayerView::cleanup()
@@ -49,6 +61,13 @@ void PlayerView::cleanup()
 
     // Quit SDL subsystems
     SDL_Quit();
+}
+
+// plays sounds from processes in the process manager
+void PlayerView::playSounds(ProcessManager* pm) {
+
+    soundPlayer.playSounds(pm->getSoundList());
+
 }
 
 int PlayerView::handleInputs(ProcessManager* pm)
@@ -88,6 +107,9 @@ int PlayerView::handleInputs(ProcessManager* pm)
                             auto curProcess = curProcesses[i];
                             curProcess->markForDeletion();
                         }
+                        break;
+                    case SDLK_SPACE:
+                        player->dodgeRoll();
                         break;
                     case SDLK_y:
                         cout << "x: " << player->getHitbox().x << "y: " << player->getHitbox().y << endl;
@@ -165,6 +187,8 @@ void PlayerView::render(Floor* floor, ProcessManager* pm)
     renderLevel(floor);
 
     renderProcesses(pm);
+
+    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
 	
     SDL_RenderPresent( renderer );
 }
@@ -181,6 +205,8 @@ void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
     renderProcesses(pm);
 	
 	//renderMinimap(walls);
+
+    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
 	
 	SDL_RenderPresent( renderer );
 }
@@ -387,3 +413,34 @@ void PlayerView::testLevelRendering(Floor* floor) {
     }
 }
 
+void PlayerView::renderHealthBar(Player1* player)
+{
+    int health = player->getHealth();
+    int maxHealth = 100;
+
+    float percent = std::max(0.0f, std::min(1.0f, health / (float)maxHealth));
+
+    int barWidth = 200;
+    int barHeight = 20;
+    int margin = 20;
+
+    int x = SCREEN_WIDTH - barWidth - margin;
+    int y = margin;
+
+    SDL_Rect bg = {x, y, barWidth, barHeight};
+    SDL_Rect fill = {x, y, static_cast<int>(barWidth * percent), barHeight};
+
+    // Background
+    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    SDL_RenderFillRect(renderer, &bg);
+
+    // Health color (green to red)
+    Uint8 red = static_cast<Uint8>((1.0f - percent) * 255);
+    Uint8 green = static_cast<Uint8>(percent * 255);
+    SDL_SetRenderDrawColor(renderer, red, green, 0, 255);
+    SDL_RenderFillRect(renderer, &fill);
+
+    // Border
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawRect(renderer, &bg);
+}

@@ -11,11 +11,16 @@ using namespace std;
 
 
 // constructor
-BloodStain::BloodStain(int x, int y, int height, int width) : GameProcess() {
+BloodStain::BloodStain(int x, int y, int height, int width, int type) : GameProcess() {
     hitbox.x = x;
     hitbox.y = y;
     hitbox.height = height;
     hitbox.width = width;
+
+    color = type;
+
+    lastX = x;
+    lastY = y;
 
     random_device rd;  // get random number
     mt19937 eng(rd()); // seed
@@ -35,6 +40,14 @@ void BloodStain::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* blood_surface = SDL_LoadBMP( "../resource/bloodstains.bmp" );
     static SDL_Texture* blood_texture = SDL_CreateTextureFromSurface( renderer, blood_surface );
+
+    // change to green if alien blood
+    if(color == 0){
+        SDL_SetTextureColorMod(blood_texture, 0, 255, 0);
+    }
+    else {
+        SDL_SetTextureColorMod(blood_texture, 255, 255, 255);
+    }
 
     SDL_Rect dst = { point.x - camX - (TILE_SIZE / 2), point.y - camY - (TILE_SIZE / 2), TILE_SIZE, TILE_SIZE };
 

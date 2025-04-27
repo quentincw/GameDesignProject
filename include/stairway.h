@@ -29,11 +29,16 @@ class Stairway : public GameProcess {
         // opens the stairway by changing the interactivity (by removing player tag)
         void openStairs();
 
+        // getter for triggered
+        bool isTriggered();
 
     protected:
 
         // whether the stairway is open (interactable)
         bool open;
+
+        // whether the stairway has been interacted with
+        bool triggered;
 
 };
 

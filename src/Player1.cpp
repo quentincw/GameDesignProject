@@ -19,7 +19,27 @@ Player1::Player1(int x, int y) : Entity() {
     xSpeed = 0;
     ySpeed = 0;
 	cooldown = 40;
+    dodging = false;
+    invulnerability = 0;
+    dodgeCooldown = 0;
     tags.insert("player");
+}
+
+// subtracts the health damage from the current health
+void Player1::adjustHealth(int healthDamage) {
+    // player is invulnerable
+    if (invulnerability > 0) {
+        return;
+    }
+    health = health - healthDamage;
+    if (health <= 0) {
+        health = 0;
+        isAlive = false;
+    }
+    invulnerability = 60;
+    // spawn blood stain on damage
+    spawnBloodStain(1);
+    
 }
 
 // updates the object
@@ -31,13 +51,36 @@ void Player1::Update(float deltaTime) {
 		if (xSpeed<0) dx*=-1;
 		if (ySpeed<0) dy*=-1;
 	}
-	else{
+	else {
 		dx = xSpeed;
 		dy = ySpeed;
 	}
 
-    Entity::Update(deltaTime);
+    // use dodge speed if dodging
+    if (dodging) {
+        lastX = hitbox.x;
+        lastY = hitbox.y;
+
+        hitbox.x += dodgeX;
+        hitbox.y += dodgeY;
+    }
+    // use normal speed
+    else {
+        Entity::Update(deltaTime);
+    }
+
 	cooldown-=1;
+    invulnerability-=1;
+    if (dodgeCooldown > 0){
+        dodgeCooldown-=1;
+    }
+    if (invulnerability <= 0){
+        if(dodging){
+            dodging = false;
+            tags.insert("player");
+            dodgeCooldown = 30;
+        }
+    }
 }
 
 // adjust move speed
@@ -183,9 +226,35 @@ void Player1::shootProj(int camX, int camY) {
     // set the flag for child to true
     children = true;
 	cooldown = 40;
+
+    // add sound to list
+    soundList.push_back(SoundType::PLAYER_SHOOT);
+    sounds = true;
 	}
 }
 
 void Player1::handleInteraction(std::string tag) {
     Entity::handleInteraction(tag);
+}
+
+// causes the player to roll, dodging all attacks and moving quickly in one direction
+void Player1::dodgeRoll(){
+    // don't dodge roll unless moving
+    if((xSpeed == 0) && (ySpeed == 0)){
+        return;
+    }
+    // don't dodge if already dodging
+    if(dodging == true){
+        return;
+    }
+    // don't dodge if dodge is on cooldown
+    if(dodgeCooldown > 0){
+        return;
+    }
+    dodging = true;
+    tags.erase("player");
+    invulnerability = 30;
+    // set speed for dodge
+    dodgeX = xSpeed * 2;
+    dodgeY = ySpeed * 2;
 }

@@ -14,7 +14,7 @@ Rectangle GameObject::getHitbox() const {
 }
 
 // sets the position of the rectangle
-void GameObject::setPosition(int x, int y) {
+void GameObject::setPosition(float x, float y) {
     lastX = hitbox.x;
     lastY = hitbox.y;
     hitbox.x = x;
