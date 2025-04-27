@@ -70,7 +70,7 @@ void PlayerView::playSounds(ProcessManager* pm) {
 
 }
 
-int PlayerView::handleInputs(ProcessManager* pm)
+int PlayerView::handleInputs(ProcessManager* pm, int state)
 {
 	SDL_Event e;
 	auto player = dynamic_cast<Player1*>(pm->getPlayer());
@@ -82,12 +82,14 @@ int PlayerView::handleInputs(ProcessManager* pm)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-
+				if (state!=2) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
                     case SDLK_g:
                         return 5;
+					case SDLK_p:
+						return -2;
                     /*case SDLK_s:
                         // check which list is active (true = room1)
                         if(curRoom){
@@ -164,33 +166,51 @@ int PlayerView::handleInputs(ProcessManager* pm)
 	return 0;
 }
 
-void PlayerView::render(Floor* floor, ProcessManager* pm)
+void PlayerView::render(Floor* floor, ProcessManager* pm, int state)
 {
 	SDL_RenderClear( renderer );
 
-    static const int fps = 12;
-    static int frame = 0;
+	switch (state){
+		case 0:
+			renderTitle();
+			break;
+		case 1:
+			renderStory();
+			break;
+		case 2:
+		{
+			static const int fps = 12;
+			static int frame = 0;
 
-    static Uint64 startTicks = SDL_GetTicks();
+			static Uint64 startTicks = SDL_GetTicks();
 
-    Uint64 curTicks = SDL_GetTicks();
-    float deltaTime = curTicks - startTicks;
-    if (deltaTime > 1000 / fps) {
-        frame = (frame + 1) % total_frames;
-        startTicks = curTicks;
-    }
+			Uint64 curTicks = SDL_GetTicks();
+			float deltaTime = curTicks - startTicks;
+			if (deltaTime > 1000 / fps) {
+				frame = (frame + 1) % total_frames;
+				startTicks = curTicks;
+			}
 
-    SDL_RenderCopy(renderer, frames[frame], NULL, NULL);
-    
-    updateCameraPosition(pm);
+			SDL_RenderCopy(renderer, frames[frame], NULL, NULL);
+			
+			updateCameraPosition(pm);
 
-    renderLevel(floor);
+			renderLevel(floor);
 
-    renderProcesses(pm);
+			renderProcesses(pm);
 
-    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
-	
-    SDL_RenderPresent( renderer );
+			renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
+			
+			SDL_RenderPresent( renderer );
+		}
+			break;
+		case 3:
+			renderWin();
+			break;
+		case -1:
+			renderLose();
+			break;
+	}
 }
 
 void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
@@ -211,20 +231,34 @@ void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
 	SDL_RenderPresent( renderer );
 }
 
-void PlayerView::renderLevel(Floor* floor)
+void PlayerView::renderPause()
 {
-    testLevelRendering(floor);
-    /*
-	GameObject* curWall;
-	for(int i = 0; i < walls.size(); i++){
-        curWall = walls[i];
-        curWall->RenderCam(renderer, cameraX, cameraY );
-    }*/
-    /*const auto& walls = levelManager->getWalls();
-    for (const auto& tile : walls)
-    {
-        tile.RenderCam( renderer, cameraX, cameraY);  
-    }*/
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 128);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderTitle()
+{
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 255, 0, 255);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderStory()
+{
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 0, 255, 255);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderWin()
+{
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 255, 255);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderLose()
+{
+	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 0, 0, 255);
+	SDL_RenderPresent( renderer );
 }
 
 void PlayerView::renderLevel(std::vector<GameObject*> walls)
@@ -271,7 +305,7 @@ void PlayerView::updateCameraPosition(ProcessManager* pm)
     cameraY = (player->getHitbox().y + player->getHitbox().height / 2) - SCREEN_HEIGHT / 2;
 }
 
-void PlayerView::testLevelRendering(Floor* floor) {
+void PlayerView::renderLevel(Floor* floor) {
     vector<vector<int>> rooms = floor->getRooms();
     int rooms_width = rooms.size();
     int rooms_height = rooms[0].size();

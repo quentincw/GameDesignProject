@@ -18,22 +18,29 @@ public:
 	
 	void cleanup();
 
-    void render(Floor* floor, ProcessManager* pm);
+    void render(Floor* floor, ProcessManager* pm, int state);
 
     void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
-	int handleInputs(ProcessManager* pm);
+	int handleInputs(ProcessManager* pm, int state);
 
     // plays sounds from processes in the process manager
     void playSounds(ProcessManager* pm);
 
+	void renderPause();
+
 private:
+	void renderTitle();
+	
+	void renderStory();
+	
+	void renderWin();
+	
+	void renderLose();
 
     void renderLevel(Floor* floor);
 
     void renderLevel(std::vector<GameObject*> walls);
-
-    void testLevelRendering(Floor* floor);
 
     void renderProcesses(ProcessManager* pm);
 	
