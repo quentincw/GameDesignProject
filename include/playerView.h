@@ -19,8 +19,6 @@ public:
 	void cleanup();
 
     void render(Floor* floor, ProcessManager* pm);
-
-    void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
 	int handleInputs(ProcessManager* pm);
 
@@ -29,15 +27,14 @@ public:
 
 private:
 
+    // renders the floor
     void renderLevel(Floor* floor);
 
-    void renderLevel(std::vector<GameObject*> walls);
-
-    void testLevelRendering(Floor* floor);
-
+    // renders all the processes (bloodstains first)
     void renderProcesses(ProcessManager* pm);
-	
-	//void renderMinimap(LevelManager* lm);
+    
+    // renders the minimap
+	void renderMinimap(Floor* floor);
 
     // updates the camera's position based on the player's position
     void updateCameraPosition(ProcessManager* pm);
@@ -52,6 +49,8 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
+
+    SDL_Rect tileTextures[14];
 
     const int total_frames = 24;
     vector<SDL_Texture*> frames;
