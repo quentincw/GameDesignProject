@@ -23,36 +23,10 @@ void csci437_error(const std::string& msg)
 }
 
 int main(int argc, char** argv) {
-    /*Floor floor;
-    floor.gen(3, 5, 14);
-    vector<vector<int>> roomPos = floor.getRoomsPos();
-    cout << '\n';
-    for (int i = 0; i < roomPos.size(); i++) {
-        for (int j = 0; j < roomPos[i].size(); j++) {
-          cout << roomPos[i][j] << ' ';
-        }
-        cout << '\n';
-    }
-    return 0;*/
-
-
-    /*** Initialization ***/
-    /*
-    // Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) csci437_error("SDL could not initialize!");
-
-    // Create window
-    SDL_Window* window = SDL_CreateWindow( "CSCI-437 Skeleton", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-    if( window == NULL ) csci437_error("Window could not be created!");
-
-    // Small delay to allow the system to create the window.
-    SDL_Delay(100);
-    
-    // Create renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
-    if (renderer == NULL) csci437_error("Unable to create renderer!");
-    */
-
+	// keep track of game state
+	// 0 = title screen, 1 = lore, 2 = playing, 3 = win, -1 = game over
+	int state = 0;
+	
     // create a level manager
     LevelManager levelManager;
 
@@ -77,19 +51,25 @@ int main(int argc, char** argv) {
 
     /*** Main Loop ***/
     bool running = true;
+	bool paused = false;
     SDL_Event e;
     const int FPS = 60;
     const int TARGETMS = 1000/FPS;
+	int startMS, deltaMS;
+	auto player = dynamic_cast<Player1*>(processManager.getPlayer());
     // While application is running
     while( running )
     {
         // get start timee
-        int startMS = SDL_GetTicks();
+        startMS = SDL_GetTicks();
         // Handle events on queue
-		int ret = playerView.handleInputs(&processManager);
+		int ret = playerView.handleInputs(&processManager, state);
         if (ret == -1) {
             running = false;
         }
+		if (ret == -2) {
+			paused = !paused;
+		}
         if (ret == 5) {
             // test genereating a new floor
             levelManager.genNextFloor(processManager.getPlayer());
@@ -98,24 +78,33 @@ int main(int argc, char** argv) {
             //curRoom = curFloor->getCurRoom();
             //processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
         }
+		if (ret >=1 ){
+			state+=ret;
+			state%=4;
+		}
+		
+		
+		if (!paused && state==2){
+			// update the player and current process list
+			processManager.updateProcesses(deltaMS);
 
-        // update the player and current process list
-        processManager.updateProcesses(1);
+			// update game logic
+			gameLogic.update();
 
-        // update game logic
-        gameLogic.update();
+			// check if the player moved to a new room
+			levelManager.setCurrentRoom(&processManager);
+			
+			if (player->getHealth()<=0) state = -1;
+		}
 
-        // check if the player moved to a new room
-        levelManager.setCurrentRoom(&processManager);
-
-        // render the level and processes
-        playerView.render(levelManager.getCurrentFloor(), &processManager);
+        // render the level and processes		
+		playerView.render(levelManager.getCurrentFloor(), &processManager, state, paused);
 
         // play sounds
         playerView.playSounds(&processManager);
 
         // delta time calculation
-        int deltaMS = SDL_GetTicks() - startMS;
+        deltaMS = SDL_GetTicks() - startMS;
         if(deltaMS < TARGETMS){
             SDL_Delay(TARGETMS - deltaMS);
         }
