@@ -334,6 +334,7 @@ void PlayerView::render(Floor* floor, ProcessManager* pm)
 // renders the floor / room
 void PlayerView::renderLevel(Floor* floor)
 {
+    int level = floor->getLevel();
     if (level == 1) {
         tile_texture = tile_texture_1;
     }
@@ -409,23 +410,9 @@ void PlayerView::updateCameraPosition(ProcessManager* pm)
     cameraY = (player->getHitbox().y + player->getHitbox().height / 2) - SCREEN_HEIGHT / 2;
 }
 
-<<<<<<< src/playerView.cpp
 void PlayerView::renderMinimap(Floor* floor) {
-=======
-void PlayerView::testLevelRendering(Floor* floor) {
 
     int level = floor->getLevel();
-    if (level == 1) {
-        tile_texture = tile_texture_1;
-    }
-    if (level == 2) {
-        tile_texture = tile_texture_2;
-    }
-    if (level == 3) {
-        tile_texture = tile_texture_3;
-    }
-
->>>>>>> src/playerView.cpp
     vector<vector<int>> rooms = floor->getRooms();
     int rooms_width = rooms.size();
     int rooms_height = rooms[0].size();
