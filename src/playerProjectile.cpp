@@ -12,14 +12,13 @@ PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startY
     radius = 8;
     hitbox.height = 16;
     hitbox.width = 16;
-    damage = 10;
+    damage = 50;
     interactions.insert("enemy");
 }
 
 // updates the object
 void PlayerProjectile::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Projectile::Update(deltaTime);
 }
 
 // draws the object

@@ -19,8 +19,7 @@ ExplosionProjectile::ExplosionProjectile(int x, int y) : Projectile(x, y, 0, 0) 
 
 // updates the object
 void ExplosionProjectile::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Projectile::Update(deltaTime);
 
     // delete explosion if active for enough time
     

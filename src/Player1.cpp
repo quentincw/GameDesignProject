@@ -4,7 +4,6 @@
 #include <cmath>
 #include "Player1.h"
 #include "playerProjectile.h"
-#include <iostream>
 #include <constants.h>
 
 // constructor
@@ -22,10 +21,11 @@ Player1::Player1(int x, int y) : Entity() {
     dodging = false;
     invulnerability = 0;
     dodgeCooldown = 0;
+    damage = 0;
     tags.insert("player");
 }
 
-// subtracts the health damage from the current health
+// subtracts the health damage from the current heaSlth
 void Player1::adjustHealth(int healthDamage) {
     // player is invulnerable
     if (invulnerability > 0) {
@@ -58,9 +58,6 @@ void Player1::Update(float deltaTime) {
 
     // use dodge speed if dodging
     if (dodging) {
-        lastX = hitbox.x;
-        lastY = hitbox.y;
-
         hitbox.x += dodgeX;
         hitbox.y += dodgeY;
     }
