@@ -1,6 +1,4 @@
 #include <stdlib.h>
-#include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
 #include "processManager.h"
@@ -48,24 +46,6 @@ void ProcessManager::updateProcesses(float deltaTime) {
     // remove marked processes
     removeMarkedProcesses();
 
-}
-
-// draws the objects
-void ProcessManager::renderProcesses(SDL_Renderer* renderer) {
-
-    for(int i = 0; i < processList.size(); i++){
-        processList[i]->Render( renderer );
-    }
-    player->Render( renderer );
-}
-
-// draws the objects based on the camera's postion
-void ProcessManager::renderProcessesCam(SDL_Renderer* renderer, int camX, int camY) {
-
-    for(int i = 0; i < processList.size(); i++){
-        processList[i]->RenderCam( renderer, camX, camY );
-    }
-    player->RenderCam( renderer, camX, camY );
 }
 
 // loads a process list from a room
