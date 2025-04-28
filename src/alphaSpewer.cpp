@@ -159,6 +159,36 @@ void AlphaSpewer::spitProjectile(Rectangle phitbox) {
     children = true;
     // decrement projectiles to shoot
     projectileAmount = projectileAmount - 1;
+
+    // 8 way spit to catch player off guard
+    if(projectileAmount == 1){
+
+        spit = new SpitterProjectile(x, y, spitSpeed, spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, -spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, spitSpeed, -spitSpeed);
+        childrenList.push_back(spit);
+
+        // up, down, left, right
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, 0);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, 0, -spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, spitSpeed, 0);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, 0, spitSpeed);
+        childrenList.push_back(spit);
+    }
 	
 	// add sound for spitting
     soundList.push_back(SoundType::SPIT_LOW);
