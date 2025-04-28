@@ -145,7 +145,7 @@ void LevelManager::genFloor(int level) {
                         door = true;
                         // create a door at the position
                         gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y - 2) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3, 180);
-                        // roomLists[i][j].push_back(gameDoor);
+                        roomLists[i][j].push_back(gameDoor);
                     }
                 }
                 //cout << "\n";
@@ -157,7 +157,7 @@ void LevelManager::genFloor(int level) {
                         door = true;
                         // create a door at the position
                         gameDoor = new GameDoor((curRect.x - 2) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE, 90);
-                        // roomLists[i][j].push_back(gameDoor);
+                        roomLists[i][j].push_back(gameDoor);
                     }
                 }
 
@@ -168,7 +168,7 @@ void LevelManager::genFloor(int level) {
                         door = true;
                         // create a door at the position
                         gameDoor = new GameDoor((curRect.x + w - 1) * TILE_SIZE, (curRect.y + curRect.height + 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE * 3, 0);
-                        // roomLists[i][j].push_back(gameDoor);
+                        roomLists[i][j].push_back(gameDoor);
                     }
                 }
 
@@ -179,7 +179,7 @@ void LevelManager::genFloor(int level) {
                         door = true;
                         // create a door at the position
                         gameDoor = new GameDoor((curRect.x + curRect.width + 1) * TILE_SIZE, (curRect.y + h - 1) * TILE_SIZE, TILE_SIZE * 3, TILE_SIZE, -90);
-                        // roomLists[i][j].push_back(gameDoor);
+                        roomLists[i][j].push_back(gameDoor);
                     }
                 }
 
@@ -253,16 +253,6 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
             curList.push_back(enemy);
             break;
-        /*
-        case 1:
-            // Alpha Spitter Trio
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
-            curList.push_back(enemy);
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
-            curList.push_back(enemy);
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
-            curList.push_back(enemy);
-            break;*/
         case 1:
             // Alpha Spewer
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
