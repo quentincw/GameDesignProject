@@ -15,6 +15,7 @@ ExplosionProjectile::ExplosionProjectile(int x, int y) : Projectile(x, y, 0, 0) 
     hitbox.width = EXPLOSIONPROJECTILE_SIZE;
     lifeTime = EXPLOSIONPROJECTILE_LIFETIME;
     interactions.insert("player");
+    interactions.insert("enemy");
 }
 
 // updates the object
@@ -39,4 +40,8 @@ void ExplosionProjectile::Render(SDL_Renderer* renderer) {
 void ExplosionProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
     filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 69, 0, 255);
+}
+
+void ExplosionProjectile::handleInteraction(std::string tag) {
+    
 }

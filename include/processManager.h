@@ -70,6 +70,9 @@ class ProcessManager {
         // gives the player's position any enemies
         void updateEnemyAI();
 
+        // delete bloodstains if too many things in list
+        void manageSize();
+
 };
 
 #endif /* _PROCESSMANAGER_H_ */

@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <set>
 #include <iostream>
+#include "alienQueen.h"
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -257,6 +258,12 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
 }
 // fills a process list with a boss encounter
 void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
+
+    if(floorNumber == 3){
+        AlienQueen* alienQueen = new AlienQueen(0,0);
+        curList.push_back(alienQueen);
+        return;
+    }
     // random enemy generator
     // increase for every boss encounter added
     uniform_int_distribution<> enemyDist(0, 1);
