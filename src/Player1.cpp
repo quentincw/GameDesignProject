@@ -5,6 +5,7 @@
 #include "Player1.h"
 #include "playerProjectile.h"
 #include <constants.h>
+#include <random>
 
 // constructor
 Player1::Player1(int x, int y) : Entity() {
@@ -98,7 +99,26 @@ void Player1::setSpeedY(float y) {
 }
 
 void Player1::adjustHealth(int healthDamage) {
-	soundList.push_back(SoundType::PLAYER_DAMAGE1);
+	int val = rand()%6+1;
+	switch (val) {
+		case 1:
+			soundList.push_back(SoundType::PLAYER_DAMAGE1);
+			break;
+		case 2:
+			soundList.push_back(SoundType::PLAYER_DAMAGE2);
+			break;
+		case 3:
+			soundList.push_back(SoundType::PLAYER_DAMAGE3);
+			break;
+		case 4:
+			soundList.push_back(SoundType::PLAYER_DAMAGE4);
+			break;
+		case 5:
+			soundList.push_back(SoundType::PLAYER_DAMAGE5);
+			break;
+		case 6:
+			soundList.push_back(SoundType::PLAYER_DAMAGE6);	
+	}
 	sounds = true;
     Entity::adjustHealth(healthDamage);
 }
