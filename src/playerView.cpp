@@ -18,7 +18,7 @@ void PlayerView::initialize()
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // Create window
-    window = SDL_CreateWindow( "playerView", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow( "Kill Alien", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( window == NULL ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // Small delay to allow the system to create the window.
@@ -172,7 +172,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 	return 0;
 }
 
-void PlayerView::render(Floor* floor, ProcessManager* pm, int state)
+void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused)
 {
 	SDL_RenderClear( renderer );
 
@@ -207,6 +207,8 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state)
 
 			renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
 			
+			if (paused) renderPause();
+			
 			SDL_RenderPresent( renderer );
 		}
 			break;
@@ -240,7 +242,6 @@ void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
 void PlayerView::renderPause()
 {
 	SDL_RenderCopy(renderer, pauseS, NULL, NULL);
-	SDL_RenderPresent( renderer );
 }
 
 void PlayerView::renderTitle()

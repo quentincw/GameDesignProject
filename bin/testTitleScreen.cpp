@@ -81,20 +81,16 @@ int main(int argc, char** argv) {
 			// update the player and current process list
 			processManager.updateProcesses(deltaMS);
 
+			// update game logic
+			gameLogic.update();
+
 			// check if the player moved to a new room
 			levelManager.setCurrentRoom(&processManager);
 			
 			if (player->getHealth()<=0) state = -1;
 		}
-		
-		// update game logic
-		gameLogic.update();
 
-		playerView.render(levelManager.getCurrentFloor(), &processManager, state);
-		
-		if (paused){
-			playerView.renderPause();
-		}
+		playerView.render(levelManager.getCurrentFloor(), &processManager, state, paused);
 
 		// delta time calculation
 		deltaMS = SDL_GetTicks() - startMS;

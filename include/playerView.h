@@ -18,7 +18,7 @@ public:
 	
 	void cleanup();
 
-    void render(Floor* floor, ProcessManager* pm, int state);
+    void render(Floor* floor, ProcessManager* pm, int state, bool paused);
 
     void render(std::vector<GameObject*> walls, ProcessManager* pm);
 	
