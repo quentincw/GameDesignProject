@@ -148,6 +148,7 @@ int PlayerView::handleInputs(ProcessManager* pm)
 			else if( e.type == SDL_MOUSEBUTTONDOWN ){
 				switch(e.button.button){
 					case SDL_BUTTON_LEFT:
+                    {
 						int mouseX = 0;
 						int mouseY = 0;
 					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
@@ -155,6 +156,10 @@ int PlayerView::handleInputs(ProcessManager* pm)
 
 						player->shootProj(cameraX, cameraY);
 						break;
+                    }
+                    case SDL_BUTTON_RIGHT:
+                        player->dodgeRoll();
+                        break;
 				}
 			}
             else {

@@ -116,7 +116,8 @@ void GameLogic::checkProcessCollisions(const std::vector<GameProcess*>& processe
         const auto& interactions = p1->getInteractions();
 
         // Player-specific interaction
-        if (interactions.find("player") != interactions.end())
+        auto playerTags = player->getTags();
+        if (interactions.find("player") != interactions.end() && playerTags.find("player") != playerTags.end())
         {
             if (isColliding(p1, player))
             {
