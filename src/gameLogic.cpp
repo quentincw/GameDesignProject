@@ -6,7 +6,6 @@
 #include "constants.h"
 #include "entity.h"
 #include "stairway.h"
-#include "iostream"
 
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
     : processManager(pm), levelManager(lm), player(pm->getPlayer()) {}
@@ -26,39 +25,6 @@ void GameLogic::update()
 
     // Floor Completion
     checkFloorCompletion(processes);
-
-    // for (auto* proc : processes)
-    // {
-    //     if (!proc) continue; // Skip invalid processes
-
-    //     // Print the tags of the current process
-    //     const auto& tags = proc->getTags();
-    //     std::cout << "Process Tags: ";
-    //     for (const auto& tag : tags)
-    //     {
-    //         std::cout << tag << " ";
-    //     }
-    //     std::cout << std::endl;
-
-    //     const auto& interactions = proc->getInteractions();
-    //     std::cout << "Process Interactions: ";
-    //     for (const auto& inter : interactions)
-    //     {
-    //         std::cout << inter << " ";
-    //     }
-    //     std::cout << std::endl;
-
-    //     // Check if the process is a type of Projectile and print its damage
-    //     auto* projectile = dynamic_cast<Projectile*>(proc);
-    //     if (projectile)
-    //     {
-    //         std::cout << "Projectile Damage: " << projectile->getDamage() << std::endl;
-    //     }
-    //     else
-    //     {
-    //         std::cout << "This process is not a projectile, no damage info available." << std::endl;
-    //     }
-    // }
 }
 
 inline TileRange GameLogic::getTileRange(float x, float y, float w, float h) const

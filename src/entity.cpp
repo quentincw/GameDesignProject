@@ -5,7 +5,6 @@
 #include "entity.h"
 #include "gameProcess.h"
 #include "bloodStain.h"
-#include <iostream>
 
 
 Entity::Entity() : GameProcess() {
