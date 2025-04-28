@@ -8,6 +8,7 @@
 #include "Player1.h"
 #include <iostream>
 #include <SDL_mixer.h>
+#include <SDL_image.h>
 
 PlayerView::PlayerView() {}
 
@@ -48,7 +49,11 @@ void PlayerView::initialize()
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         std::cerr << " (" << SDL_GetError() << ")" << std::endl;
     }
-
+	
+	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
+	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
+	winS = IMG_LoadTexture(renderer, "../resource/screens/winS.png");
+	loseS = IMG_LoadTexture(renderer, "../resource/screens/loseS.png");
 }
 
 void PlayerView::cleanup()
@@ -239,25 +244,25 @@ void PlayerView::renderPause()
 
 void PlayerView::renderTitle()
 {
-	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 255, 0, 255);
+	SDL_RenderCopy(renderer, titleS, NULL, NULL);
 	SDL_RenderPresent( renderer );
 }
 
 void PlayerView::renderStory()
 {
-	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 0, 255, 255);
+	SDL_RenderCopy(renderer, storyS, NULL, NULL);
 	SDL_RenderPresent( renderer );
 }
 
 void PlayerView::renderWin()
 {
-	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 255, 255);
+	SDL_RenderCopy(renderer, winS, NULL, NULL);
 	SDL_RenderPresent( renderer );
 }
 
 void PlayerView::renderLose()
 {
-	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 255, 0, 0, 255);
+	SDL_RenderCopy(renderer, loseS, NULL, NULL);
 	SDL_RenderPresent( renderer );
 }
 
