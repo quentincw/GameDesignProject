@@ -23,11 +23,6 @@ void Projectile::Update(float deltaTime) {
     hitbox.y = hitbox.y + ySpeed;
 }
 
-// get the damage the projectile causes to the player on contact
-int Projectile::getDamage() const {
-    return damage;
-}
-
 void Projectile::handleInteraction(std::string tag) {
     if (tag == "wall" || tag == "player" || tag == "enemy" || tag == "door") {
         markForDeletion();

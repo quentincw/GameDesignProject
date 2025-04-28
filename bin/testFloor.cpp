@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 
   Floor floor;
   // width * height >= gen_rooms + 2 (start and boss room)
-  floor.gen(3, 5, 14);
+  floor.gen(1, 3, 5, 14);
   SDL_Rect curRoom = floor.getCurRoom();
 
   player.setPos((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);

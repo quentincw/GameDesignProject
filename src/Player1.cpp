@@ -4,7 +4,6 @@
 #include <cmath>
 #include "Player1.h"
 #include "playerProjectile.h"
-#include <iostream>
 #include <constants.h>
 
 // constructor
@@ -22,10 +21,11 @@ Player1::Player1(int x, int y) : Entity() {
     dodging = false;
     invulnerability = 0;
     dodgeCooldown = 0;
+    damage = 0;
     tags.insert("player");
 }
 
-// subtracts the health damage from the current health
+// subtracts the health damage from the current heaSlth
 void Player1::adjustHealth(int healthDamage) {
     // player is invulnerable
     if (invulnerability > 0) {
@@ -58,9 +58,6 @@ void Player1::Update(float deltaTime) {
 
     // use dodge speed if dodging
     if (dodging) {
-        lastX = hitbox.x;
-        lastY = hitbox.y;
-
         hitbox.x += dodgeX;
         hitbox.y += dodgeY;
     }
@@ -161,12 +158,7 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
     static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
 
-    SDL_Rect dst_weapon = { point.x - camX - 20 + flip_offset.x, point.y - camY - 12 + flip_offset.y, TILE_SIZE, TILE_SIZE };
-
-    SDL_Rect dst_weapon_2 = { point.x - camX - 68 + flip_offset.x, point.y - camY - 12 + flip_offset.y, TILE_SIZE, TILE_SIZE };
-
     static const SDL_Point pivot = {8, 28};
-
     static const SDL_Point pivot_2 = {56, 28};
 
     int mX = 0;
@@ -180,9 +172,11 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     if (deltaX != 0) angle = atanf(deltaY / deltaX) * (180 / M_PI);
 
     if (deltaX > 0) {
-        SDL_RenderCopyEx(renderer, weapon_texture, NULL, &dst_weapon_2, angle, &pivot_2, SDL_FLIP_HORIZONTAL);
+        dst_weapon = { point.x - camX - 68 + flip_offset.x, point.y - camY - 12 + flip_offset.y, TILE_SIZE, TILE_SIZE };
+        SDL_RenderCopyEx(renderer, weapon_texture, NULL, &dst_weapon, angle, &pivot_2, SDL_FLIP_HORIZONTAL);
     }
     else {
+        dst_weapon = { point.x - camX - 20 + flip_offset.x, point.y - camY - 12 + flip_offset.y, TILE_SIZE, TILE_SIZE };
         SDL_RenderCopyEx(renderer, weapon_texture, NULL, &dst_weapon, angle, &pivot, SDL_FLIP_NONE);
     }
 }

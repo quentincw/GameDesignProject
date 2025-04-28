@@ -44,7 +44,7 @@ private:
 
     // Returns the corner coords of the range of tiles that 
     // could interact with the provided x, y, w, h
-    TileRange getTileRange(float x, float y, float w, float h) const;
+    inline TileRange getTileRange(float x, float y, float w, float h) const;
 };
 
 #endif
