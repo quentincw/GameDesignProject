@@ -1,3 +1,7 @@
+int main(int argc, char** argv)
+{}
+
+/*
 //Using SDL and standard IO
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
@@ -76,28 +80,27 @@ int moveInbounds(GameObject* rect1, GameObject* rect2){
 
 void projectileCollision(PlayerProjectile* ball){
 
-    /*
-    Circle hitbox = ball->getHitbox();
-    int radius = hitbox.radius;
-    int x = hitbox.x;
-    int y = hitbox.y;
-    // check for collision with top of screen
-    if (y - radius <= 0){
-        ball->bounceY(0 + radius);
-    }
-    // check for collision with bottom of the screen
-    else if(y + radius >= SCREEN_HEIGHT){
-        ball->bounceY(SCREEN_HEIGHT - radius);
-    }
-    // check for collision with left of screen
-    if (x - radius <= 0){
-        ball->bounceX(0 + radius);
-    }
-    // check for collision with right of the screen
-    else if(x + radius >= SCREEN_WIDTH){
-        ball->bounceX(SCREEN_WIDTH - radius);
-    }
-    */
+    //Circle hitbox = ball->getHitbox();
+    //int radius = hitbox.radius;
+    //int x = hitbox.x;
+    //int y = hitbox.y;
+    //// check for collision with top of screen
+    //if (y - radius <= 0){
+    //    ball->bounceY(0 + radius);
+    //}
+    //// check for collision with bottom of the screen
+    //else if(y + radius >= SCREEN_HEIGHT){
+    //    ball->bounceY(SCREEN_HEIGHT - radius);
+    //}
+    //// check for collision with left of screen
+    //if (x - radius <= 0){
+    //    ball->bounceX(0 + radius);
+    //}
+    //// check for collision with right of the screen
+    //else if(x + radius >= SCREEN_WIDTH){
+    //    ball->bounceX(SCREEN_WIDTH - radius);
+    //}
+
 
     Rectangle hitbox = ball->getHitbox();
     int height = hitbox.height;
@@ -128,8 +131,6 @@ void projectileCollision(PlayerProjectile* ball){
 
 int main(int argc, char** argv)
 {
-
-    /*** Initialization ***/
   
     // Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) csci437_error("SDL could not initialize!");
@@ -190,7 +191,6 @@ int main(int argc, char** argv)
 
 
 
-    /*** Main Loop ***/
     bool running = true;
     SDL_Event e;
     const int FPS = 60;
@@ -252,17 +252,17 @@ int main(int argc, char** argv)
         //projectileCollision(&ball1);
 
         curProcesses = manager.getProcessList();
-        /*
-        for(int i = 0; i < curProcesses.size(); i++){
-            curProcess = curProcesses[i];
-            curCircle = curProcess->getHitbox();
-            if((curCircle.x - curCircle.radius <= 0) || (curCircle.y - curCircle.radius <= 0)){
-                curProcess->markForDeletion();
-            }
-            else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
-                curProcess->markForDeletion();
-            }
-        }*/
+        
+        //for(int i = 0; i < curProcesses.size(); i++){
+        //    curProcess = curProcesses[i];
+        //    curCircle = curProcess->getHitbox();
+        //    if((curCircle.x - curCircle.radius <= 0) || (curCircle.y - curCircle.radius <= 0)){
+        //        curProcess->markForDeletion();
+        //    }
+        //    else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
+        //        curProcess->markForDeletion();
+        //    }
+        //}
 
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];
@@ -280,16 +280,16 @@ int main(int argc, char** argv)
             }
         }
 
-        /*if(checkCollision(&wall1, &ball1)){
-            //cout << "collision";
-            int code = moveInbounds(&wall1, &ball1);
-            if (code == 1 || code == 3){
-                ball1.bounceX(ball1.getHitbox().x);
-            }
-            else {
-                ball1.bounceY(ball1.getHitbox().y);
-            }
-        }*/
+        //if(checkCollision(&wall1, &ball1)){
+        //    //cout << "collision";
+        //    int code = moveInbounds(&wall1, &ball1);
+        //    if (code == 1 || code == 3){
+        //        ball1.bounceX(ball1.getHitbox().x);
+        //    }
+        //    else {
+        //        ball1.bounceY(ball1.getHitbox().y);
+        //    }
+        //}
 
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];
@@ -315,3 +315,4 @@ int main(int argc, char** argv)
     // Done.
     return 0;
 }
+*/

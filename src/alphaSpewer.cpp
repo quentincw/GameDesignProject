@@ -177,6 +177,52 @@ void AlphaSpewer::spitProjectile(Rectangle phitbox) {
     children = true;
     // decrement projectiles to shoot
     projectileAmount = projectileAmount - 1;
+
+    // 8 way spit to catch player off guard
+    if(projectileAmount == 1){
+        /*
+        spit = new SpitterProjectile(x, y, spitSpeed, spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, -spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, spitSpeed, -spitSpeed);
+        childrenList.push_back(spit);
+
+        // up, down, left, right
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, 0);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, 0, -spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, spitSpeed, 0);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, 0, spitSpeed);
+        childrenList.push_back(spit);*/
+
+        int numProjectiles = 20; // Number of projectiles to fire in a circle
+        float angleStep = 360.0f / numProjectiles;
+
+        for (int i = 0; i < numProjectiles; ++i) {
+            float angleDeg = i * angleStep;
+            float angleRad = angleDeg * (M_PI / 180.0f); // Convert to radians
+
+            float dx = cos(angleRad);
+            float dy = sin(angleRad);
+
+            float speed = spitSpeed;
+
+            spit = new SpitterProjectile(x, y, dx * speed, dy * speed);
+            childrenList.push_back(spit);
+        }
+    }
 	
 	// add sound for spitting
     soundList.push_back(SoundType::SPIT_LOW);

@@ -1,6 +1,4 @@
 #include <stdlib.h>
-#include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
 #include "processManager.h"
@@ -11,6 +9,7 @@
 #include "stairway.h"
 #include "gameDoor.h"
 #include <algorithm>
+#include "bloodStain.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
@@ -45,27 +44,24 @@ void ProcessManager::updateProcesses(float deltaTime) {
     // add any sounds to the sound list
 	findSounds();
 
+    // delete bloodstains if too many things in list
+    manageSize();
+
     // remove marked processes
     removeMarkedProcesses();
 
 }
 
-// draws the objects
-void ProcessManager::renderProcesses(SDL_Renderer* renderer) {
-
-    for(int i = 0; i < processList.size(); i++){
-        processList[i]->Render( renderer );
+// delete bloodstains if too many things in list
+void ProcessManager::manageSize() {
+    if(processList.size() > 150) {
+        for (auto& curProcess : processList) {
+            // check if the current process is an enemy
+            if (auto blood = dynamic_cast<BloodStain*>(curProcess)) {
+                blood->markForDeletion();
+            }
+        }
     }
-    player->Render( renderer );
-}
-
-// draws the objects based on the camera's postion
-void ProcessManager::renderProcessesCam(SDL_Renderer* renderer, int camX, int camY) {
-
-    for(int i = 0; i < processList.size(); i++){
-        processList[i]->RenderCam( renderer, camX, camY );
-    }
-    player->RenderCam( renderer, camX, camY );
 }
 
 // loads a process list from a room

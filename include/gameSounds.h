@@ -55,6 +55,8 @@ enum class SoundType {
     EXPLOSION,
     PICKUP,
     ROLL,
+    ALIENQUEEN1,
+    ALIENQUEEN2,
     // count needs to be the last element
     Count
 
@@ -103,6 +105,8 @@ constexpr std::array<SoundType, static_cast<std::size_t>(SoundType::Count)> allS
     SoundType::PLAYER_SHOOT,
     SoundType::EXPLOSION,
     SoundType::PICKUP,
+    SoundType::ALIENQUEEN1,
+    SoundType::ALIENQUEEN2,
     SoundType::ROLL
 }};
 

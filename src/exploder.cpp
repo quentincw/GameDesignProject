@@ -60,7 +60,7 @@ void Exploder::UpdateAI(Rectangle phitbox) {
         spawnBloodStain();
 		soundList.push_back(SoundType::BUG_DEATH1);
 		sounds = true;
-        //explode();
+        explode();
     }
 
     Point playerCenter = getCenter(&phitbox);
