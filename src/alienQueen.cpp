@@ -25,7 +25,7 @@ AlienQueen::AlienQueen(int x, int y) : Enemy(x, y) {
     spitSpeed = SPEWERPROJECTILE_SPEED + 2;
     projectileAmount = 0;
     spitInterval = 20;
-    phase = 1;
+    phase = 2;
     charging = false;
     chargeDuration = 0;
 }
@@ -59,7 +59,7 @@ void AlienQueen::UpdateAI(Rectangle phitbox) {
 
     // code for determining switching phase
     // if health = 70% -> phase 2
-    if(health <= 2000) {
+    if((health <= 2000) && (phase == 1)) {
         phase = 2;
         cooldown = 200;
         cooldown2 = 435;
@@ -169,6 +169,9 @@ void AlienQueen::charge(Rectangle phitbox) {
     // set the speed based on speed
     xSpeed = dx * 13;
     ySpeed = dy * 13;
+
+    soundList.push_back(SoundType::ALIENQUEEN2);
+    sounds = true;
 }
 
 // moves towards the player
@@ -259,7 +262,7 @@ void AlienQueen::enemyCircle(int number, EnemyFactory::EnemyType type) {
         childrenList.push_back(enemy);
     }
 
-    soundList.push_back(SoundType::SPIT_MEDIUM);
+    soundList.push_back(SoundType::ALIENQUEEN1);
     sounds = true;
 }
 
