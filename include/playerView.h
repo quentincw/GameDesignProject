@@ -60,6 +60,7 @@ private:
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
 	
+	SDL_Texture* pauseS;
 	SDL_Texture* titleS;
 	SDL_Texture* storyS;
 	SDL_Texture* winS;

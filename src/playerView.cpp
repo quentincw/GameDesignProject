@@ -50,6 +50,7 @@ void PlayerView::initialize()
         std::cerr << " (" << SDL_GetError() << ")" << std::endl;
     }
 	
+	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
 	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
 	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
 	winS = IMG_LoadTexture(renderer, "../resource/screens/winS.png");
@@ -238,7 +239,7 @@ void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
 
 void PlayerView::renderPause()
 {
-	boxRGBA(renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 128);
+	SDL_RenderCopy(renderer, pauseS, NULL, NULL);
 	SDL_RenderPresent( renderer );
 }
 

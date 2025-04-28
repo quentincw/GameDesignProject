@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
     const int FPS = 60;
     const int TARGETMS = 1000/FPS;
 	int startMS, deltaMS;
+	auto player = dynamic_cast<Player1*>(processManager.getPlayer());
     // While application is running
     while( running )
     {
@@ -71,7 +72,10 @@ int main(int argc, char** argv) {
 		if (ret == -2) {
 			paused = !paused;
 		}
-		if (ret >=1 ) state+=ret;
+		if (ret >=1 ){
+			state+=ret;
+			state%=4;
+		}
 		
 		if (!paused && state==2){
 			// update the player and current process list
@@ -79,6 +83,8 @@ int main(int argc, char** argv) {
 
 			// check if the player moved to a new room
 			levelManager.setCurrentRoom(&processManager);
+			
+			if (player->getHealth()<=0) state = -1;
 		}
 		
 		// update game logic
