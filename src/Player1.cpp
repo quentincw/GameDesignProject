@@ -4,7 +4,6 @@
 #include <cmath>
 #include "Player1.h"
 #include "playerProjectile.h"
-#include <iostream>
 #include <constants.h>
 
 // constructor
@@ -59,9 +58,6 @@ void Player1::Update(float deltaTime) {
 
     // use dodge speed if dodging
     if (dodging) {
-        lastX = hitbox.x;
-        lastY = hitbox.y;
-
         hitbox.x += dodgeX;
         hitbox.y += dodgeY;
     }

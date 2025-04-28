@@ -12,7 +12,7 @@ PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startY
     radius = 15;
     hitbox.height = 30;
     hitbox.width = 30;
-    damage = 10;
+    damage = 50;
     interactions.insert("enemy");
 }
 
