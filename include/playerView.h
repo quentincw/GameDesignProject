@@ -52,9 +52,15 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
+    SDL_Texture* tile_texture_1;
+    SDL_Texture* tile_texture_2;
+    SDL_Texture* tile_texture_3;
 
     const int total_frames = 24;
     vector<SDL_Texture*> frames;
+    vector<SDL_Texture*> frames_1;
+    vector<SDL_Texture*> frames_2;
+    vector<SDL_Texture*> frames_3;
 
     // the sound player
     SoundPlayer soundPlayer;

@@ -28,16 +28,34 @@ void PlayerView::initialize()
     if (renderer == NULL) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // render tiles
-    SDL_Surface* tile_surface = SDL_LoadBMP("../resource/tile_f4.bmp");
+    SDL_Surface* tile_surface_1 = SDL_LoadBMP("../resource/tile_1.bmp");
+    SDL_Surface* tile_surface_2 = SDL_LoadBMP("../resource/tile_2.bmp");
+    SDL_Surface* tile_surface_3 = SDL_LoadBMP("../resource/tile_3.bmp");
     // convert to texture
-    tile_texture = SDL_CreateTextureFromSurface( renderer, tile_surface );
+    tile_texture_1 = SDL_CreateTextureFromSurface( renderer, tile_surface_1 );
+    tile_texture_2 = SDL_CreateTextureFromSurface( renderer, tile_surface_2 );
+    tile_texture_3 = SDL_CreateTextureFromSurface( renderer, tile_surface_3 );
 
-    SDL_Texture* texture;
+    SDL_Texture* texture_1;
+    SDL_Texture* texture_2;
+    SDL_Texture* texture_3;
 
     for (int i = 1; i <= total_frames; ++i) {
-        SDL_Surface* surface = SDL_LoadBMP(("../resource/frames/" + to_string(i) + ".bmp").c_str());
-        texture = SDL_CreateTextureFromSurface( renderer, surface );
-        frames.push_back(texture);
+        SDL_Surface* surface_1 = SDL_LoadBMP(("../resource/frames_1/" + to_string(i) + ".bmp").c_str());
+        texture_1 = SDL_CreateTextureFromSurface( renderer, surface_1 );
+        frames_1.push_back(texture_1);
+    };
+
+    for (int i = 1; i <= total_frames; ++i) {
+        SDL_Surface* surface_2 = SDL_LoadBMP(("../resource/frames_2/" + to_string(i) + ".bmp").c_str());
+        texture_2 = SDL_CreateTextureFromSurface( renderer, surface_2 );
+        frames_2.push_back(texture_2);
+    };
+
+    for (int i = 1; i <= total_frames; ++i) {
+        SDL_Surface* surface_3 = SDL_LoadBMP(("../resource/frames_3/" + to_string(i) + ".bmp").c_str());
+        texture_3 = SDL_CreateTextureFromSurface( renderer, surface_3 );
+        frames_3.push_back(texture_3);
     };
 
     // initialize SDL audio and mixer
@@ -173,6 +191,17 @@ void PlayerView::render(Floor* floor, ProcessManager* pm)
 {
 	SDL_RenderClear( renderer );
 
+    int level = floor->getLevel();
+    if (level == 1) {
+        frames = frames_1;
+    }
+    if (level == 2) {
+        frames = frames_2;
+    }
+    if (level == 3) {
+        frames = frames_3;
+    }
+
     static const int fps = 12;
     static int frame = 0;
 
@@ -277,6 +306,18 @@ void PlayerView::updateCameraPosition(ProcessManager* pm)
 }
 
 void PlayerView::testLevelRendering(Floor* floor) {
+
+    int level = floor->getLevel();
+    if (level == 1) {
+        tile_texture = tile_texture_1;
+    }
+    if (level == 2) {
+        tile_texture = tile_texture_2;
+    }
+    if (level == 3) {
+        tile_texture = tile_texture_3;
+    }
+
     vector<vector<int>> rooms = floor->getRooms();
     int rooms_width = rooms.size();
     int rooms_height = rooms[0].size();

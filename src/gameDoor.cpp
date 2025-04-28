@@ -41,10 +41,10 @@ void GameDoor::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     SDL_Rect dst;
     if (rot == 90 || rot == -90) {
-        dst = { hitbox.x - camX - TILE_SIZE, hitbox.y - camY + TILE_SIZE, TILE_SIZE * 3, TILE_SIZE };
+        dst = { static_cast<int>(hitbox.x - camX - TILE_SIZE), static_cast<int>(hitbox.y - camY + TILE_SIZE), TILE_SIZE * 3, TILE_SIZE };
     }
     else {
-        dst = { hitbox.x - camX, hitbox.y - camY, TILE_SIZE * 3, TILE_SIZE };
+        dst = { static_cast<int>(hitbox.x - camX), static_cast<int>(hitbox.y - camY), TILE_SIZE * 3, TILE_SIZE };
     }
 
     static SDL_Surface* door_surface = SDL_LoadBMP( "../resource/door.bmp" );

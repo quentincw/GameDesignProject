@@ -40,9 +40,18 @@ void Spitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/spitter.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
 
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    if (xSpeed < 0) {
+        flip = SDL_FLIP_NONE;
+    }
+    if (xSpeed > 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
     SDL_Rect dst = { point.x - camX - 32, point.y - camY - 46, TILE_SIZE, TILE_SIZE };
 
-    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+    SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
 
     // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 255, 0, 100);
 }

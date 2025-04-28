@@ -4,6 +4,7 @@
 #include "gameProcess.h"
 #include "pickup.h"
 #include "healthPickup.h"
+#include <constants.h>
 
 // default constructor
 HealthPickup::HealthPickup(int x, int y) : Pickup(x, y) {
@@ -67,6 +68,13 @@ void HealthPickup::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     SDL_SetRenderDrawColor( renderer, 0, 255, 100, 255 );
     SDL_RenderFillRect( renderer, &rect );
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/health.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_Rect dst = { static_cast<int>(hitbox.x - camX - 32), static_cast<int>(hitbox.y - camY - 32), TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
 
 }
 
