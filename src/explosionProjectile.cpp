@@ -5,6 +5,7 @@
 #include "projectile.h"
 #include "explosionProjectile.h"
 #include "enemyConstants.h"
+#include <constants.h>
 
 // constructor
 ExplosionProjectile::ExplosionProjectile(int x, int y) : Projectile(x, y, 0, 0) {
@@ -15,12 +16,12 @@ ExplosionProjectile::ExplosionProjectile(int x, int y) : Projectile(x, y, 0, 0) 
     hitbox.width = EXPLOSIONPROJECTILE_SIZE;
     lifeTime = EXPLOSIONPROJECTILE_LIFETIME;
     interactions.insert("player");
+    interactions.insert("enemy");
 }
 
 // updates the object
 void ExplosionProjectile::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Projectile::Update(deltaTime);
 
     // delete explosion if active for enough time
     
@@ -38,5 +39,14 @@ void ExplosionProjectile::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void ExplosionProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 69, 0, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/explosion.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_Rect dst = { point.x - camX - 32, point.y - camY - 32, TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 69, 0, 100);
 }
+void ExplosionProjectile::handleInteraction(std::string tag) {}

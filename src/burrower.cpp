@@ -6,6 +6,7 @@
 #include "enemy.h"
 #include "burrower.h"
 #include "spitterProjectile.h"
+#include <constants.h>
 
 
 // constructor
@@ -21,8 +22,8 @@ Burrower::Burrower(int x, int y) : Enemy(x, y) {
     burrowing = false;
     burrowDuration = 0;
     moveDuration = 0;
-    spitAmount = 0;
-    cooldown = 0;
+    spitAmount = 4;
+    cooldown = 100;
     spitSpeed = 4;
 }
 
@@ -31,13 +32,16 @@ void Burrower::Update(float deltaTime) {
     Entity::Update(deltaTime);
     if(burrowing) {
         burrowDuration = burrowDuration - 1;
+        interactions.erase("player");
+        tags.erase("enemy");
     }
     else {
         cooldown = cooldown - 1;
+        interactions.insert("player");
+        tags.insert("enemy");
     }
 
     moveDuration = moveDuration - 1;
-
 }
 
 // draws the object
@@ -52,7 +56,15 @@ void Burrower::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         return;
     }
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/burrower.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_Rect dst = { point.x - camX - 32, point.y - camY - 50, TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+    
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 100);
 }
 
 // updates the ai based on the player's position
@@ -87,14 +99,14 @@ void Burrower::UpdateAI(Rectangle phitbox) {
                 burrowDuration = 170;
             }
             // if the burrower has fired less than 3 projectiles
-            if(spitAmount > 0) {
+            else if(spitAmount > 0) {
                 spitProjectile(phitbox);
                 cooldown = 8;
                 spitAmount = spitAmount - 1;
-            }
-            // the burrower should remain exposed for a time
-            else {
-                cooldown = 100;
+                // the burrower should remain exposed for a time
+                if (spitAmount == 0) {
+                    cooldown = 100;
+                }
             }
         }
         return;

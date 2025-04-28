@@ -26,12 +26,6 @@ class ProcessManager {
         // updates the list of processes
         void updateProcesses(float deltaTime);
 
-        // draws the object
-        void renderProcesses(SDL_Renderer* renderer);
-
-        // draws the objects based on the camera position
-        void renderProcessesCam(SDL_Renderer* renderer, int camX, int camY);
-
         // loads a process list from a room
         void loadProcessList(std::vector<GameProcess*> newList);
 
@@ -75,6 +69,9 @@ class ProcessManager {
 
         // gives the player's position any enemies
         void updateEnemyAI();
+
+        // delete bloodstains if too many things in list
+        void manageSize();
 
 };
 

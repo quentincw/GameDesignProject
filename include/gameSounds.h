@@ -2,6 +2,7 @@
 #define GAMESOUNDS_H
 
 #include <array>
+#include <functional>
 
 /*
     To add a sound:
@@ -55,7 +56,8 @@ enum class SoundType {
     PICKUP,
 	FOOTSTEPS,
     ROLL,
-    // count needs to be the last element
+    ALIENQUEEN1,
+    ALIENQUEEN2,
     Count
 
 };
@@ -104,10 +106,24 @@ constexpr std::array<SoundType, static_cast<std::size_t>(SoundType::Count)> allS
     SoundType::EXPLOSION,
     SoundType::PICKUP,
 	SoundType::FOOTSTEPS,
+    SoundType::ALIENQUEEN1,
+    SoundType::ALIENQUEEN2,
     SoundType::ROLL
 }};
 
 // basic mapping of sound type to a file path
 const char* toFilePath(SoundType sound);
+
+namespace std
+{
+    template <>
+    struct hash<SoundType>
+    {
+        size_t operator()(const SoundType& sound) const
+        {
+            return hash<int>()(static_cast<int>(sound));
+        }
+    };
+}
 
 #endif

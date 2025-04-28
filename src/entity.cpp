@@ -21,9 +21,6 @@ Entity::Entity() : GameProcess() {
 
 // updates the position of an entity
 void Entity::Update(float deltaTime) {
-    lastX = hitbox.x;
-    lastY = hitbox.y;
-
     hitbox.x += xSpeed;
     hitbox.y += ySpeed;
 }
@@ -43,8 +40,8 @@ void Entity::adjustHealth(int healthDamage) {
     }
 }
 
-void Entity::spawnBloodStain() {
-    BloodStain* blood = new BloodStain(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
+void Entity::spawnBloodStain(int color) {
+    BloodStain* blood = new BloodStain(hitbox.x, hitbox.y, hitbox.height, hitbox.width, color);
     childrenList.push_back(blood);
     children = true;
 }
