@@ -14,6 +14,7 @@ GameDoor::GameDoor(int x, int y, int height, int width, int rotation)  {
     hitbox.y = y;
     hitbox.height = height;
     hitbox.width = width;
+    damage = 0;
     tags.insert("door");
 
     rot = rotation;

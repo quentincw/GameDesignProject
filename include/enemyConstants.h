@@ -84,7 +84,7 @@ static const int CHARGER_SIZE =   50;
 static const int CHARGER_RADIUS = 25;
 static const int CHARGER_SPEED =  3;
 static const int CHARGER_HEALTH = 300;
-static const int CHARGER_DAMAGE = 100;
+static const int CHARGER_DAMAGE = 30;
 static const int CHARGER_CHARGE_SPEED =  5;
 static const int CHARGER_CHARGEDURATION = 50;
 
@@ -93,7 +93,7 @@ static const int ALPHACHARGER_SIZE =   100;
 static const int ALPHACHARGER_RADIUS = 50;
 static const int ALPHACHARGER_SPEED =  4;
 static const int ALPHACHARGER_HEALTH = 1000;
-static const int ALPHACHARGER_DAMAGE = 150;
+static const int ALPHACHARGER_DAMAGE = 50;
 static const int ALPHACHARGER_CHARGE_SPEED =  10;
 static const int ALPHACHARGER_CHARGEDURATION = 80;
 
@@ -101,7 +101,7 @@ static const int ALPHACHARGER_CHARGEDURATION = 80;
 static const int BURROWER_SIZE = 40;
 static const int BURROWER_RADIUS = 20;
 static const int BURROWER_SPEED = 3;
-static const int BURROWER_HEALTH = 400;
+static const int BURROWER_HEALTH = 200;
 static const int BURROWER_DAMAGE = 100;
 static const int BURROWER_COOLDOWN = 60;
 

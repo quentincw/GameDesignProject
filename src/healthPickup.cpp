@@ -10,12 +10,15 @@
 HealthPickup::HealthPickup(int x, int y) : Pickup(x, y) {
     hitbox.height = 30;
     hitbox.width = 30;
+    damage = -20;
+    interactions.insert("player");
 }
 
 // constructor
 HealthPickup::HealthPickup(int x, int y, int health, int armor, int damage) : Pickup(x, y, health, armor, damage) {
     hitbox.height = 30;
     hitbox.width = 30;
+    damage = 0;
 }
 
 // draws the object

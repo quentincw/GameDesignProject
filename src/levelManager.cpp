@@ -12,6 +12,7 @@
 #include <set>
 #include <iostream>
 #include "alienQueen.h"
+#include "healthPickup.h"
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -126,7 +127,7 @@ void LevelManager::genFloor(int level) {
                     fillProcessListBoss(roomLists[i][j]);
                     // add stairway to next floor
                     gameDoor = new Stairway(0, 0, 100, 100);
-                    // roomLists[i][j].push_back(gameDoor);
+                    roomLists[i][j].push_back(gameDoor);
                 }
                 else {
                     // level filler call (fill list using the rectangle)
@@ -370,6 +371,9 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
             curList.push_back(enemy);
         }
     }
+
+    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
+    curList.push_back(healthPickup);
 }
 
 
