@@ -365,8 +365,6 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 	}
 }
 
-
-<<<<<<< src/playerView.cpp
 void PlayerView::renderPause()
 {
 	SDL_RenderCopy(renderer, pauseS, NULL, NULL);
