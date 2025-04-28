@@ -85,6 +85,8 @@ const char* toFilePath(SoundType sound) {
 			return "../resource/sounds/EXPLOSION.wav";
 		case SoundType::PICKUP:
 			return "../resource/sounds/PICKUP.wav";
+		case SoundType::FOOTSTEPS:
+			return "../resource/sounds/FOOTSTEPS.wav";
 		case SoundType::ROLL:
 			return "../resource/sounds/ROLL.wav";
 		case SoundType::ALIENQUEEN1:

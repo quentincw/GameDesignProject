@@ -18,6 +18,7 @@ Player1::Player1(int x, int y) : Entity() {
     xSpeed = 0;
     ySpeed = 0;
 	cooldown = 40;
+	stepCooldown = 0;
     dodging = false;
     invulnerability = 0;
     dodgeCooldown = 0;
@@ -55,6 +56,13 @@ void Player1::Update(float deltaTime) {
 		dx = xSpeed;
 		dy = ySpeed;
 	}
+	
+	if ((xSpeed!=0 || ySpeed!=0) && stepCooldown<=0){
+		soundList.push_back(SoundType::FOOTSTEPS);
+		sounds = true;
+		stepCooldown = 20;
+	}
+	stepCooldown-=1;
 
     // use dodge speed if dodging
     if (dodging) {
@@ -87,6 +95,12 @@ void Player1::setSpeedX(float x) {
 
 void Player1::setSpeedY(float y) {
 	ySpeed = y;
+}
+
+void Player1::adjustHealth(int healthDamage) {
+	soundList.push_back(SoundType::PLAYER_DAMAGE1);
+	sounds = true;
+    Entity::adjustHealth(healthDamage);
 }
 
 // draws the object

@@ -58,6 +58,7 @@ void Exploder::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		deathSound(3);
 		soundList.push_back(SoundType::BUG_DEATH1);
 		sounds = true;
         explode();
