@@ -25,7 +25,7 @@ AlienQueen::AlienQueen(int x, int y) : Enemy(x, y) {
     spitSpeed = SPEWERPROJECTILE_SPEED + 2;
     projectileAmount = 0;
     spitInterval = 20;
-    phase = 2;
+    phase = 1;
     charging = false;
     chargeDuration = 0;
 }
