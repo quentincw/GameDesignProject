@@ -5,6 +5,7 @@
 #include <vector>
 #include "enemy.h"
 #include "roach.h"
+#include <constants.h>
 
 // constructor
 Roach::Roach(int x, int y) : Enemy(x, y) {
@@ -32,7 +33,24 @@ void Roach::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void Roach::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 0, 0, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/roach.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    if (xSpeed < 0) {
+        flip = SDL_FLIP_NONE;
+    }
+    if (xSpeed > 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
+    SDL_Rect dst = { point.x - camX - 32, point.y - camY - 50, TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 0, 0, 100);
 }
 
 // updates the ai based on the player's position
@@ -40,8 +58,7 @@ void Roach::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(8);
     }
 
     Point playerCenter = getCenter(&phitbox);

@@ -22,12 +22,14 @@ Floor::Floor() {
 // small: 3-4 rooms
 // large: 2-3 rooms
 
-vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_rooms) {
+vector<vector<vector<vector<int>>>> Floor::gen(int level, int width, int height, int gen_rooms) {
     random_device rd;  // get random number
     mt19937 eng(rd()); // seed
     uniform_int_distribution<> distr(0, 100); // Define the range
 
     Room room;
+
+    cur_level = level;
 
     grid_width = width;
     grid_height = height;
@@ -395,4 +397,8 @@ vector<vector<int>> Floor::getRooms() {
 
 vector<vector<int>> Floor::getRoomsCol() {
     return rooms_col;
+}
+
+int Floor::getLevel() {
+    return cur_level;
 }

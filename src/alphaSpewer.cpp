@@ -5,6 +5,7 @@
 #include "enemy.h"
 #include "alphaSpewer.h"
 #include "spitterProjectile.h"
+#include <constants.h>
 
 
 // constructor
@@ -45,7 +46,24 @@ void AlphaSpewer::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void AlphaSpewer::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 205, 92, 92, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/a_spewer.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    if (xSpeed < 0) {
+        flip = SDL_FLIP_NONE;
+    }
+    if (xSpeed > 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
+    SDL_Rect dst = { point.x - camX - 64, point.y - camY - 86, TILE_SIZE * 2, TILE_SIZE * 2 };
+
+    SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 205, 92, 92, 100);
 }
 
 // updates the ai based on the player's position
@@ -53,8 +71,7 @@ void AlphaSpewer::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(1);
     }
 
     if(cooldown <= 0){
@@ -159,6 +176,52 @@ void AlphaSpewer::spitProjectile(Rectangle phitbox) {
     children = true;
     // decrement projectiles to shoot
     projectileAmount = projectileAmount - 1;
+
+    // 8 way spit to catch player off guard
+    if(projectileAmount == 1){
+        /*
+        spit = new SpitterProjectile(x, y, spitSpeed, spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, -spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, spitSpeed, -spitSpeed);
+        childrenList.push_back(spit);
+
+        // up, down, left, right
+
+        spit = new SpitterProjectile(x, y, -spitSpeed, 0);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, 0, -spitSpeed);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, spitSpeed, 0);
+        childrenList.push_back(spit);
+
+        spit = new SpitterProjectile(x, y, 0, spitSpeed);
+        childrenList.push_back(spit);*/
+
+        int numProjectiles = 20; // Number of projectiles to fire in a circle
+        float angleStep = 360.0f / numProjectiles;
+
+        for (int i = 0; i < numProjectiles; ++i) {
+            float angleDeg = i * angleStep;
+            float angleRad = angleDeg * (M_PI / 180.0f); // Convert to radians
+
+            float dx = cos(angleRad);
+            float dy = sin(angleRad);
+
+            float speed = spitSpeed;
+
+            spit = new SpitterProjectile(x, y, dx * speed, dy * speed);
+            childrenList.push_back(spit);
+        }
+    }
 	
 	// add sound for spitting
     soundList.push_back(SoundType::SPIT_LOW);

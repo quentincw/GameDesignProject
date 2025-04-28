@@ -6,6 +6,7 @@
 #include "enemy.h"
 #include "burrower.h"
 #include "spitterProjectile.h"
+#include <constants.h>
 
 
 // constructor
@@ -55,7 +56,15 @@ void Burrower::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         return;
     }
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/burrower.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_Rect dst = { point.x - camX - 32, point.y - camY - 50, TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+    
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 100);
 }
 
 // updates the ai based on the player's position
@@ -63,13 +72,14 @@ void Burrower::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(3);
     }
 
     // stop burrowing if enough time has passed
     if((burrowing == true) && (burrowDuration <= 0)){
         burrowing = false;
+		soundList.push_back(SoundType::BURROWER_DIG);
+		sounds = true;
         // pause to give player time to react
         cooldown = 30;
         spitAmount = 3;
@@ -84,6 +94,8 @@ void Burrower::UpdateAI(Rectangle phitbox) {
             // burrow if all projectiles have been fired and cooldown ready
             if(spitAmount <= 0) {
                 burrowing = true;
+				soundList.push_back(SoundType::BURROWER_DIG);
+				sounds = true;
                 burrowDuration = 170;
             }
             // if the burrower has fired less than 3 projectiles

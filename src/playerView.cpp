@@ -6,11 +6,112 @@
 #include "gameObject.h"
 #include "floor.h"
 #include "Player1.h"
+#include "bloodStain.h"
 #include <iostream>
 #include <SDL_mixer.h>
 #include <SDL_image.h>
 
-PlayerView::PlayerView() {}
+PlayerView::PlayerView() {
+
+    SDL_Rect tile_0;
+    tile_0.x = 0;
+    tile_0.y = 0;
+    tile_0.w = 16;
+    tile_0.h = 16;
+  
+    SDL_Rect tile_1;
+    tile_1.x = 16;
+    tile_1.y = 0;
+    tile_1.w = 16;
+    tile_1.h = 16;
+  
+    SDL_Rect tile_2;
+    tile_2.x = 32;
+    tile_2.y = 0;
+    tile_2.w = 16;
+    tile_2.h = 16;
+  
+    SDL_Rect tile_3;
+    tile_3.x = 48;
+    tile_3.y = 0;
+    tile_3.w = 16;
+    tile_3.h = 16;
+  
+    SDL_Rect tile_4;
+    tile_4.x = 64;
+    tile_4.y = 0;
+    tile_4.w = 16;
+    tile_4.h = 16;
+  
+    SDL_Rect tile_5;
+    tile_5.x = 0;
+    tile_5.y = 16;
+    tile_5.w = 16;
+    tile_5.h = 16;
+  
+    SDL_Rect tile_6;
+    tile_6.x = 16;
+    tile_6.y = 16;
+    tile_6.w = 16;
+    tile_6.h = 16;
+  
+    SDL_Rect tile_7;
+    tile_7.x = 32;
+    tile_7.y = 16;
+    tile_7.w = 16;
+    tile_7.h = 16;
+  
+    SDL_Rect tile_8;
+    tile_8.x = 48;
+    tile_8.y = 16;
+    tile_8.w = 16;
+    tile_8.h = 16;
+  
+    SDL_Rect tile_9;
+    tile_9.x = 64;
+    tile_9.y = 16;
+    tile_9.w = 16;
+    tile_9.h = 16;
+  
+    SDL_Rect tile_10;
+    tile_10.x = 0;
+    tile_10.y = 32;
+    tile_10.w = 16;
+    tile_10.h = 16;
+  
+    SDL_Rect tile_11;
+    tile_11.x = 16;
+    tile_11.y = 32;
+    tile_11.w = 16;
+    tile_11.h = 16;
+  
+    SDL_Rect tile_12;
+    tile_12.x = 32;
+    tile_12.y = 32;
+    tile_12.w = 16;
+    tile_12.h = 16;
+  
+    SDL_Rect tile_13;
+    tile_13.x = 48;
+    tile_13.y = 32;
+    tile_13.w = 16;
+    tile_13.h = 16;
+  
+    tileTextures[0] = tile_0;
+    tileTextures[1] = tile_1;
+    tileTextures[2] = tile_2;
+    tileTextures[3] = tile_3;
+    tileTextures[4] = tile_4;
+    tileTextures[5] = tile_5;
+    tileTextures[6] = tile_6;
+    tileTextures[7] = tile_7;
+    tileTextures[8] = tile_8;
+    tileTextures[9] = tile_9;
+    tileTextures[10] = tile_10;
+    tileTextures[11] = tile_11;
+    tileTextures[12] = tile_12;
+    tileTextures[13] = tile_13;
+}
 
 void PlayerView::initialize()
 {
@@ -29,16 +130,34 @@ void PlayerView::initialize()
     if (renderer == NULL) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // render tiles
-    SDL_Surface* tile_surface = SDL_LoadBMP("../resource/tile_f4.bmp");
+    SDL_Surface* tile_surface_1 = SDL_LoadBMP("../resource/tile_1.bmp");
+    SDL_Surface* tile_surface_2 = SDL_LoadBMP("../resource/tile_2.bmp");
+    SDL_Surface* tile_surface_3 = SDL_LoadBMP("../resource/tile_3.bmp");
     // convert to texture
-    tile_texture = SDL_CreateTextureFromSurface( renderer, tile_surface );
+    tile_texture_1 = SDL_CreateTextureFromSurface( renderer, tile_surface_1 );
+    tile_texture_2 = SDL_CreateTextureFromSurface( renderer, tile_surface_2 );
+    tile_texture_3 = SDL_CreateTextureFromSurface( renderer, tile_surface_3 );
 
-    SDL_Texture* texture;
+    SDL_Texture* texture_1;
+    SDL_Texture* texture_2;
+    SDL_Texture* texture_3;
 
     for (int i = 1; i <= total_frames; ++i) {
-        SDL_Surface* surface = SDL_LoadBMP(("../resource/frames/" + to_string(i) + ".bmp").c_str());
-        texture = SDL_CreateTextureFromSurface( renderer, surface );
-        frames.push_back(texture);
+        SDL_Surface* surface_1 = SDL_LoadBMP(("../resource/frames_1/" + to_string(i) + ".bmp").c_str());
+        texture_1 = SDL_CreateTextureFromSurface( renderer, surface_1 );
+        frames_1.push_back(texture_1);
+    };
+
+    for (int i = 1; i <= total_frames; ++i) {
+        SDL_Surface* surface_2 = SDL_LoadBMP(("../resource/frames_2/" + to_string(i) + ".bmp").c_str());
+        texture_2 = SDL_CreateTextureFromSurface( renderer, surface_2 );
+        frames_2.push_back(texture_2);
+    };
+
+    for (int i = 1; i <= total_frames; ++i) {
+        SDL_Surface* surface_3 = SDL_LoadBMP(("../resource/frames_3/" + to_string(i) + ".bmp").c_str());
+        texture_3 = SDL_CreateTextureFromSurface( renderer, surface_3 );
+        frames_3.push_back(texture_3);
     };
 
     // initialize SDL audio and mixer
@@ -163,6 +282,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 			else if( e.type == SDL_MOUSEBUTTONDOWN ){
 				switch(e.button.button){
 					case SDL_BUTTON_LEFT:
+                    {
 						int mouseX = 0;
 						int mouseY = 0;
 					 	Uint32 mouse = SDL_GetMouseState(&mouseX, &mouseY);
@@ -170,6 +290,10 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
 						player->shootProj(cameraX, cameraY);
 						break;
+                    }
+                    case SDL_BUTTON_RIGHT:
+                        player->dodgeRoll();
+                        break;
 				}
 			}
             else {
@@ -195,6 +319,17 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 			static const int fps = 12;
 			static int frame = 0;
 
+            int level = floor->getLevel();
+            if (level == 1) {
+                frames = frames_1;
+            }
+            if (level == 2) {
+                frames = frames_2;
+            }
+            if (level == 3) {
+                frames = frames_3;
+            }
+
 			static Uint64 startTicks = SDL_GetTicks();
 
 			Uint64 curTicks = SDL_GetTicks();
@@ -213,6 +348,8 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 			renderProcesses(pm);
 
 			renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
+            
+            renderMinimap(floor);
 			
 			if (paused) renderPause();
 			
@@ -228,24 +365,8 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 	}
 }
 
-void PlayerView::render(std::vector<GameObject*> walls, ProcessManager* pm)
-{
-	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-    SDL_RenderClear( renderer );
-	
-    updateCameraPosition(pm);
 
-	renderLevel(walls);
-
-    renderProcesses(pm);
-	
-	//renderMinimap(walls);
-
-    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
-	
-	SDL_RenderPresent( renderer );
-}
-
+<<<<<<< src/playerView.cpp
 void PlayerView::renderPause()
 {
 	SDL_RenderCopy(renderer, pauseS, NULL, NULL);
@@ -275,41 +396,76 @@ void PlayerView::renderLose()
 	SDL_RenderPresent( renderer );
 }
 
-void PlayerView::renderLevel(std::vector<GameObject*> walls)
+// renders the floor / room
+void PlayerView::renderLevel(Floor* floor)
 {
-    
-	GameObject* curWall;
-	for(int i = 0; i < walls.size(); i++){
-        curWall = walls[i];
-        curWall->RenderCam(renderer, cameraX, cameraY );
+    int level = floor->getLevel();
+    if (level == 1) {
+        tile_texture = tile_texture_1;
     }
-    /*const auto& walls = levelManager->getWalls();
-    for (const auto& tile : walls)
-    {
-        tile.RenderCam( renderer, cameraX, cameraY);  
-    }*/
+    if (level == 2) {
+        tile_texture = tile_texture_2;
+    }
+    if (level == 3) {
+        tile_texture = tile_texture_3;
+    }
+
+    vector<vector<int>> rooms = floor->getRooms();
+    int rooms_width = rooms.size();
+    int rooms_height = rooms[0].size();
+    vector<vector<int>> rooms_col = floor->getRoomsCol();
+
+    SDL_Rect curRoom = floor->getCurRoom();
+  
+    vector<vector<SDL_Rect>> tile(rooms_width, vector<SDL_Rect>(rooms_height));
+
+    for (int x = 0; x < rooms_width; x++) {
+        for (int y = 0; y < rooms_height; y++) {
+            tile[x][y].x = x * TILE_SIZE;
+            tile[x][y].y = y * TILE_SIZE;
+            tile[x][y].w = TILE_SIZE;
+            tile[x][y].h = TILE_SIZE;
+        }
+    }
+    
+    int min_x = max(0, (cameraX / TILE_SIZE));
+    int max_x = min(rooms_width, ((cameraX + SCREEN_WIDTH) / TILE_SIZE) + 1);
+    int min_y = max(0, (cameraY / TILE_SIZE));
+    int max_y = min(rooms_height, ((cameraY + SCREEN_HEIGHT) / TILE_SIZE) + 1);
+
+    for (int x = min_x; x < max_x; x++) {
+        for (int y = min_y; y < max_y; y++) {
+            SDL_Rect tileRect = {tile[x][y].x - cameraX, tile[x][y].y - cameraY, TILE_SIZE, TILE_SIZE};
+            if (rooms[x][y] >= 0 && rooms[x][y] < 14) {
+                SDL_RenderCopy(renderer, tile_texture, &tileTextures[rooms[x][y]], &tileRect);
+            }
+        }
+    }
 }
 
 void PlayerView::renderProcesses(ProcessManager* pm)
 {
-	pm->renderProcessesCam( renderer, cameraX, cameraY );
-    /*const auto& processes = pm->getProcessList();
-    for (GameProcess* process : processes)
-    {
-        if (!process) 
-            continue;
+	//pm->renderProcessesCam( renderer, cameraX, cameraY );
+    vector<GameProcess*> processes = pm->getProcessList();
+    GameProcess* curProcess;
 
-        process->Render(renderer);
+    // render bloodstains
+	for(int i = 0; i < processes.size(); i++){
+        curProcess = processes[i];
+        if (auto blood = dynamic_cast<BloodStain*>(curProcess)) {
+            curProcess->RenderCam(renderer, cameraX, cameraY );
+        }
     }
-	pm->getPlayer()->Render(renderer);*/
+    // render not blood stains
+    for(int i = 0; i < processes.size(); i++){
+        curProcess = processes[i];
+        if (auto blood = dynamic_cast<BloodStain*>(curProcess)) {
+            continue;
+        }
+        curProcess->RenderCam(renderer, cameraX, cameraY );
+    }
+	pm->getPlayer()->RenderCam(renderer, cameraX, cameraY);
 }
-
-/*
-void PlayerView::renderMinimap(walls)
-{
-	
-}
-*/
 
 // updates the camera's position based on the player's position
 void PlayerView::updateCameraPosition(ProcessManager* pm)
@@ -319,7 +475,9 @@ void PlayerView::updateCameraPosition(ProcessManager* pm)
     cameraY = (player->getHitbox().y + player->getHitbox().height / 2) - SCREEN_HEIGHT / 2;
 }
 
-void PlayerView::renderLevel(Floor* floor) {
+void PlayerView::renderMinimap(Floor* floor) {
+
+    int level = floor->getLevel();
     vector<vector<int>> rooms = floor->getRooms();
     int rooms_width = rooms.size();
     int rooms_height = rooms[0].size();
@@ -345,110 +503,8 @@ void PlayerView::renderLevel(Floor* floor) {
           tile[x][y].h = TILE_SIZE;
       }
     }
-  
-    SDL_Rect tile_0;
-    tile_0.x = 0;
-    tile_0.y = 0;
-    tile_0.w = 16;
-    tile_0.h = 16;
-  
-    SDL_Rect tile_1;
-    tile_1.x = 16;
-    tile_1.y = 0;
-    tile_1.w = 16;
-    tile_1.h = 16;
-  
-    SDL_Rect tile_2;
-    tile_2.x = 32;
-    tile_2.y = 0;
-    tile_2.w = 16;
-    tile_2.h = 16;
-  
-    SDL_Rect tile_3;
-    tile_3.x = 48;
-    tile_3.y = 0;
-    tile_3.w = 16;
-    tile_3.h = 16;
-  
-    SDL_Rect tile_4;
-    tile_4.x = 64;
-    tile_4.y = 0;
-    tile_4.w = 16;
-    tile_4.h = 16;
-  
-    SDL_Rect tile_5;
-    tile_5.x = 0;
-    tile_5.y = 16;
-    tile_5.w = 16;
-    tile_5.h = 16;
-  
-    SDL_Rect tile_6;
-    tile_6.x = 16;
-    tile_6.y = 16;
-    tile_6.w = 16;
-    tile_6.h = 16;
-  
-    SDL_Rect tile_7;
-    tile_7.x = 32;
-    tile_7.y = 16;
-    tile_7.w = 16;
-    tile_7.h = 16;
-  
-    SDL_Rect tile_8;
-    tile_8.x = 48;
-    tile_8.y = 16;
-    tile_8.w = 16;
-    tile_8.h = 16;
-  
-    SDL_Rect tile_9;
-    tile_9.x = 64;
-    tile_9.y = 16;
-    tile_9.w = 16;
-    tile_9.h = 16;
-  
-    SDL_Rect tile_10;
-    tile_10.x = 0;
-    tile_10.y = 32;
-    tile_10.w = 16;
-    tile_10.h = 16;
-  
-    SDL_Rect tile_11;
-    tile_11.x = 16;
-    tile_11.y = 32;
-    tile_11.w = 16;
-    tile_11.h = 16;
-  
-    SDL_Rect tile_12;
-    tile_12.x = 32;
-    tile_12.y = 32;
-    tile_12.w = 16;
-    tile_12.h = 16;
-  
-    SDL_Rect tile_13;
-    tile_13.x = 48;
-    tile_13.y = 32;
-    tile_13.w = 16;
-    tile_13.h = 16;
-  
-    SDL_Rect tileTextures[14] = {tile_0, tile_1, tile_2, tile_3, tile_4, tile_5, tile_6, tile_7, tile_8, tile_9, tile_10, tile_11, tile_12, tile_13};
-
-    //floor->setCurRoom(player.getPos()[0] / TILE_SIZE, player.getPos()[1] / TILE_SIZE);
+    // minimap rooms
     SDL_Rect curRoom = floor->getCurRoom();
-
-    int min_x = max(0, (cameraX / TILE_SIZE));
-    int max_x = min(rooms_width, ((cameraX + SCREEN_WIDTH) / TILE_SIZE) + 1);
-    int min_y = max(0, (cameraY / TILE_SIZE));
-    int max_y = min(rooms_height, ((cameraY + SCREEN_HEIGHT) / TILE_SIZE) + 1);
-
-    for (int x = min_x; x < max_x; x++) {
-        for (int y = min_y; y < max_y; y++) {
-            SDL_Rect tileRect = {tile[x][y].x - cameraX, tile[x][y].y - cameraY, TILE_SIZE, TILE_SIZE};
-            if (rooms[x][y] >= 0 && rooms[x][y] < 14) {
-                SDL_RenderCopy(renderer, tile_texture, &tileTextures[rooms[x][y]], &tileRect);
-            }
-        }
-    }
-
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     for (SDL_Rect rect: render_map) {
         if (rect.x / MAP_SIZE >= curRoom.x && rect.x / MAP_SIZE < curRoom.x + curRoom.w && rect.y / MAP_SIZE >= curRoom.y && rect.y / MAP_SIZE < curRoom.y + curRoom.h) {
