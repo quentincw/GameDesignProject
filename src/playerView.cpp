@@ -59,6 +59,13 @@ void PlayerView::initialize()
 
 void PlayerView::cleanup()
 {
+	// Destroy textures
+	SDL_DestroyTexture( pauseS );
+	SDL_DestroyTexture( titleS );
+	SDL_DestroyTexture( storyS );
+	SDL_DestroyTexture( winS );
+	SDL_DestroyTexture( loseS );
+	
 	// Destroy renderer
 	SDL_DestroyRenderer( renderer );
   
