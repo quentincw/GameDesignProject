@@ -36,9 +36,6 @@ class Player1 : public Entity {
 
         void adjustHealth(int healthDamage) override;
 		
-		// override adjust health to play voice lines
-		void adjustHealth(int healthDamage);
-		
 	protected:
 		float mouseX;
 		float mouseY;
