@@ -228,13 +228,14 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
             x = width(gen) + rectangle.x;
             y = height(gen) + rectangle.y;
 
-            pHeight = curList[i]->getHitbox().height / TILE_SIZE;
-            pWidth = curList[i]->getHitbox().width / TILE_SIZE;
+            pHeight = (curList[i]->getHitbox().height) / TILE_SIZE;
+            pWidth = (curList[i]->getHitbox().width) / TILE_SIZE;
 
             // loop through each tile that touches the hitbox
             invalid = false;
-            for(int i = x - 2; i < x + pWidth + 2; i++){
-                for(int j = y - 2; j < y + pHeight + 2; j++) {
+            int offset = 1;
+            for(int i = x - offset; i < x + pWidth + offset; i++){
+                for(int j = y - offset; j < y + pHeight + offset; j++) {
                     if(roomsCol[i][j] == 1){
                         // intersects with wall
                         invalid = true;
@@ -245,8 +246,8 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
         }
         // null pointer check
         if (curList[i] != nullptr) {
-            curList[i]->setPosition(x * TILE_SIZE, y * TILE_SIZE);
-            curList[i]->setLastPosition(x * TILE_SIZE, y * TILE_SIZE);
+            curList[i]->setPosition(x * TILE_SIZE - 32, y * TILE_SIZE - 32);
+            curList[i]->setLastPosition(x * TILE_SIZE - 32, y * TILE_SIZE - 32);
         } else {
             cout << "Null pointer encountered at index " << i << endl;
         }
@@ -368,10 +369,10 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
                 break;
         }
         // add enemy to the list
-        cout << "adding enemy" << endl;
-        curList.push_back(enemy);
+        if (enemy != nullptr) {
+            curList.push_back(enemy);
+        }
     }
-    cout << "retrun" << endl;
 }
 
 
