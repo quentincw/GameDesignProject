@@ -17,7 +17,7 @@ Player1::Player1(int x, int y) : Entity() {
     radius = 10;
     xSpeed = 0;
     ySpeed = 0;
-	cooldown = 40;
+	cooldown = 25;
 	stepCooldown = 0;
     dodging = false;
     invulnerability = 0;
@@ -40,7 +40,9 @@ void Player1::adjustHealth(int healthDamage) {
     invulnerability = 60;
     // spawn blood stain on damage
     spawnBloodStain(1);
-    
+
+    soundList.push_back(SoundType::PLAYER_DAMAGE1);
+	sounds = true;
 }
 
 // updates the object
@@ -95,12 +97,6 @@ void Player1::setSpeedX(float x) {
 
 void Player1::setSpeedY(float y) {
 	ySpeed = y;
-}
-
-void Player1::adjustHealth(int healthDamage) {
-	soundList.push_back(SoundType::PLAYER_DAMAGE1);
-	sounds = true;
-    Entity::adjustHealth(healthDamage);
 }
 
 // draws the object
@@ -220,8 +216,8 @@ void Player1::shootProj(int camX, int camY) {
     }
 
     // set the speed based on spitSpeed
-    float projXspeed = dx * 3;
-    float projYspeed = dy * 3;
+    float projXspeed = dx * 6;
+    float projYspeed = dy * 6;
 
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
@@ -233,7 +229,7 @@ void Player1::shootProj(int camX, int camY) {
     
     // set the flag for child to true
     children = true;
-	cooldown = 40;
+	cooldown = 25;
 
     // add sound to list
     soundList.push_back(SoundType::PLAYER_SHOOT);
