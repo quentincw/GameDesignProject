@@ -38,7 +38,7 @@ void BloodStain::Render(SDL_Renderer* renderer) {
 void BloodStain::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
 
-    static SDL_Surface* blood_surface = SDL_LoadBMP( "../resource/bloodstains.bmp" );
+    static SDL_Surface* blood_surface = SDL_LoadBMP( "../resource/blood.bmp" );
     static SDL_Texture* blood_texture = SDL_CreateTextureFromSurface( renderer, blood_surface );
 
     // change to green if alien blood
@@ -51,7 +51,7 @@ void BloodStain::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     SDL_Rect dst = { point.x - camX - (TILE_SIZE / 2), point.y - camY - (TILE_SIZE / 2), TILE_SIZE, TILE_SIZE };
 
-    static SDL_Rect spriteTextures[7] = {
+    static SDL_Rect redTextures[7] = {
         {0, 0, 16, 16},
         {16, 0, 16, 16},
         {32, 0, 16, 16},
@@ -61,7 +61,22 @@ void BloodStain::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         {96, 0, 16, 16}
     };
 
-    SDL_RenderCopy(renderer, blood_texture, &spriteTextures[currentSpriteIndex], &dst);
+    static SDL_Rect greenTextures[7] = {
+        {0, 16, 16, 16},
+        {16, 16, 16, 16},
+        {32, 16, 16, 16},
+        {48, 16, 16, 16},
+        {64, 16, 16, 16},
+        {80, 16, 16, 16},
+        {96, 16, 16, 16}
+    };
+
+    if (color == 1) {
+    SDL_RenderCopy(renderer, blood_texture, &redTextures[currentSpriteIndex], &dst);
+    }
+    else {
+        SDL_RenderCopy(renderer, blood_texture, &greenTextures[currentSpriteIndex], &dst);
+    }
 }
 
 // updates the object

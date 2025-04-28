@@ -51,6 +51,9 @@ class Player1 : public Entity {
         bool dodging;
 
 
+
+    private:
+        SDL_Rect dst_weapon;
 };
 
 

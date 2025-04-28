@@ -5,6 +5,7 @@
 #include <vector>
 #include "enemy.h"
 #include "alphaCharger.h"
+#include <constants.h>
 
 // constructor
 AlphaCharger::AlphaCharger(int x, int y) : Enemy(x, y) {
@@ -41,7 +42,24 @@ void AlphaCharger::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void AlphaCharger::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 0, 0, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/a_charger.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    if (xSpeed < 0) {
+        flip = SDL_FLIP_NONE;
+    }
+    if (xSpeed > 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
+    SDL_Rect dst = { point.x - camX - 64, point.y - camY - 76, TILE_SIZE * 2, TILE_SIZE * 2 };
+
+    SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 0, 0, 100);
 }
 
 // updates the ai based on the player's position
