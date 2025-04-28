@@ -18,8 +18,7 @@ PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startY
 
 // updates the object
 void PlayerProjectile::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Projectile::Update(deltaTime);
 }
 
 // draws the object

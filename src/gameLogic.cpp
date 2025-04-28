@@ -26,6 +26,39 @@ void GameLogic::update()
 
     // Floor Completion
     checkFloorCompletion(processes);
+
+    // for (auto* proc : processes)
+    // {
+    //     if (!proc) continue; // Skip invalid processes
+
+    //     // Print the tags of the current process
+    //     const auto& tags = proc->getTags();
+    //     std::cout << "Process Tags: ";
+    //     for (const auto& tag : tags)
+    //     {
+    //         std::cout << tag << " ";
+    //     }
+    //     std::cout << std::endl;
+
+    //     const auto& interactions = proc->getInteractions();
+    //     std::cout << "Process Interactions: ";
+    //     for (const auto& inter : interactions)
+    //     {
+    //         std::cout << inter << " ";
+    //     }
+    //     std::cout << std::endl;
+
+    //     // Check if the process is a type of Projectile and print its damage
+    //     auto* projectile = dynamic_cast<Projectile*>(proc);
+    //     if (projectile)
+    //     {
+    //         std::cout << "Projectile Damage: " << projectile->getDamage() << std::endl;
+    //     }
+    //     else
+    //     {
+    //         std::cout << "This process is not a projectile, no damage info available." << std::endl;
+    //     }
+    // }
 }
 
 inline TileRange GameLogic::getTileRange(float x, float y, float w, float h) const
@@ -204,15 +237,16 @@ void GameLogic::handleCollision(GameProcess* p1, GameProcess* p2, const std::str
     if (tags.find("entity") != tags.end())
     {
         Entity* entity = dynamic_cast<Entity*>(p2);
-        if (entity && !entity->getMarkForDeletion())
+        if (entity && !entity->getMarkForDeletion() && !p1->getMarkForDeletion())
         {
             entity->adjustHealth(p1->getDamage());
-
-            std::cout << "doing damage: " << p1->getDamage() << ::endl;
         }
     }
     
-    p1->handleInteraction(matchedTag);
+    if (!p1->getMarkForDeletion()) 
+    {
+        p1->handleInteraction(matchedTag);
+    }
 }
 
 void GameLogic::updateLastPositions(const std::vector<GameProcess*>& processes)
@@ -253,7 +287,7 @@ void GameLogic::checkFloorCompletion(const std::vector<GameProcess*>& processes)
     {
         auto tags = proc->getTags();
 
-        if (tags.find("stairway") != tags.end())
+        if (tags.find("stairway") != tags.end() && !proc->getMarkForDeletion())
         {
             if (dynamic_cast<Stairway*>(proc)->isTriggered()) {
                 levelManager->genNextFloor(player);           

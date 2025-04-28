@@ -22,10 +22,11 @@ Player1::Player1(int x, int y) : Entity() {
     dodging = false;
     invulnerability = 0;
     dodgeCooldown = 0;
+    damage = 0;
     tags.insert("player");
 }
 
-// subtracts the health damage from the current health
+// subtracts the health damage from the current heaSlth
 void Player1::adjustHealth(int healthDamage) {
     // player is invulnerable
     if (invulnerability > 0) {

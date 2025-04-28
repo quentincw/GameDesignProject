@@ -17,8 +17,7 @@ SpitterProjectile::SpitterProjectile(int x, int y, float startXSpeed, float star
 
 // updates the object
 void SpitterProjectile::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Projectile::Update(deltaTime);
 }
 
 // draws the object
