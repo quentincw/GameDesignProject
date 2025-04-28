@@ -9,6 +9,7 @@
 #include "bloodStain.h"
 #include <iostream>
 #include <SDL_mixer.h>
+#include <SDL_image.h>
 
 PlayerView::PlayerView() {
 
@@ -118,7 +119,7 @@ void PlayerView::initialize()
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // Create window
-    window = SDL_CreateWindow( "playerView", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow( "Kill Alien", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( window == NULL ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
 
     // Small delay to allow the system to create the window.
@@ -167,11 +168,23 @@ void PlayerView::initialize()
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         std::cerr << " (" << SDL_GetError() << ")" << std::endl;
     }
-
+	
+	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
+	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
+	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
+	winS = IMG_LoadTexture(renderer, "../resource/screens/winS.png");
+	loseS = IMG_LoadTexture(renderer, "../resource/screens/loseS.png");
 }
 
 void PlayerView::cleanup()
 {
+	// Destroy textures
+	SDL_DestroyTexture( pauseS );
+	SDL_DestroyTexture( titleS );
+	SDL_DestroyTexture( storyS );
+	SDL_DestroyTexture( winS );
+	SDL_DestroyTexture( loseS );
+	
 	// Destroy renderer
 	SDL_DestroyRenderer( renderer );
   
@@ -189,7 +202,7 @@ void PlayerView::playSounds(ProcessManager* pm) {
 
 }
 
-int PlayerView::handleInputs(ProcessManager* pm)
+int PlayerView::handleInputs(ProcessManager* pm, int state)
 {
 	SDL_Event e;
 	auto player = dynamic_cast<Player1*>(pm->getPlayer());
@@ -201,12 +214,14 @@ int PlayerView::handleInputs(ProcessManager* pm)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-
+				if (state!=2) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
                     case SDLK_g:
                         return 5;
+					case SDLK_p:
+						return -2;
                     /*case SDLK_s:
                         // check which list is active (true = room1)
                         if(curRoom){
@@ -288,48 +303,98 @@ int PlayerView::handleInputs(ProcessManager* pm)
 	return 0;
 }
 
-void PlayerView::render(Floor* floor, ProcessManager* pm)
+void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused)
 {
 	SDL_RenderClear( renderer );
 
-    int level = floor->getLevel();
-    if (level == 1) {
-        frames = frames_1;
-    }
-    if (level == 2) {
-        frames = frames_2;
-    }
-    if (level == 3) {
-        frames = frames_3;
-    }
+	switch (state){
+		case 0:
+			renderTitle();
+			break;
+		case 1:
+			renderStory();
+			break;
+		case 2:
+		{
+			static const int fps = 12;
+			static int frame = 0;
 
-    static const int fps = 12;
-    static int frame = 0;
+            int level = floor->getLevel();
+            if (level == 1) {
+                frames = frames_1;
+            }
+            if (level == 2) {
+                frames = frames_2;
+            }
+            if (level == 3) {
+                frames = frames_3;
+            }
 
-    static Uint64 startTicks = SDL_GetTicks();
+			static Uint64 startTicks = SDL_GetTicks();
 
-    Uint64 curTicks = SDL_GetTicks();
-    float deltaTime = curTicks - startTicks;
-    if (deltaTime > 1000 / fps) {
-        frame = (frame + 1) % total_frames;
-        startTicks = curTicks;
-    }
+			Uint64 curTicks = SDL_GetTicks();
+			float deltaTime = curTicks - startTicks;
+			if (deltaTime > 1000 / fps) {
+				frame = (frame + 1) % total_frames;
+				startTicks = curTicks;
+			}
 
-    SDL_RenderCopy(renderer, frames[frame], NULL, NULL);
-    
-    updateCameraPosition(pm);
+			SDL_RenderCopy(renderer, frames[frame], NULL, NULL);
+			
+			updateCameraPosition(pm);
 
-    renderLevel(floor);
+			renderLevel(floor);
 
-    renderProcesses(pm);
+			renderProcesses(pm);
 
-    renderMinimap(floor);
-
-    renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
-	
-    SDL_RenderPresent( renderer );
+			renderHealthBar(dynamic_cast<Player1*>(pm->getPlayer()));
+            
+            renderMinimap(floor);
+			
+			if (paused) renderPause();
+			
+			SDL_RenderPresent( renderer );
+		}
+			break;
+		case 3:
+			renderWin();
+			break;
+		case -1:
+			renderLose();
+			break;
+	}
 }
 
+
+<<<<<<< src/playerView.cpp
+void PlayerView::renderPause()
+{
+	SDL_RenderCopy(renderer, pauseS, NULL, NULL);
+}
+
+void PlayerView::renderTitle()
+{
+	SDL_RenderCopy(renderer, titleS, NULL, NULL);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderStory()
+{
+	SDL_RenderCopy(renderer, storyS, NULL, NULL);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderWin()
+{
+	SDL_RenderCopy(renderer, winS, NULL, NULL);
+	SDL_RenderPresent( renderer );
+}
+
+void PlayerView::renderLose()
+{
+	SDL_RenderCopy(renderer, loseS, NULL, NULL);
+	SDL_RenderPresent( renderer );
+}
 
 // renders the floor / room
 void PlayerView::renderLevel(Floor* floor)

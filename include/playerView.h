@@ -18,14 +18,23 @@ public:
 	
 	void cleanup();
 
-    void render(Floor* floor, ProcessManager* pm);
+    void render(Floor* floor, ProcessManager* pm, int state, bool paused);
 	
-	int handleInputs(ProcessManager* pm);
+	int handleInputs(ProcessManager* pm, int state);
 
     // plays sounds from processes in the process manager
     void playSounds(ProcessManager* pm);
 
+	void renderPause();
+
 private:
+	void renderTitle();
+	
+	void renderStory();
+	
+	void renderWin();
+	
+	void renderLose();
 
     // renders the floor
     void renderLevel(Floor* floor);
@@ -49,6 +58,13 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
+	
+	SDL_Texture* pauseS;
+	SDL_Texture* titleS;
+	SDL_Texture* storyS;
+	SDL_Texture* winS;
+	SDL_Texture* loseS;
+
     SDL_Texture* tile_texture_1;
     SDL_Texture* tile_texture_2;
     SDL_Texture* tile_texture_3;
