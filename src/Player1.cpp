@@ -24,6 +24,7 @@ Player1::Player1(int x, int y) : Entity() {
     invulnerability = 0;
     dodgeCooldown = 0;
     damage = 0;
+    maxHealth = 100;
     tags.insert("player");
 }
 
@@ -37,6 +38,9 @@ void Player1::adjustHealth(int healthDamage) {
     if (health <= 0) {
         health = 0;
         isAlive = false;
+    }
+    if (health > maxHealth) {
+        health = maxHealth;
     }
     invulnerability = 90;
     
