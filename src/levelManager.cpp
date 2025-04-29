@@ -13,6 +13,7 @@
 #include <iostream>
 #include "alienQueen.h"
 #include "healthPickup.h"
+#include "deadSoldier.h"
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -129,6 +130,8 @@ void LevelManager::genFloor(int level) {
                     // add stairway to next floor
                     gameDoor = new Stairway(0, 0, 100, 100);
                     roomLists[i][j].push_back(gameDoor);
+                    // fill room with boss encounter
+                    fillProcessListBoss(roomLists[i][j]);
                 }
                 else {
                     // level filler call (fill list using the rectangle)
@@ -294,6 +297,14 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 // fills a process list based on a difficulty level
 void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
 
+    // add health pack to room
+    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
+    curList.push_back(healthPickup);
+
+    // add dead soldier to room
+    DeadSoldier* deadSoldier = new DeadSoldier(0, 0);
+    curList.push_back(deadSoldier);
+
     // random enemy generator
     // increase for every enemy added
     uniform_int_distribution<> enemyDist(0, 7);
@@ -372,9 +383,6 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
             curList.push_back(enemy);
         }
     }
-
-    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
-    curList.push_back(healthPickup);
 }
 
 
@@ -417,4 +425,9 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 // returns the current floor
 Floor* LevelManager::getCurrentFloor() {
     return curfloor;
+}
+
+// returns the current floor number
+int LevelManager::getFloorNumber(){
+	return floorNumber;
 }

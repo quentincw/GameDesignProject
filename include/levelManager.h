@@ -25,6 +25,9 @@ public:
 
     // returns the current floor
     Floor* getCurrentFloor();
+	
+	// get floor number
+	int getFloorNumber();
 
 
 private:
@@ -37,7 +40,6 @@ private:
 
     // flag for deleting first room
     bool startDelete;
-
 
     // the current floor number (1, 2, 3)
     int floorNumber;

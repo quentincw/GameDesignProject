@@ -13,6 +13,11 @@
 
 PlayerView::PlayerView() {
 
+    up = false;
+    down = false;
+    right = false;
+    left = false;
+
     SDL_Rect tile_0;
     tile_0.x = 0;
     tile_0.y = 0;
@@ -121,6 +126,10 @@ void PlayerView::initialize()
     // Create window
     window = SDL_CreateWindow( "Kill Alien", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( window == NULL ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+	
+	SDL_Surface* icon = SDL_LoadBMP("../resource/gameIcon.bmp");
+	SDL_SetWindowIcon( window, icon );
+	SDL_FreeSurface(icon);
 
     // Small delay to allow the system to create the window.
     SDL_Delay(100);
@@ -169,6 +178,10 @@ void PlayerView::initialize()
         std::cerr << " (" << SDL_GetError() << ")" << std::endl;
     }
 	
+	music = Mix_LoadMUS("../resource/sounds/KillAlien.wav");
+	
+	Mix_PlayMusic( music, -1 );
+	
 	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
 	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
 	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
@@ -178,6 +191,10 @@ void PlayerView::initialize()
 
 void PlayerView::cleanup()
 {
+	// Destroy music
+	Mix_FreeMusic( music );
+    music = NULL;
+	
 	// Destroy textures
 	SDL_DestroyTexture( pauseS );
 	SDL_DestroyTexture( titleS );
@@ -214,7 +231,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-				if (state!=2) return 1;
+				if (state==0 || state==1) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
@@ -249,16 +266,17 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
                         cout << "x: " << player->getHitbox().x << "y: " << player->getHitbox().y << endl;
                         break;
                     case SDLK_w:
-                        player->setSpeedY(-3);
+                        up = true;
                         break;
                     case SDLK_s:
-                        player->setSpeedY(3);
+                        down = true;
                         break;
                     case SDLK_d:
-                        player->setSpeedX(3);
+                        right = true;
                         break;
                     case SDLK_a:
-                        player->setSpeedX(-3);
+                        left = true;
+                        break;
                 }
             }
 			// User releases a key
@@ -266,16 +284,16 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
                 switch(e.key.keysym.sym){
 					case SDLK_w:
-						player->setSpeedY(0);
+                        up = false;
 						break;
 					case SDLK_s:
-						player->setSpeedY(0);
+                        down = false;
 						break;
 					case SDLK_d:
-						player->setSpeedX(0);
+                        right = false;
 						break;
 					case SDLK_a:
-						player->setSpeedX(0);
+                        left = false;
 						break;
 				}
 			}
@@ -300,6 +318,25 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
             // no keys pressed,
             }
         }
+    // edit player speed based on current keys
+    int xSpeed = 0;
+    int ySpeed = 0;
+    
+    if(up){
+        ySpeed -=3;
+    }
+    if(down){
+        ySpeed +=3;
+    }
+    if(right){
+        xSpeed +=3;
+    }
+    if(left){
+        xSpeed -=3;
+    }
+
+    player->setSpeedX(xSpeed);
+    player->setSpeedY(ySpeed);
 	return 0;
 }
 

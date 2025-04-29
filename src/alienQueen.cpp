@@ -90,6 +90,8 @@ void AlienQueen::UpdateAI(Rectangle phitbox) {
         phase = 2;
         cooldown = 200;
         cooldown2 = 435;
+        childrenList.clear();
+        children = false;
     }
     // if health = 35% -> phase 3
 
@@ -161,10 +163,11 @@ void AlienQueen::phase2(Rectangle phitbox){
 
     // cooldown 2
     // spawn alpha spitters
+    /*
     if (cooldown2 <= 0){
         enemyCircle(4, EnemyFactory::EnemyType::SPITTER);
         cooldown2 = 435;
-    }
+    }*/
 }
 
 void AlienQueen::phase3(Rectangle phitbox){
@@ -280,8 +283,8 @@ void AlienQueen::enemyCircle(int number, EnemyFactory::EnemyType type) {
         float angleDeg = i * angleStep;
         float angleRad = angleDeg * (M_PI / 180.0f);
 
-        float spawnX = x + cos(angleRad) * radius * 1.5;
-        float spawnY = y + sin(angleRad) * radius * 1.5;
+        float spawnX = x + cos(angleRad) * radius * 1.3;
+        float spawnY = y + sin(angleRad) * radius * 1.3;
 
         GameProcess* enemy = EnemyFactory::createEnemy(type);
         enemy->setPosition(spawnX, spawnY);

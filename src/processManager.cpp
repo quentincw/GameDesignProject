@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <iostream>
 #include "bloodStain.h"
+#include "deadSoldier.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
@@ -199,6 +200,10 @@ void ProcessManager::updateEnemyAI() {
             // check if current process is a stairway
             else if (auto stairs = dynamic_cast<Stairway*>(curProcess)) {
                 stairs->openStairs();
+            }
+            // check if current process is dead soldier
+            else if (auto dead = dynamic_cast<DeadSoldier*>(curProcess)) {
+                dead->UpdateAI(player->getHitbox());
             }
         }
     }

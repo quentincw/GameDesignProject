@@ -14,11 +14,14 @@ public:
     GameLogic(ProcessManager* pm, LevelManager* lm);
     
     void update();
+	
+	bool checkWin();
 
 private:
     ProcessManager* processManager;
     LevelManager* levelManager;
     GameProcess* player;
+	bool hasWon;
 
     // Checks if two things are colliding
     bool isColliding(const GameObject* a, const GameObject* b) const;

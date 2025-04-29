@@ -33,3 +33,6 @@ void Pickup::Update(float deltaTime) {
 Stats Pickup::getStats() const {
     return pickupStats;
 }
+
+void Pickup::handleInteraction(std::string tag) {
+}

@@ -59,6 +59,8 @@ private:
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
 	
+	Mix_Music* music;
+	
 	SDL_Texture* pauseS;
 	SDL_Texture* titleS;
 	SDL_Texture* storyS;
@@ -76,6 +78,12 @@ private:
     vector<SDL_Texture*> frames_1;
     vector<SDL_Texture*> frames_2;
     vector<SDL_Texture*> frames_3;
+
+    // booleans for player movement
+    bool right;
+    bool left;
+    bool up;
+    bool down;
 
     // the sound player
     SoundPlayer soundPlayer;
