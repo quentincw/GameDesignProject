@@ -79,6 +79,12 @@ private:
     vector<SDL_Texture*> frames_2;
     vector<SDL_Texture*> frames_3;
 
+    // booleans for player movement
+    bool right;
+    bool left;
+    bool up;
+    bool down;
+
     // the sound player
     SoundPlayer soundPlayer;
 };

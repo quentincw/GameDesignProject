@@ -13,6 +13,11 @@
 
 PlayerView::PlayerView() {
 
+    up = false;
+    down = false;
+    right = false;
+    left = false;
+
     SDL_Rect tile_0;
     tile_0.x = 0;
     tile_0.y = 0;
@@ -261,16 +266,17 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
                         cout << "x: " << player->getHitbox().x << "y: " << player->getHitbox().y << endl;
                         break;
                     case SDLK_w:
-                        player->setSpeedY(-3);
+                        up = true;
                         break;
                     case SDLK_s:
-                        player->setSpeedY(3);
+                        down = true;
                         break;
                     case SDLK_d:
-                        player->setSpeedX(3);
+                        right = true;
                         break;
                     case SDLK_a:
-                        player->setSpeedX(-3);
+                        left = true;
+                        break;
                 }
             }
 			// User releases a key
@@ -278,16 +284,16 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
                 switch(e.key.keysym.sym){
 					case SDLK_w:
-						player->setSpeedY(0);
+                        up = false;
 						break;
 					case SDLK_s:
-						player->setSpeedY(0);
+                        down = false;
 						break;
 					case SDLK_d:
-						player->setSpeedX(0);
+                        right = false;
 						break;
 					case SDLK_a:
-						player->setSpeedX(0);
+                        left = false;
 						break;
 				}
 			}
@@ -312,6 +318,25 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
             // no keys pressed,
             }
         }
+    // edit player speed based on current keys
+    int xSpeed = 0;
+    int ySpeed = 0;
+    
+    if(up){
+        ySpeed -=3;
+    }
+    if(down){
+        ySpeed +=3;
+    }
+    if(right){
+        xSpeed +=3;
+    }
+    if(left){
+        xSpeed -=3;
+    }
+
+    player->setSpeedX(xSpeed);
+    player->setSpeedY(ySpeed);
 	return 0;
 }
 
