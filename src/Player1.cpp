@@ -281,6 +281,11 @@ void Player1::dodgeRoll(){
     tags.erase("player");
     invulnerability = 30;
     // set speed for dodge
-    dodgeX = xSpeed * 2;
-    dodgeY = ySpeed * 2;
+    float length = sqrt(xSpeed * xSpeed + ySpeed * ySpeed);
+    float normX = xSpeed / length;
+    float normY = ySpeed / length;
+
+    float dodgeSpeed = 7.0f;
+    dodgeX = normX * dodgeSpeed;
+    dodgeY = normY * dodgeSpeed;
 }
