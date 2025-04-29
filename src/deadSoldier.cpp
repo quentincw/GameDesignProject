@@ -13,8 +13,8 @@
 DeadSoldier::DeadSoldier(int x, int y)  {
     hitbox.x = x;
     hitbox.y = y;
-    hitbox.height = 10;
-    hitbox.width = 10;
+    hitbox.height = 64;
+    hitbox.width = 64;
     damage = 0;
     soundPlayed = false;
     spriteNum = rand()%2 + 1;
@@ -63,7 +63,7 @@ void DeadSoldier::UpdateAI(Rectangle phitbox) {
     }
 
     // if the player is close, play voice line
-    if((length <= 300) && (soundPlayed == false)) {
+    if((length <= 150) && (soundPlayed == false)) {
         int val = rand()%6+1;
         switch (val) {
             case 1:

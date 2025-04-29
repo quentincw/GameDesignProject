@@ -45,7 +45,7 @@ void Enemy::deathSound(int odds) {
 				break;
 			case 6:
 				soundList.push_back(SoundType::PLAYER_KILLS6);	
-				
+				break;
 			case 7:
 				soundList.push_back(SoundType::PLAYER_KILLS1);
 				break;

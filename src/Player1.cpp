@@ -38,11 +38,11 @@ void Player1::adjustHealth(int healthDamage) {
         health = 0;
         isAlive = false;
     }
-    invulnerability = 60;
-    // spawn blood stain on damage
-    spawnBloodStain(1);
+    invulnerability = 90;
     
     if (healthDamage > 0) {
+        // spawn blood stain on damage
+        spawnBloodStain(1);
         int val = rand()%6+1;
         switch (val) {
             case 1:
