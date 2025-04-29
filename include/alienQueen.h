@@ -49,6 +49,8 @@ class AlienQueen : public Enemy {
 
         bool charging;
 
+        SDL_Texture* texture;
+
         // shoot projectiles and spawn enemies. Stationary in center
         void phase1(Rectangle phitbox);
 

@@ -122,7 +122,8 @@ void LevelManager::genFloor(int level) {
                 Rectangle curRect = rooms[count];
                 // cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
                 // boss room check
-                if((curRect.height == 24) && (curRect.width == 24)){
+                vector<int> boss_loc = curfloor->getBossLoc();
+                if(curRect.x == boss_loc[0] && curRect.y == boss_loc[1]){
                     // fill room with boss encounter
                     fillProcessListBoss(roomLists[i][j]);
                     // add stairway to next floor

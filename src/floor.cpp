@@ -80,8 +80,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int level, int width, int height,
         if (room_h_min > room_height) room_h_min = room_height;
     }
 
-    room_width = 24;
-    room_height = 24;
+    room_width = 14;
+    room_height = 14;
     walk_pct = 100;
     dimensions.push_back({room_width, room_height, walk_pct});
 
@@ -194,6 +194,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int level, int width, int height,
         grid[x][y] = room.gen(dimensions[r][0], dimensions[r][1], door_map[x][y], dimensions[r][2]);
         grid_col[x][y] = room.getTilemapCollision();
     }
+    boss_loc = layout[layout.size() - 1];
+    cout << "boss x: " << boss_loc[0] << " boss y: " << boss_loc[1] << endl;
     cout << "grid: " << grid.size() << " grid y: " << grid[0].size() << endl;
 
     for (int iy = 0; iy < grid_height; ++iy) {
@@ -272,6 +274,9 @@ vector<vector<vector<vector<int>>>> Floor::gen(int level, int width, int height,
                 roomRectangle.y = render_grid[x][y].y;
                 roomRectangle.width = render_grid[x][y].w;
                 roomRectangle.height = render_grid[x][y].h;
+                if (boss_loc[0] == x && boss_loc[1] == y) {
+                    boss_loc = {int(roomRectangle.x), int(roomRectangle.y)};
+                }
                 roomDimensions.push_back(roomRectangle);
 
             }
@@ -401,4 +406,8 @@ vector<vector<int>> Floor::getRoomsCol() {
 
 int Floor::getLevel() {
     return cur_level;
+}
+
+vector<int> Floor::getBossLoc() {
+    return boss_loc;
 }
