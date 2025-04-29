@@ -283,4 +283,7 @@ void Player1::dodgeRoll(){
     // set speed for dodge
     dodgeX = xSpeed * 2;
     dodgeY = ySpeed * 2;
+	
+	soundList.push_back(SoundType::ROLL);
+	sounds = true;
 }

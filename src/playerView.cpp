@@ -121,6 +121,10 @@ void PlayerView::initialize()
     // Create window
     window = SDL_CreateWindow( "Kill Alien", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( window == NULL ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+	
+	SDL_Surface* icon = SDL_LoadBMP("../resource/gameIcon.bmp");
+	SDL_SetWindowIcon( window, icon );
+	SDL_FreeSurface(icon);
 
     // Small delay to allow the system to create the window.
     SDL_Delay(100);
