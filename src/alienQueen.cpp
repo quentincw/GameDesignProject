@@ -63,6 +63,8 @@ void AlienQueen::UpdateAI(Rectangle phitbox) {
         phase = 2;
         cooldown = 200;
         cooldown2 = 435;
+        childrenList.clear();
+        children = false;
     }
     // if health = 35% -> phase 3
 
