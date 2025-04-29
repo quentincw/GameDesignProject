@@ -72,13 +72,14 @@ void Burrower::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(3);
     }
 
     // stop burrowing if enough time has passed
     if((burrowing == true) && (burrowDuration <= 0)){
         burrowing = false;
+		soundList.push_back(SoundType::BURROWER_DIG);
+		sounds = true;
         // pause to give player time to react
         cooldown = 30;
         spitAmount = 3;
@@ -93,6 +94,8 @@ void Burrower::UpdateAI(Rectangle phitbox) {
             // burrow if all projectiles have been fired and cooldown ready
             if(spitAmount <= 0) {
                 burrowing = true;
+				soundList.push_back(SoundType::BURROWER_DIG);
+				sounds = true;
                 burrowDuration = 170;
             }
             // if the burrower has fired less than 3 projectiles

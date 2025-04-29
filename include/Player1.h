@@ -40,6 +40,9 @@ class Player1 : public Entity {
 		float mouseX;
 		float mouseY;
 		float cooldown;
+
+		float stepCooldown;
+
         float dodgeCooldown;
         // speeds for dodge
         float dodgeX, dodgeY;

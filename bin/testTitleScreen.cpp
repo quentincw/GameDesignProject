@@ -10,8 +10,6 @@
 #include "levelManager.h"
 #include "playerView.h"
 #include "gameLogic.h"
-#include "Player1.h"
-#include "processManager.h"
 
 
 using namespace std;
@@ -20,6 +18,16 @@ void csci437_error(const std::string& msg)
 {
   std::cerr << msg << " (" << SDL_GetError() << ")" << std::endl;
   exit(0);
+}
+
+void floorGen(LevelManager *lm, ProcessManager *pm) {
+	// generate the floor
+    lm->genFloor(1);
+	
+	// set the players position in the starting room
+    Floor* curFloor = lm->getCurrentFloor();
+    SDL_Rect curRoom = curFloor->getCurRoom();
+    pm->getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
 }
 
 int main(int argc, char** argv) {
@@ -32,19 +40,13 @@ int main(int argc, char** argv) {
 
     // create process manager w/ player at 0,0
     ProcessManager processManager;
+	
+	// generates the first floor
+	floorGen(&levelManager, &processManager);
 
     // create player view
     PlayerView playerView;
     playerView.initialize();
-
-    // generate the floor
-    levelManager.genNextFloor(processManager.getPlayer());
-
-    // set the players position in the starting room
-    //Floor* curFloor = levelManager.getCurrentFloor();
-    //SDL_Rect curRoom = curFloor->getCurRoom();
-    //processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
-    //processManager.addProcess(processManager.getPlayer());
 
     // make game logic
     GameLogic gameLogic(&processManager, &levelManager);
@@ -70,19 +72,10 @@ int main(int argc, char** argv) {
 		if (ret == -2) {
 			paused = !paused;
 		}
-        if (ret == 5) {
-            // test genereating a new floor
-            levelManager.genNextFloor(processManager.getPlayer());
-            // set the players position in the starting room
-            //curFloor = levelManager.getCurrentFloor();
-            //curRoom = curFloor->getCurRoom();
-            //processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
-        }
 		if (ret >=1 ){
 			state+=ret;
 			state%=4;
 		}
-		
 		
 		if (!paused && state==2){
 			// update the player and current process list
@@ -97,17 +90,13 @@ int main(int argc, char** argv) {
 			if (player->getHealth()<=0) state = -1;
 		}
 
-        // render the level and processes		
 		playerView.render(levelManager.getCurrentFloor(), &processManager, state, paused);
 
-        // play sounds
-        playerView.playSounds(&processManager);
-
-        // delta time calculation
-        deltaMS = SDL_GetTicks() - startMS;
-        if(deltaMS < TARGETMS){
-            SDL_Delay(TARGETMS - deltaMS);
-        }
+		// delta time calculation
+		deltaMS = SDL_GetTicks() - startMS;
+		if(deltaMS < TARGETMS){
+			SDL_Delay(TARGETMS - deltaMS);
+		}
     }
     return 0;
 }

@@ -5,6 +5,7 @@
 #include "Player1.h"
 #include "playerProjectile.h"
 #include <constants.h>
+#include <random>
 
 // constructor
 Player1::Player1(int x, int y) : Entity() {
@@ -17,7 +18,8 @@ Player1::Player1(int x, int y) : Entity() {
     radius = 10;
     xSpeed = 0;
     ySpeed = 0;
-	cooldown = 40;
+	cooldown = 25;
+	stepCooldown = 0;
     dodging = false;
     invulnerability = 0;
     dodgeCooldown = 0;
@@ -40,6 +42,29 @@ void Player1::adjustHealth(int healthDamage) {
     // spawn blood stain on damage
     spawnBloodStain(1);
     
+    if (healthDamage > 0) {
+        int val = rand()%6+1;
+        switch (val) {
+            case 1:
+                soundList.push_back(SoundType::PLAYER_DAMAGE1);
+                break;
+            case 2:
+                soundList.push_back(SoundType::PLAYER_DAMAGE2);
+                break;
+            case 3:
+                soundList.push_back(SoundType::PLAYER_DAMAGE3);
+                break;
+            case 4:
+                soundList.push_back(SoundType::PLAYER_DAMAGE4);
+                break;
+            case 5:
+                soundList.push_back(SoundType::PLAYER_DAMAGE5);
+                break;
+            case 6:
+                soundList.push_back(SoundType::PLAYER_DAMAGE6);	
+        }
+        sounds = true;
+    }
 }
 
 // updates the object
@@ -55,6 +80,13 @@ void Player1::Update(float deltaTime) {
 		dx = xSpeed;
 		dy = ySpeed;
 	}
+	
+	if ((xSpeed!=0 || ySpeed!=0) && stepCooldown<=0){
+		soundList.push_back(SoundType::FOOTSTEPS);
+		sounds = true;
+		stepCooldown = 20;
+	}
+	stepCooldown-=1;
 
     // use dodge speed if dodging
     if (dodging) {
@@ -206,8 +238,8 @@ void Player1::shootProj(int camX, int camY) {
     }
 
     // set the speed based on spitSpeed
-    float projXspeed = dx * 3;
-    float projYspeed = dy * 3;
+    float projXspeed = dx * 6;
+    float projYspeed = dy * 6;
 
     // create spit at spitter's location w/ calculated speeds
     //SpitterProjectile spit(hitbox.x, hitbox.y, projXspeed, projYspeed);
@@ -219,7 +251,7 @@ void Player1::shootProj(int camX, int camY) {
     
     // set the flag for child to true
     children = true;
-	cooldown = 40;
+	cooldown = 25;
 
     // add sound to list
     soundList.push_back(SoundType::PLAYER_SHOOT);

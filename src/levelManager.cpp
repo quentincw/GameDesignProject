@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <set>
 #include <iostream>
+#include "alienQueen.h"
+#include "healthPickup.h"
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -129,7 +131,7 @@ void LevelManager::genFloor(int level) {
                 }
                 else {
                     // level filler call (fill list using the rectangle)
-                    fillProcessList(roomLists[i][j], 2);
+                    fillProcessList(roomLists[i][j]);
                 }
                 // find valid places for each enemy
                 findValidSpots(roomLists[i][j], curRect);
@@ -195,6 +197,8 @@ void LevelManager::genFloor(int level) {
         reverse(roomLists[i].begin(), roomLists[i].end());
     }
     
+    // flag for deleting first room enemies
+    startDelete = false;
 
 
 }
@@ -209,24 +213,43 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
 
     // potential position (tile)
     int x,y;
+    // boolean for loop
+    bool invalid = true;
+    // height and width of process
+    int pHeight, pWidth;
 
     // vector of valid/ invalid locations
     vector<vector<int>> roomsCol = curfloor->getRoomsCol();
 
     // loop through each process
     for (size_t i = 0; i < curList.size(); ++i) {
-        // generate a position
-        x = width(gen) + rectangle.x;
-        y = height(gen) + rectangle.y;
-        // cheeck if valid
-        while(roomsCol[x][y] == 1){
-            // repeat until valid
+        invalid = true;
+        while(invalid){
+
+            // generate a position
             x = width(gen) + rectangle.x;
             y = height(gen) + rectangle.y;
+
+            pHeight = (curList[i]->getHitbox().height) / TILE_SIZE;
+            pWidth = (curList[i]->getHitbox().width) / TILE_SIZE;
+
+            // loop through each tile that touches the hitbox
+            invalid = false;
+            int offset = 1;
+            for(int i = x - offset; i < x + pWidth + offset; i++){
+                for(int j = y - offset; j < y + pHeight + offset; j++) {
+                    if(roomsCol[i][j] == 1){
+                        // intersects with wall
+                        invalid = true;
+                    }
+                }
+            }
+            // repeat until valid
         }
         // null pointer check
         if (curList[i] != nullptr) {
-            curList[i]->setPosition(x * TILE_SIZE, y * TILE_SIZE);
+            curList[i]->setPosition(x * TILE_SIZE - 32, y * TILE_SIZE - 32);
+            curList[i]->setLastPosition(x * TILE_SIZE - 32, y * TILE_SIZE - 32);
         } else {
             cout << "Null pointer encountered at index " << i << endl;
         }
@@ -236,6 +259,12 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
 }
 // fills a process list with a boss encounter
 void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
+
+    if(floorNumber == 3){
+        AlienQueen* alienQueen = new AlienQueen(0,0);
+        curList.push_back(alienQueen);
+        return;
+    }
     // random enemy generator
     // increase for every boss encounter added
     uniform_int_distribution<> enemyDist(0, 1);
@@ -253,16 +282,6 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
             curList.push_back(enemy);
             break;
-        /*
-        case 1:
-            // Alpha Spitter Trio
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
-            curList.push_back(enemy);
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
-            curList.push_back(enemy);
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
-            curList.push_back(enemy);
-            break;*/
         case 1:
             // Alpha Spewer
             enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
@@ -272,63 +291,89 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 }
 
 // fills a process list based on a difficulty level
-void LevelManager::fillProcessList(vector<GameProcess*>& curList, int difficulty) {
+void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
 
     // random enemy generator
     // increase for every enemy added
     uniform_int_distribution<> enemyDist(0, 7);
+
+    // get difficulty
+    int difficulty;
+    switch (floorNumber) {
+        case 1:
+            // first floor = easy
+            difficulty = 10;
+            break;
+        case 2:
+            // second floor = medium
+            difficulty = 15;
+            break;
+        case 3:
+            // third floor = hard
+            difficulty = 20;
+            break;
+        default:
+            difficulty = 15;
+            break;
+    }
  
     GameProcess* enemy = nullptr;
 
-    // loop for generating enemies
-    // spawns difficulty * 2 enemies
-    for (int i = 0; i < difficulty * 2; ++i) { 
+    while(difficulty > 2) {
         // generate an enemy number
         int enemyType = enemyDist(gen);
-
         switch (enemyType) {
             case 0:
                 // spawn roach
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ROACH);
+                difficulty-=1;
                 break;
             case 1:
                 // spawn spitter
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPITTER);
+                difficulty-=2;
                 break;
             case 2:
                 // spawn spewer
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPEWER);
+                difficulty-=3;
                 break;
             case 3:
                 // spawn spawner
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::SPAWNER);
+                difficulty-=3;
                 break;
             case 4:
                 // spawn Exploder
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::EXPLODER);
+                difficulty-=2;
                 break;
             case 5:
                 // spawn Alpha Spitter
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPITTER);
+                difficulty-=5;
                 break;
             case 6:
                 // spawn Charger
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::CHARGER);
+                difficulty-=5;
                 break;
             case 7:
                 // spawn Burrower
                 enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::BURROWER);
+                difficulty-=4;
                 break;
-
-
             default:
                 break;
         }
-
         // add enemy to the list
-        curList.push_back(enemy);
-
+        if (enemy != nullptr) {
+            curList.push_back(enemy);
+        }
     }
+
+    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
+    curList.push_back(healthPickup);
 }
 
 
@@ -349,17 +394,18 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
     // check if the player entered a different room
     if ((roomX != newPos.x) || (roomY != newPos.y)) {
 
-        cout << "entered new room: " << newPos.x << " " << newPos.y << endl;
-
         // save process list
         roomLists[roomX][roomY] = pm->getProcessList();
 
-        cout << "saved list" << endl;
+        // delete the list if it is the first room
+        if(startDelete == false){
+            roomLists[newPos.x][newPos.y].clear();
+            startDelete = true;
+        }
+
 
         // load new list
         pm->loadProcessList(roomLists[newPos.x][newPos.y]);
-
-        cout << "loaded list" << endl;
 
         // update current room
         roomX = newPos.x;

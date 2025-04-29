@@ -58,8 +58,7 @@ void Roach::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		deathSound(8);
     }
 
     Point playerCenter = getCenter(&phitbox);

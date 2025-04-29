@@ -22,6 +22,9 @@ class ExplosionProjectile : public Projectile {
 
         // draws the object based on the camera's position
         void RenderCam(SDL_Renderer* renderer, int camX, int camY);
+
+        // handles the interactions with other objects
+        void handleInteraction(std::string tag) override;
     
     protected:
 
