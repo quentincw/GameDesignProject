@@ -372,7 +372,7 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
         }
     }
 
-    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
+    HealthPickup* healthPickup = new HealthPickup(0, 0, 0, 0, -20);
     curList.push_back(healthPickup);
 }
 
