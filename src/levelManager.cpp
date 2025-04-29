@@ -289,7 +289,7 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
 
     // add health pack to room
-    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
+    HealthPickup* healthPickup = new HealthPickup(0, 0, 0, 0, -20);
     curList.push_back(healthPickup);
 
     // add dead soldier to room
