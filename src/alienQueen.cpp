@@ -256,8 +256,8 @@ void AlienQueen::enemyCircle(int number, EnemyFactory::EnemyType type) {
         float angleDeg = i * angleStep;
         float angleRad = angleDeg * (M_PI / 180.0f);
 
-        float spawnX = x + cos(angleRad) * radius * 1.5;
-        float spawnY = y + sin(angleRad) * radius * 1.5;
+        float spawnX = x + cos(angleRad) * radius * 1.3;
+        float spawnY = y + sin(angleRad) * radius * 1.3;
 
         GameProcess* enemy = EnemyFactory::createEnemy(type);
         enemy->setPosition(spawnX, spawnY);
