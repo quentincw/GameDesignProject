@@ -50,9 +50,9 @@ static const int SPEWERPROJECTILE_SPEED = 3;
 static const int ALPHASPEWER_SIZE = 70;
 static const int ALPHASPEWER_RADIUS = 35;
 static const int ALPHASPEWER_SPEED = 3;
-static const int ALPHASPEWER_HEALTH = 650;
+static const int ALPHASPEWER_HEALTH = 1200;
 static const int ALPHASPEWER_DAMAGE = 35;
-static const int ALPHASPEWER_COOLDOWN = 250;
+static const int ALPHASPEWER_COOLDOWN = 210;
 static const int ALPHASPEWER_PROJECTILE_NUMBER = 20;
 static const int ALPHASPEWER_SPIT_INTERVAL = 10;
 
