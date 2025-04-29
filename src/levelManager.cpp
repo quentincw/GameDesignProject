@@ -125,8 +125,6 @@ void LevelManager::genFloor(int level) {
                 // boss room check
                 vector<int> boss_loc = curfloor->getBossLoc();
                 if(curRect.x == boss_loc[0] && curRect.y == boss_loc[1]){
-                    // fill room with boss encounter
-                    fillProcessListBoss(roomLists[i][j]);
                     // add stairway to next floor
                     gameDoor = new Stairway(0, 0, 100, 100);
                     roomLists[i][j].push_back(gameDoor);
