@@ -18,7 +18,8 @@ HealthPickup::HealthPickup(int x, int y) : Pickup(x, y) {
 HealthPickup::HealthPickup(int x, int y, int health, int armor, int damage) : Pickup(x, y, health, armor, damage) {
     hitbox.height = 30;
     hitbox.width = 30;
-    damage = 0;
+    this->damage = damage;
+    interactions.insert("player");
 }
 
 // draws the object
@@ -82,6 +83,8 @@ void HealthPickup::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 }
 
 // handles the interactions with other objects
-void HealthPickup::handleInteractions(int tag) {
-    
+void HealthPickup::handleInteraction(std::string tag) {
+    if (tag == "player") {
+        markForDeletion();
+    }
 }
