@@ -262,34 +262,27 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
 // fills a process list with a boss encounter
 void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 
-    if(floorNumber == 3){
+    GameProcess* enemy;
+    
+    if(floorNumber == 1){
+        // Alpha Spewer
+        enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
+        curList.push_back(enemy);
+        return;
+    }
+    else if(floorNumber == 2){
+        // Alpha Charger Duo
+        enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
+        curList.push_back(enemy);
+        enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
+        curList.push_back(enemy);
+        return;
+    }
+    else if(floorNumber == 3){
         AlienQueen* alienQueen = new AlienQueen(0,0);
         curList.push_back(alienQueen);
         return;
-    }
-    // random enemy generator
-    // increase for every boss encounter added
-    uniform_int_distribution<> enemyDist(0, 1);
-
-    GameProcess* enemy = nullptr;
-
-    // generate an enemy number
-    int encounter = enemyDist(gen);
-
-    switch (encounter) {
-        case 0:
-            // Alpha Charger Duo
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
-            curList.push_back(enemy);
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHACHARGER);
-            curList.push_back(enemy);
-            break;
-        case 1:
-            // Alpha Spewer
-            enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
-            curList.push_back(enemy);
-            break;
-    }              
+    }      
 }
 
 // fills a process list based on a difficulty level
