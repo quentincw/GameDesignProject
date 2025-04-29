@@ -134,10 +134,11 @@ void AlienQueen::phase2(Rectangle phitbox){
 
     // cooldown 2
     // spawn alpha spitters
+    /*
     if (cooldown2 <= 0){
         enemyCircle(4, EnemyFactory::EnemyType::SPITTER);
         cooldown2 = 435;
-    }
+    }*/
 }
 
 void AlienQueen::phase3(Rectangle phitbox){

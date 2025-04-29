@@ -29,6 +29,10 @@ void ExplosionProjectile::Update(float deltaTime) {
     if(lifeTime < 0){
         markForDeletion();
     }
+    // only damage enemies/ player for 3 frames
+    if(lifeTime < EXPLOSIONPROJECTILE_LIFETIME - 2) {
+        interactions.clear();
+    }
 }
 
 // draws the object
