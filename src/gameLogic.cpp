@@ -6,9 +6,10 @@
 #include "constants.h"
 #include "entity.h"
 #include "stairway.h"
+#include <iostream>
 
 GameLogic::GameLogic(ProcessManager* pm, LevelManager* lm)
-    : processManager(pm), levelManager(lm), player(pm->getPlayer()) {}
+    : processManager(pm), levelManager(lm), player(pm->getPlayer()) {hasWon=false;}
 
 void GameLogic::update()
 {
@@ -257,8 +258,14 @@ void GameLogic::checkFloorCompletion(const std::vector<GameProcess*>& processes)
         if (tags.find("stairway") != tags.end() && !proc->getMarkForDeletion())
         {
             if (dynamic_cast<Stairway*>(proc)->isTriggered()) {
-                levelManager->genNextFloor(player);           
+				if (levelManager->getFloorNumber()>=3) hasWon = true;
+				else levelManager->genNextFloor(player);
             }
         }
     }
+}
+
+// get the win state
+bool GameLogic::checkWin() {
+	return hasWon;
 }

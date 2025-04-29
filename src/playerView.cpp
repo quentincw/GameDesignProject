@@ -214,7 +214,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-				if (state!=2) return 1;
+				if (state==0 || state==1) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
