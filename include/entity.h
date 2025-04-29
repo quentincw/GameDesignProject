@@ -55,6 +55,9 @@ class Entity : public GameProcess {
         // spawns a bloodstain child process
         void spawnBloodStain(int color = 0);
 
+        // how long the entity should be red for
+        int red;
+
 };
 
 

@@ -25,6 +25,7 @@ Spitter::Spitter(int x, int y) : Enemy(x, y) {
 void Spitter::Update(float deltaTime) {
     Entity::Update(deltaTime);
     cooldown = cooldown - 1;
+    red -= 1;
 }
 
 // draws the object
@@ -50,6 +51,11 @@ void Spitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     }
 
     SDL_Rect dst = { point.x - camX - 32, point.y - camY - 46, TILE_SIZE, TILE_SIZE };
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
 
     SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
 

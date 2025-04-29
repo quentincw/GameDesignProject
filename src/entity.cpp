@@ -17,6 +17,7 @@ Entity::Entity() : GameProcess() {
     speed = 0;
     xSpeed = 0;
     ySpeed = 0;
+    red = 0;
 }
 
 // updates the position of an entity
@@ -33,6 +34,7 @@ int Entity::getHealth() const {
 // subtracts the health damage from the current health
 void Entity::adjustHealth(int healthDamage) {
     health = health - healthDamage;
+    red = 15;
     if (health <= 0) {
         health = 0;
         isAlive = false;

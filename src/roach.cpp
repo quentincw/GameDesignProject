@@ -22,6 +22,7 @@ Roach::Roach(int x, int y) : Enemy(x, y) {
 // updates the object
 void Roach::Update(float deltaTime) {
     Entity::Update(deltaTime);
+    red -= 1;
 }
 
 // draws the object
@@ -36,6 +37,11 @@ void Roach::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/roach.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
 
     static SDL_RendererFlip flip = SDL_FLIP_NONE;
 

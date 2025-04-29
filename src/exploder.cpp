@@ -23,6 +23,7 @@ Exploder::Exploder(int x, int y) : Enemy(x, y) {
 // updates the object
 void Exploder::Update(float deltaTime) {
     Entity::Update(deltaTime);
+    red -= 1;
 }
 
 // draws the object
@@ -36,6 +37,11 @@ void Exploder::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/exploder.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
 
     static SDL_RendererFlip flip = SDL_FLIP_NONE;
 
@@ -59,8 +65,8 @@ void Exploder::UpdateAI(Rectangle phitbox) {
     if(deleteFlag == true){
         spawnBloodStain();
 		deathSound(3);
-		soundList.push_back(SoundType::BUG_DEATH1);
-		sounds = true;
+		//soundList.push_back(SoundType::BUG_DEATH1);
+		//sounds = true;
         explode();
     }
 

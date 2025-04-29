@@ -40,7 +40,7 @@ void Burrower::Update(float deltaTime) {
         interactions.insert("player");
         tags.insert("enemy");
     }
-
+    red -= 1;
     moveDuration = moveDuration - 1;
 }
 
@@ -59,6 +59,11 @@ void Burrower::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/burrower.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
 
     SDL_Rect dst = { point.x - camX - 32, point.y - camY - 50, TILE_SIZE, TILE_SIZE };
 
