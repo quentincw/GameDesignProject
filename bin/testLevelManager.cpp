@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
             //curRoom = curFloor->getCurRoom();
             //processManager.getPlayer()->setPosition((curRoom.x + (curRoom.w / 2)) * TILE_SIZE, (curRoom.y + (curRoom.h / 2)) * TILE_SIZE);
         }
-		if (ret >=1 ){
+		if (ret == 1){
 			state+=ret;
 			state%=4;
 		}
@@ -95,6 +95,8 @@ int main(int argc, char** argv) {
 			levelManager.setCurrentRoom(&processManager);
 			
 			if (player->getHealth()<=0) state = -1;
+			
+			if (gameLogic.checkWin()) state = 3;
 		}
 
         // render the level and processes		

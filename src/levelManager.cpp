@@ -418,3 +418,8 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 Floor* LevelManager::getCurrentFloor() {
     return curfloor;
 }
+
+// returns the current floor number
+int LevelManager::getFloorNumber(){
+	return floorNumber;
+}

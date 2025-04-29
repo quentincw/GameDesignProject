@@ -288,4 +288,8 @@ void Player1::dodgeRoll(){
     float dodgeSpeed = 7.0f;
     dodgeX = normX * dodgeSpeed;
     dodgeY = normY * dodgeSpeed;
+	
+	soundList.push_back(SoundType::ROLL);
+	sounds = true;
+
 }

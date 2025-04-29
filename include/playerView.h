@@ -59,6 +59,8 @@ private:
 	SDL_Renderer* renderer;
     SDL_Texture* tile_texture;
 	
+	Mix_Music* music;
+	
 	SDL_Texture* pauseS;
 	SDL_Texture* titleS;
 	SDL_Texture* storyS;

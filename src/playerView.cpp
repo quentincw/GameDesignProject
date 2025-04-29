@@ -126,6 +126,10 @@ void PlayerView::initialize()
     // Create window
     window = SDL_CreateWindow( "Kill Alien", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( window == NULL ) std::cerr << " (" << SDL_GetError() << ")" << std::endl;
+	
+	SDL_Surface* icon = SDL_LoadBMP("../resource/gameIcon.bmp");
+	SDL_SetWindowIcon( window, icon );
+	SDL_FreeSurface(icon);
 
     // Small delay to allow the system to create the window.
     SDL_Delay(100);
@@ -174,6 +178,10 @@ void PlayerView::initialize()
         std::cerr << " (" << SDL_GetError() << ")" << std::endl;
     }
 	
+	music = Mix_LoadMUS("../resource/sounds/KillAlien.wav");
+	
+	Mix_PlayMusic( music, -1 );
+	
 	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
 	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
 	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
@@ -183,6 +191,10 @@ void PlayerView::initialize()
 
 void PlayerView::cleanup()
 {
+	// Destroy music
+	Mix_FreeMusic( music );
+    music = NULL;
+	
 	// Destroy textures
 	SDL_DestroyTexture( pauseS );
 	SDL_DestroyTexture( titleS );
@@ -219,7 +231,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-				if (state!=2) return 1;
+				if (state==0 || state==1) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
