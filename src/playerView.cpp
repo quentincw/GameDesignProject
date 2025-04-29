@@ -169,6 +169,10 @@ void PlayerView::initialize()
         std::cerr << " (" << SDL_GetError() << ")" << std::endl;
     }
 	
+	music = Mix_LoadMUS("../resource/sounds/KillAlien.wav");
+	
+	Mix_PlayMusic( music, -1 );
+	
 	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
 	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
 	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
@@ -178,6 +182,10 @@ void PlayerView::initialize()
 
 void PlayerView::cleanup()
 {
+	// Destroy music
+	Mix_FreeMusic( music );
+    music = NULL;
+	
 	// Destroy textures
 	SDL_DestroyTexture( pauseS );
 	SDL_DestroyTexture( titleS );
