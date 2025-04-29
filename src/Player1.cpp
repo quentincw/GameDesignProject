@@ -159,8 +159,12 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Uint64 curTicks = SDL_GetTicks();
     float deltaTime = curTicks - startTicks;
     if (deltaTime > 1000 / fps) {
+        // play dodge
+        if (dodging) {
+            frame = 0;
+        }
         // play walk anim
-        if (xSpeed != 0 || ySpeed != 0) {
+        else if (xSpeed != 0 || ySpeed != 0) {
             frame = (frame + 1) % total_frames;
         }
         // use idle sprite

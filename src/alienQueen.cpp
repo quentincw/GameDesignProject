@@ -9,6 +9,7 @@
 #include "roach.h"
 #include "spitter.h"
 #include "enemyFactory.h"
+#include <constants.h>
 
 // constructor
 AlienQueen::AlienQueen(int x, int y) : Enemy(x, y) {
@@ -51,7 +52,33 @@ void AlienQueen::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void AlienQueen::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 120, 30, 92, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/queen_1.bmp" );
+    static SDL_Surface* proj_surface_2 = SDL_LoadBMP( "../resource/enemies/queen_2.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+    static SDL_Texture* proj_texture_2 = SDL_CreateTextureFromSurface( renderer, proj_surface_2 );
+
+    if (phase == 1) {
+        texture = proj_texture;
+    }
+    if (phase == 2) {
+        texture = proj_texture_2;
+    }
+
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    if (xSpeed < 0) {
+        flip = SDL_FLIP_NONE;
+    }
+    if (xSpeed > 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
+    SDL_Rect dst = { point.x - camX - 96, point.y - camY - 96, TILE_SIZE * 3, TILE_SIZE * 3 };
+
+    SDL_RenderCopyEx(renderer, texture, NULL, &dst, NULL, NULL, flip);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 120, 30, 92, 100);
 }
 
 // updates the ai based on the player's position

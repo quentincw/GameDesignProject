@@ -31,6 +31,8 @@ class Floor {
 
     int getLevel();
 
+    vector<int> getBossLoc();
+
     // returns a 2D vector representing where each room is
     vector<vector<int>> getRoomsPos();
 
@@ -43,6 +45,7 @@ class Floor {
     private:
     // additional padding between rooms
     int cur_level;
+    vector<int> boss_loc;
     SDL_Rect curRoom;
     vector<int> roomCoord;
     int pad;
