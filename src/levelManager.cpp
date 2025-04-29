@@ -13,6 +13,7 @@
 #include <iostream>
 #include "alienQueen.h"
 #include "healthPickup.h"
+#include "deadSoldier.h"
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -296,6 +297,10 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
     // add health pack to room
     HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
     curList.push_back(healthPickup);
+
+    // add dead soldier to room
+    DeadSoldier* deadSoldier = new DeadSoldier(0, 0);
+    curList.push_back(deadSoldier);
 
     // random enemy generator
     // increase for every enemy added

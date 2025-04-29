@@ -26,7 +26,7 @@ void Enemy::deathSound(int odds) {
 	float per = 100.0/odds;
 	int val = rand()%100;
 	if (per>=val){
-		val = rand()%6+1;
+		val = rand()%9+1;
 		switch (val) {
 			case 1:
 				soundList.push_back(SoundType::PLAYER_KILLS1);
@@ -45,6 +45,16 @@ void Enemy::deathSound(int odds) {
 				break;
 			case 6:
 				soundList.push_back(SoundType::PLAYER_KILLS6);	
+				
+			case 7:
+				soundList.push_back(SoundType::PLAYER_KILLS1);
+				break;
+			case 8:
+				soundList.push_back(SoundType::PLAYER_KILLS2);
+				break;
+			case 9:
+				soundList.push_back(SoundType::PLAYER_KILLS3);
+				break;
 		}
 	}
 	sounds = true;
