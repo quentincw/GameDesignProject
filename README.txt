@@ -97,3 +97,7 @@ Draws a box, a circle, and draws lines.  You can enable/disable each with 'b',
 The above instructions will compile your executable with all debug information embedded and compiler optimizations minimized.  To compile a 'release' version, just create a subdirectory 'Release' instead of 'Debug' and follow the same instructions as above. Note: in release mode certain safety checks are disabled and 'assert' statement are ignored. Hence, it is recommended to test your code in 'Debug' mode, and only when everything works, compile it in the 'Release' mode.
 
 If you want to use additional external libraries, you will need to add them to 'CMakeLists.txt' (line 48). Please refer to the CMake documentation for more information on how to include libraries to your project with CMake.
+
+**HOW TO PLAY GAME**
+
+Follow the compilation instructions above and then run ./killAlien in Debug.

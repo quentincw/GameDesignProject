@@ -179,8 +179,8 @@ void PlayerView::initialize()
     }
 	
 	music = Mix_LoadMUS("../resource/sounds/KillAlien.wav");
-	
-	Mix_PlayMusic( music, -1 );
+    
+    Mix_PlayMusic( music, -1 );
 	
 	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
 	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
