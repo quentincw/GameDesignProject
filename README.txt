@@ -100,4 +100,4 @@ If you want to use additional external libraries, you will need to add them to '
 
 **HOW TO PLAY GAME**
 
-Follow the compilation instructions above and then run ./killAlien in Debug.
+Follow the compilation instructions above and then run ./killAlien in Release.
