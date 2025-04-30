@@ -36,6 +36,7 @@ void AlphaSpewer::Update(float deltaTime) {
     else if (spitInterval > 0){
         spitInterval = spitInterval - 1;
     }
+    red -= 1;
 }
 
 // draws the object
@@ -49,6 +50,11 @@ void AlphaSpewer::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/a_spewer.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
 
     static SDL_RendererFlip flip = SDL_FLIP_NONE;
 

@@ -263,7 +263,7 @@ void LevelManager::findValidSpots(vector<GameProcess*>& curList, Rectangle recta
 void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 
     GameProcess* enemy;
-    
+
     if(floorNumber == 1){
         // Alpha Spewer
         enemy = EnemyFactory::createEnemy(EnemyFactory::EnemyType::ALPHASPEWER);
@@ -288,13 +288,13 @@ void LevelManager::fillProcessListBoss(vector<GameProcess*>& curList) {
 // fills a process list based on a difficulty level
 void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
 
-    // add health pack to room
-    HealthPickup* healthPickup = new HealthPickup(0, 0, 0, 0, -20);
-    curList.push_back(healthPickup);
-
     // add dead soldier to room
     DeadSoldier* deadSoldier = new DeadSoldier(0, 0);
     curList.push_back(deadSoldier);
+
+    // add health pack to room
+    HealthPickup* healthPickup = new HealthPickup(0, 0, 0, 0, -20);
+    curList.push_back(healthPickup);
 
     // random enemy generator
     // increase for every enemy added

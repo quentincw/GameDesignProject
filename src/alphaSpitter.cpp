@@ -26,6 +26,7 @@ AlphaSpitter::AlphaSpitter(int x, int y) : Enemy(x, y) {
 void AlphaSpitter::Update(float deltaTime) {
     Entity::Update(deltaTime);
     cooldown = cooldown - 1;
+    red -= 1;
 }
 
 // draws the object
@@ -40,6 +41,11 @@ void AlphaSpitter::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/a_spitter.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
 
     static SDL_RendererFlip flip = SDL_FLIP_NONE;
 

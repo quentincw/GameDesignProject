@@ -258,7 +258,7 @@ void GameLogic::checkFloorCompletion(const std::vector<GameProcess*>& processes)
         if (tags.find("stairway") != tags.end() && !proc->getMarkForDeletion())
         {
             if (dynamic_cast<Stairway*>(proc)->isTriggered()) {
-				if (levelManager->getFloorNumber()>=3) hasWon = true;
+				if (levelManager->getFloorNumber()>3) hasWon = true;
 				else levelManager->genNextFloor(player);
             }
         }

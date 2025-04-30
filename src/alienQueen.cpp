@@ -41,6 +41,7 @@ void AlienQueen::Update(float deltaTime) {
     if(charging) {
         chargeDuration = chargeDuration - 1;
     }
+    red -= 1;
 
 }
 
@@ -57,6 +58,7 @@ void AlienQueen::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     static SDL_Surface* proj_surface_2 = SDL_LoadBMP( "../resource/enemies/queen_2.bmp" );
     static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
     static SDL_Texture* proj_texture_2 = SDL_CreateTextureFromSurface( renderer, proj_surface_2 );
+
 
     if (phase == 1) {
         texture = proj_texture;
@@ -75,6 +77,11 @@ void AlienQueen::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     }
 
     SDL_Rect dst = { point.x - camX - 96, point.y - camY - 96, TILE_SIZE * 3, TILE_SIZE * 3 };
+
+    SDL_SetTextureColorMod(texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(texture, 255, 0, 0);
+    }
 
     SDL_RenderCopyEx(renderer, texture, NULL, &dst, NULL, NULL, flip);
 

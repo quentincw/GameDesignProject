@@ -39,12 +39,14 @@ void Player1::adjustHealth(int healthDamage) {
         health = 0;
         isAlive = false;
     }
+    
     if (health > maxHealth) {
         health = maxHealth;
     }
-    invulnerability = 90;
     
     if (healthDamage > 0) {
+        invulnerability = 90;
+        red = 90;
         // spawn blood stain on damage
         spawnBloodStain(1);
         int val = rand()%6+1;
@@ -104,6 +106,7 @@ void Player1::Update(float deltaTime) {
 
 	cooldown-=1;
     invulnerability-=1;
+    red-=1;
     if (dodgeCooldown > 0){
         dodgeCooldown-=1;
     }
@@ -138,6 +141,11 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* player_surface = SDL_LoadBMP( "../resource/player.bmp" );
     static SDL_Texture* player_texture = SDL_CreateTextureFromSurface( renderer, player_surface );
+
+    SDL_SetTextureColorMod(player_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(player_texture, 255, 0, 0);
+    }
 
     static SDL_Rect idle = {0, 0, 16, 16};
 
@@ -197,6 +205,10 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
     static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
+    SDL_SetTextureColorMod(weapon_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(weapon_texture, 255, 0, 0);
+    }
 
     static const SDL_Point pivot = {8, 28};
     static const SDL_Point pivot_2 = {56, 28};
