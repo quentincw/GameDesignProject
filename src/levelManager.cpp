@@ -293,7 +293,7 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
     curList.push_back(deadSoldier);
 
     // add health pack to room
-    HealthPickup* healthPickup = new HealthPickup(0, 0, -20, 0, 0);
+    HealthPickup* healthPickup = new HealthPickup(0, 0, 0, 0, -20);
     curList.push_back(healthPickup);
 
     // random enemy generator
