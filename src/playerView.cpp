@@ -395,9 +395,11 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 			break;
 		case 3:
 			renderWin();
+            soundPlayer.playWin();
 			break;
 		case -1:
 			renderLose();
+            soundPlayer.playLose();
 			break;
 	}
 }

@@ -44,6 +44,7 @@ class Player1 : public Entity {
 		float stepCooldown;
 
         float dodgeCooldown;
+        float dodgeDuration;
         // speeds for dodge
         float dodgeX, dodgeY;
 

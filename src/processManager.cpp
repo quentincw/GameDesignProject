@@ -75,6 +75,8 @@ void ProcessManager::loadProcessList(std::vector<GameProcess*> newList) {
 				soundList.push_back(SoundType::DOOR_CLOSE);
             }
 		}
+    // make player invulnerable when entering a room
+    player->adjustHealth(-1);
 }
 
 // returns the process list
