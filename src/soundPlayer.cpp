@@ -5,6 +5,8 @@ using namespace std;
 
 SoundPlayer::SoundPlayer() {
 
+    end = false;
+
     // load all sounds
     for (SoundType sound : allSoundTypes) {
         load(sound);
@@ -53,4 +55,23 @@ void SoundPlayer::playSounds(vector<SoundType> sounds) {
     for(int i = 0; i < sounds.size(); i++){
         play(sounds[i]);
     }
+}
+
+
+void SoundPlayer::playWin() {
+    if (end){
+        return;
+    }
+    end = true;
+    Mix_Music* music = Mix_LoadMUS("../resource/sounds/WIN.mp3");
+	Mix_PlayMusic( music, -1 );
+}
+
+void SoundPlayer::playLose() {
+    if (end){
+        return;
+    }
+    end = true;
+    Mix_Music* music = Mix_LoadMUS("../resource/sounds/TAPS.mp3");
+	Mix_PlayMusic( music, -1 );
 }

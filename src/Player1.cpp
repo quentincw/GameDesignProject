@@ -79,6 +79,7 @@ void Player1::adjustHealth(int healthDamage) {
 
 // updates the object
 void Player1::Update(float deltaTime) {
+    /*
 	float dx, dy;
 	if (abs(xSpeed) == abs(ySpeed)){
 		dx = sqrt(xSpeed*xSpeed/2);
@@ -89,7 +90,7 @@ void Player1::Update(float deltaTime) {
 	else {
 		dx = xSpeed;
 		dy = ySpeed;
-	}
+	}*/
 	
 	if ((xSpeed!=0 || ySpeed!=0) && stepCooldown<=0){
 		soundList.push_back(SoundType::FOOTSTEPS);
