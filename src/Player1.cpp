@@ -30,6 +30,10 @@ Player1::Player1(int x, int y) : Entity() {
 
 // subtracts the health damage from the current heaSlth
 void Player1::adjustHealth(int healthDamage) {
+    if(healthDamage == -1) {
+        invulnerability = 90;
+        return;
+    }
     // player is invulnerable
     if (invulnerability > 0) {
         return;
