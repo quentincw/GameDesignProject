@@ -65,9 +65,31 @@ void Burrower::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
     }
 
+    static SDL_Rect spriteTextures[4] = {
+        {0, 0, 16, 16},
+        {16, 0, 16, 16},
+        {32, 0, 16, 16},
+        {48, 0, 16, 16}
+    };
+
+    static const int total_frames = 4;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        if (!burrowing) {
+            frame = (frame + 1) % total_frames;
+        }
+        startTicks = curTicks;
+    }
+
     SDL_Rect dst = { point.x - camX - 32, point.y - camY - 50, TILE_SIZE, TILE_SIZE };
 
-    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+    SDL_RenderCopy(renderer, proj_texture, &spriteTextures[frame], &dst);
     
     // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 100);
 }

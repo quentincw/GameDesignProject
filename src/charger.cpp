@@ -51,6 +51,32 @@ void Charger::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
     }
 
+    static SDL_Rect spriteTextures[4] = {
+        {0, 0, 16, 16},
+        {16, 0, 16, 16},
+        {32, 0, 16, 16},
+        {48, 0, 16, 16}
+    };
+
+    static const int total_frames = 4;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        if (xSpeed != 0 || ySpeed != 0) {
+            frame = (frame + 1) % total_frames;
+        }
+        // use idle sprite
+        else {
+            frame = 0;
+        }
+        startTicks = curTicks;
+    }
+
     static SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     if (xSpeed < 0) {
@@ -62,7 +88,7 @@ void Charger::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     SDL_Rect dst = { point.x - camX - 36, point.y - camY - 36, TILE_SIZE, TILE_SIZE };
 
-    SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
+    SDL_RenderCopyEx(renderer, proj_texture, &spriteTextures[frame], &dst, NULL, NULL, flip);
 
     // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 0, 0, 100);
 }
