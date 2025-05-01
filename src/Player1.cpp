@@ -21,6 +21,7 @@ Player1::Player1(int x, int y) : Entity() {
 	cooldown = 25;
 	stepCooldown = 0;
     dodging = false;
+    dodgeDuration = 0;
     invulnerability = 0;
     dodgeCooldown = 0;
     damage = 0;
@@ -112,15 +113,15 @@ void Player1::Update(float deltaTime) {
 	cooldown-=1;
     invulnerability-=1;
     red-=1;
+    dodgeDuration-=1;
     if (dodgeCooldown > 0){
         dodgeCooldown-=1;
     }
-    if (invulnerability <= 0){
-        if(dodging){
+
+    if ((dodgeDuration <= 0) && (dodging == true)){
             dodging = false;
             tags.insert("player");
-            dodgeCooldown = 30;
-        }
+            dodgeCooldown = 45;
     }
 }
 
@@ -303,6 +304,7 @@ void Player1::dodgeRoll(){
         return;
     }
     dodging = true;
+    dodgeDuration = 30;
     tags.erase("player");
     invulnerability = 30;
     // set speed for dodge

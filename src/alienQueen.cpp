@@ -14,15 +14,15 @@
 // constructor
 AlienQueen::AlienQueen(int x, int y) : Enemy(x, y) {
 
-    health = 3000;
+    health = 4000;
     radius = 75;
     hitbox.height = 150;
     hitbox.width = 150;
     xSpeed = 0;
     ySpeed = 0;
     damage = ALPHASPEWER_DAMAGE;
-    cooldown = 100;
-    cooldown2 = 435;
+    cooldown = 50;
+    cooldown2 = 335;
     spitSpeed = SPEWERPROJECTILE_SPEED + 2;
     projectileAmount = 0;
     spitInterval = 20;
