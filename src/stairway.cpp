@@ -78,7 +78,9 @@ bool Stairway::isTriggered() {
 }
 
 void Stairway::openStairs() {
-
+    if(open){
+        return;
+    }
     open = true;
     // interact with player again
     interactions.insert("player");

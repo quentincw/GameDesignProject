@@ -89,6 +89,8 @@ void Charger::UpdateAI(Rectangle phitbox) {
     // check if the player is on the same x as the charger
     if((enemyCenter.x + CHARGER_SIZE/2 > playerCenter.x) && (enemyCenter.x - CHARGER_SIZE/2 < playerCenter.x)) {
         charging = true;
+        soundList.push_back(SoundType::CHARGER_CHARGE);
+        sounds = true;
         chargeDuration = CHARGER_CHARGEDURATION;
         moveDuration = 0;
         // charge direction
@@ -104,6 +106,8 @@ void Charger::UpdateAI(Rectangle phitbox) {
     // check if the player is on the same y as the charger
     else if((enemyCenter.y + CHARGER_SIZE/2 > playerCenter.y) && (enemyCenter.y - CHARGER_SIZE/2 < playerCenter.y)) {
         charging = true;
+        soundList.push_back(SoundType::CHARGER_CHARGE);
+        sounds = true;
         chargeDuration = CHARGER_CHARGEDURATION;
         moveDuration = 0;
         // charge direction
