@@ -24,7 +24,7 @@ void csci437_error(const std::string& msg)
 
 int main(int argc, char** argv) {
 	// keep track of game state
-	// 0 = title screen, 1 = lore, 2 = playing, 3 = win, -1 = game over
+	// 0 = title screen, 1 = lore, 2 = controls, 3 = playing, 4 = win, -1 = game over
 	int state = 0;
 	
     // create a level manager
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
 		}
 		
 		
-		if (!paused && state==2){
+		if (!paused && state==3){
 			// update the player and current process list
 			processManager.updateProcesses(deltaMS);
 
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 			
 			if (player->getHealth()<=0) state = -1;
 			
-			if (gameLogic.checkWin()) state = 3;
+			if (gameLogic.checkWin()) state = 4;
 		}
 
         // render the level and processes		
