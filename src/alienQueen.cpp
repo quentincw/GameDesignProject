@@ -83,7 +83,27 @@ void AlienQueen::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         SDL_SetTextureColorMod(texture, 255, 0, 0);
     }
 
-    SDL_RenderCopyEx(renderer, texture, NULL, &dst, NULL, NULL, flip);
+    static SDL_Rect spriteTextures[4] = {
+        {0, 0, 48, 48},
+        {48, 0, 48, 48},
+        {96, 0, 48, 48},
+        {144, 0, 48, 48}
+    };
+
+    static const int total_frames = 4;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        frame = (frame + 1) % total_frames;
+        startTicks = curTicks;
+    }
+
+    SDL_RenderCopyEx(renderer, texture, &spriteTextures[frame], &dst, NULL, NULL, flip);
 
     // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 120, 30, 92, 100);
 }

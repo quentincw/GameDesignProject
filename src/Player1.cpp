@@ -147,10 +147,14 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* player_surface = SDL_LoadBMP( "../resource/player.bmp" );
     static SDL_Texture* player_texture = SDL_CreateTextureFromSurface( renderer, player_surface );
+    static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
+    static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
 
     SDL_SetTextureColorMod(player_texture, 255, 255, 255);
+    SDL_SetTextureColorMod(weapon_texture, 255, 255, 255);
     if(red > 0) {
         SDL_SetTextureColorMod(player_texture, 255, 0, 0);
+        SDL_SetTextureColorMod(weapon_texture, 255, 0, 0);
     }
 
     static SDL_Rect idle = {0, 0, 16, 16};
@@ -180,14 +184,20 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         // play dodge
         if (dodging) {
             frame = 0;
+            SDL_SetTextureAlphaMod(player_texture, 100);
+            SDL_SetTextureAlphaMod(weapon_texture, 100);
         }
         // play walk anim
         else if (xSpeed != 0 || ySpeed != 0) {
             frame = (frame + 1) % total_frames;
+            SDL_SetTextureAlphaMod(player_texture, 255);
+            SDL_SetTextureAlphaMod(weapon_texture, 255);
         }
         // use idle sprite
         else {
             frame = 0;
+            SDL_SetTextureAlphaMod(player_texture, 255);
+            SDL_SetTextureAlphaMod(weapon_texture, 255);
         }
         startTicks = curTicks;
     }
@@ -207,13 +217,6 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     }
     else {
         SDL_RenderCopyEx(renderer, player_texture, &idle, &dst_player, NULL, NULL, flip);
-    }
-
-    static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
-    static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
-    SDL_SetTextureColorMod(weapon_texture, 255, 255, 255);
-    if(red > 0) {
-        SDL_SetTextureColorMod(weapon_texture, 255, 0, 0);
     }
 
     static const SDL_Point pivot = {8, 28};

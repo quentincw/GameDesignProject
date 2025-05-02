@@ -183,6 +183,7 @@ void PlayerView::initialize()
     Mix_PlayMusic( music, -1 );
 	
 	pauseS = IMG_LoadTexture(renderer, "../resource/screens/pauseS.png");
+    controlS = IMG_LoadTexture(renderer, "../resource/screens/controlS.png");
 	titleS = IMG_LoadTexture(renderer, "../resource/screens/titleS.png");
 	storyS = IMG_LoadTexture(renderer, "../resource/screens/storyS.png");
 	winS = IMG_LoadTexture(renderer, "../resource/screens/winS.png");
@@ -197,6 +198,7 @@ void PlayerView::cleanup()
 	
 	// Destroy textures
 	SDL_DestroyTexture( pauseS );
+    SDL_DestroyTexture( controlS );
 	SDL_DestroyTexture( titleS );
 	SDL_DestroyTexture( storyS );
 	SDL_DestroyTexture( winS );
@@ -231,7 +233,7 @@ int PlayerView::handleInputs(ProcessManager* pm, int state)
 
             // User presses a key
             if( e.type == SDL_KEYDOWN ){
-				if (state==0 || state==1) return 1;
+				if (state==0 || state==1 || state==2) return 1;
                 switch(e.key.keysym.sym){
                     case SDLK_q:
                         return -1;
@@ -351,7 +353,10 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 		case 1:
 			renderStory();
 			break;
-		case 2:
+        case 2:
+			renderControl();
+			break;
+		case 3:
 		{
 			static const int fps = 12;
 			static int frame = 0;
@@ -393,7 +398,7 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 			SDL_RenderPresent( renderer );
 		}
 			break;
-		case 3:
+		case 4:
 			renderWin();
             soundPlayer.playWin();
 			break;
@@ -407,6 +412,12 @@ void PlayerView::render(Floor* floor, ProcessManager* pm, int state, bool paused
 void PlayerView::renderPause()
 {
 	SDL_RenderCopy(renderer, pauseS, NULL, NULL);
+}
+
+void PlayerView::renderControl()
+{
+	SDL_RenderCopy(renderer, controlS, NULL, NULL);
+    SDL_RenderPresent( renderer );
 }
 
 void PlayerView::renderTitle()
@@ -520,31 +531,26 @@ void PlayerView::renderMinimap(Floor* floor) {
     int rooms_height = rooms[0].size();
     vector<vector<int>> rooms_col = floor->getRoomsCol();
   
-    vector<vector<SDL_Rect>> tile(rooms_width, vector<SDL_Rect>(rooms_height));
     vector<vector<SDL_Rect>> map(rooms_width, vector<SDL_Rect>(rooms_height));
     vector<SDL_Rect> render_map;
     static const int MAP_SIZE = 2;
     for (int x = 0; x < rooms_width; x++) {
       for (int y = 0; y < rooms_height; y++) {
           if (rooms[x][y] >= 0) {
-              map[x][y].x = x * MAP_SIZE;
-              map[x][y].y = y * MAP_SIZE;
+              map[x][y].x = x * MAP_SIZE + 20;
+              map[x][y].y = y * MAP_SIZE + 20;
               map[x][y].w = MAP_SIZE;
               map[x][y].h = MAP_SIZE;
   
               render_map.push_back(map[x][y]);
           }
-          tile[x][y].x = x * TILE_SIZE;
-          tile[x][y].y = y * TILE_SIZE;
-          tile[x][y].w = TILE_SIZE;
-          tile[x][y].h = TILE_SIZE;
       }
     }
     // minimap rooms
     SDL_Rect curRoom = floor->getCurRoom();
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     for (SDL_Rect rect: render_map) {
-        if (rect.x / MAP_SIZE >= curRoom.x && rect.x / MAP_SIZE < curRoom.x + curRoom.w && rect.y / MAP_SIZE >= curRoom.y && rect.y / MAP_SIZE < curRoom.y + curRoom.h) {
+        if ((rect.x - 20) / MAP_SIZE >= curRoom.x && (rect.x - 20) / MAP_SIZE < curRoom.x + curRoom.w && (rect.y - 20) / MAP_SIZE >= curRoom.y && (rect.y - 20) / MAP_SIZE < curRoom.y + curRoom.h) {
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
         }
         else {
