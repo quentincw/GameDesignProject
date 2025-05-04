@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
 		}
 		
 		
-		if (!paused && state==2){
+		if (!paused && state==3){
 			// update the player and current process list
 			processManager.updateProcesses(deltaMS);
 
