@@ -85,6 +85,8 @@ void HealthPickup::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 // handles the interactions with other objects
 void HealthPickup::handleInteraction(std::string tag) {
     if (tag == "player") {
+        soundList.push_back(SoundType::PICKUP2);
+        sounds = true;
         markForDeletion();
     }
 }

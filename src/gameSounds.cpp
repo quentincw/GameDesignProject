@@ -93,6 +93,16 @@ const char* toFilePath(SoundType sound) {
 			return "../resource/sounds/ALIENQUEEN1.mp3";
 		case SoundType::ALIENQUEEN2:
 			return "../resource/sounds/ALIENQUEEN2.mp3";
+		case SoundType::UNSETTLING:
+			return "../resource/sounds/UNSETTLING.mp3";
+		case SoundType::WIN:
+			return "../resource/sounds/WIN.mp3";
+		case SoundType::PICKUP2:
+			return "../resource/sounds/PICKUP2.mp3";
+		case SoundType::TAPS:
+			return "../resource/sounds/TAPS.mp3";
+		case SoundType::CHARGER_CHARGE:
+			return "../resource/sounds/CHARGER_CHARGE.mp3";
         default:
             return "";
     }

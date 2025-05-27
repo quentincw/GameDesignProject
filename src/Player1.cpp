@@ -21,6 +21,7 @@ Player1::Player1(int x, int y) : Entity() {
 	cooldown = 25;
 	stepCooldown = 0;
     dodging = false;
+    dodgeDuration = 0;
     invulnerability = 0;
     dodgeCooldown = 0;
     damage = 0;
@@ -30,6 +31,10 @@ Player1::Player1(int x, int y) : Entity() {
 
 // subtracts the health damage from the current heaSlth
 void Player1::adjustHealth(int healthDamage) {
+    if(healthDamage == -1) {
+        invulnerability = 90;
+        return;
+    }
     // player is invulnerable
     if (invulnerability > 0) {
         return;
@@ -39,10 +44,10 @@ void Player1::adjustHealth(int healthDamage) {
         health = 0;
         isAlive = false;
     }
+    
     if (health > maxHealth) {
         health = maxHealth;
     }
-    invulnerability = 90;
     
     if (healthDamage > 0) {
         invulnerability = 90;
@@ -75,6 +80,7 @@ void Player1::adjustHealth(int healthDamage) {
 
 // updates the object
 void Player1::Update(float deltaTime) {
+    /*
 	float dx, dy;
 	if (abs(xSpeed) == abs(ySpeed)){
 		dx = sqrt(xSpeed*xSpeed/2);
@@ -85,7 +91,7 @@ void Player1::Update(float deltaTime) {
 	else {
 		dx = xSpeed;
 		dy = ySpeed;
-	}
+	}*/
 	
 	if ((xSpeed!=0 || ySpeed!=0) && stepCooldown<=0){
 		soundList.push_back(SoundType::FOOTSTEPS);
@@ -107,15 +113,15 @@ void Player1::Update(float deltaTime) {
 	cooldown-=1;
     invulnerability-=1;
     red-=1;
+    dodgeDuration-=1;
     if (dodgeCooldown > 0){
         dodgeCooldown-=1;
     }
-    if (invulnerability <= 0){
-        if(dodging){
+
+    if ((dodgeDuration <= 0) && (dodging == true)){
             dodging = false;
             tags.insert("player");
-            dodgeCooldown = 30;
-        }
+            dodgeCooldown = 45;
     }
 }
 
@@ -141,10 +147,14 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     static SDL_Surface* player_surface = SDL_LoadBMP( "../resource/player.bmp" );
     static SDL_Texture* player_texture = SDL_CreateTextureFromSurface( renderer, player_surface );
+    static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
+    static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
 
     SDL_SetTextureColorMod(player_texture, 255, 255, 255);
+    SDL_SetTextureColorMod(weapon_texture, 255, 255, 255);
     if(red > 0) {
         SDL_SetTextureColorMod(player_texture, 255, 0, 0);
+        SDL_SetTextureColorMod(weapon_texture, 255, 0, 0);
     }
 
     static SDL_Rect idle = {0, 0, 16, 16};
@@ -174,14 +184,20 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         // play dodge
         if (dodging) {
             frame = 0;
+            SDL_SetTextureAlphaMod(player_texture, 100);
+            SDL_SetTextureAlphaMod(weapon_texture, 100);
         }
         // play walk anim
         else if (xSpeed != 0 || ySpeed != 0) {
             frame = (frame + 1) % total_frames;
+            SDL_SetTextureAlphaMod(player_texture, 255);
+            SDL_SetTextureAlphaMod(weapon_texture, 255);
         }
         // use idle sprite
         else {
             frame = 0;
+            SDL_SetTextureAlphaMod(player_texture, 255);
+            SDL_SetTextureAlphaMod(weapon_texture, 255);
         }
         startTicks = curTicks;
     }
@@ -201,13 +217,6 @@ void Player1::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     }
     else {
         SDL_RenderCopyEx(renderer, player_texture, &idle, &dst_player, NULL, NULL, flip);
-    }
-
-    static SDL_Surface* weapon_surface = SDL_LoadBMP( "../resource/weapon.bmp" );
-    static SDL_Texture* weapon_texture = SDL_CreateTextureFromSurface( renderer, weapon_surface );
-    SDL_SetTextureColorMod(weapon_texture, 255, 255, 255);
-    if(red > 0) {
-        SDL_SetTextureColorMod(weapon_texture, 255, 0, 0);
     }
 
     static const SDL_Point pivot = {8, 28};
@@ -298,6 +307,7 @@ void Player1::dodgeRoll(){
         return;
     }
     dodging = true;
+    dodgeDuration = 30;
     tags.erase("player");
     invulnerability = 30;
     // set speed for dodge

@@ -20,6 +20,7 @@ enum class SoundType {
     EXPLODER_NOISE,
     ALPHASPITTER_NOISE,
     CHARGER_NOISE,
+    CHARGER_CHARGE,
     ALPHACHARGER_NOISE,
     ALPHASPEWER_NOISE,
     BURROWER_NOISE,
@@ -58,6 +59,10 @@ enum class SoundType {
     ROLL,
     ALIENQUEEN1,
     ALIENQUEEN2,
+    TAPS,
+    PICKUP2,
+    UNSETTLING,
+    WIN,
     Count
 
 };
@@ -71,6 +76,7 @@ constexpr std::array<SoundType, static_cast<std::size_t>(SoundType::Count)> allS
     SoundType::EXPLODER_NOISE,
     SoundType::ALPHASPITTER_NOISE,
     SoundType::CHARGER_NOISE,
+    SoundType::CHARGER_CHARGE,
     SoundType::ALPHACHARGER_NOISE,
     SoundType::ALPHASPEWER_NOISE,
     SoundType::BURROWER_NOISE,
@@ -108,7 +114,11 @@ constexpr std::array<SoundType, static_cast<std::size_t>(SoundType::Count)> allS
 	SoundType::FOOTSTEPS,
     SoundType::ALIENQUEEN1,
     SoundType::ALIENQUEEN2,
-    SoundType::ROLL
+    SoundType::ROLL,
+    SoundType::TAPS,
+    SoundType::UNSETTLING,
+    SoundType::PICKUP2,
+    SoundType::WIN
 }};
 
 // basic mapping of sound type to a file path

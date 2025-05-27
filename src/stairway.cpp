@@ -46,7 +46,7 @@ void Stairway::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     static SDL_Surface* closed_surface = SDL_LoadBMP( "../resource/floor_closed.bmp" );
     static SDL_Texture* closed_texture = SDL_CreateTextureFromSurface( renderer, closed_surface );
 
-    SDL_Rect dst = { static_cast<int>(hitbox.x - camX - 64), static_cast<int>(hitbox.y - camY - 64), TILE_SIZE * 2, TILE_SIZE * 2 };
+    SDL_Rect dst = { static_cast<int>(hitbox.x - camX - 16), static_cast<int>(hitbox.y - camY - 16), TILE_SIZE * 2, TILE_SIZE * 2 };
 
     SDL_RenderCopy(renderer, closed_texture, NULL, &dst);
 
@@ -78,7 +78,9 @@ bool Stairway::isTriggered() {
 }
 
 void Stairway::openStairs() {
-
+    if(open){
+        return;
+    }
     open = true;
     // interact with player again
     interactions.insert("player");

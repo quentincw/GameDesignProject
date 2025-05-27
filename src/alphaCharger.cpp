@@ -51,6 +51,32 @@ void AlphaCharger::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
     }
 
+    static SDL_Rect spriteTextures[4] = {
+        {0, 0, 32, 32},
+        {32, 0, 32, 32},
+        {64, 0, 32, 32},
+        {96, 0, 32, 32}
+    };
+
+    static const int total_frames = 4;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        if (xSpeed != 0 || ySpeed != 0) {
+            frame = (frame + 1) % total_frames;
+        }
+        // use idle sprite
+        else {
+            frame = 0;
+        }
+        startTicks = curTicks;
+    }
+
     static SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     if (xSpeed < 0) {
@@ -62,7 +88,7 @@ void AlphaCharger::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
 
     SDL_Rect dst = { point.x - camX - 64, point.y - camY - 76, TILE_SIZE * 2, TILE_SIZE * 2 };
 
-    SDL_RenderCopyEx(renderer, proj_texture, NULL, &dst, NULL, NULL, flip);
+    SDL_RenderCopyEx(renderer, proj_texture, &spriteTextures[frame], &dst, NULL, NULL, flip);
 
     // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 255, 0, 0, 100);
 }
@@ -89,6 +115,8 @@ void AlphaCharger::UpdateAI(Rectangle phitbox) {
     // check if the player is on the same x as the charger
     if((enemyCenter.x + ALPHACHARGER_SIZE/2 > playerCenter.x) && (enemyCenter.x - ALPHACHARGER_SIZE/2 < playerCenter.x)) {
         charging = true;
+        soundList.push_back(SoundType::CHARGER_CHARGE);
+        sounds = true;
         chargeDuration = ALPHACHARGER_CHARGEDURATION;
         moveDuration = 0;
         // charge direction
@@ -104,6 +132,8 @@ void AlphaCharger::UpdateAI(Rectangle phitbox) {
     // check if the player is on the same y as the charger
     else if((enemyCenter.y + ALPHACHARGER_SIZE/2 > playerCenter.y) && (enemyCenter.y - ALPHACHARGER_SIZE/2 < playerCenter.y)) {
         charging = true;
+        soundList.push_back(SoundType::CHARGER_CHARGE);
+        sounds = true;
         chargeDuration = ALPHACHARGER_CHARGEDURATION;
         moveDuration = 0;
         // charge direction

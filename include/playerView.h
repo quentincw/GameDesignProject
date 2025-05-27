@@ -31,6 +31,8 @@ private:
 	void renderTitle();
 	
 	void renderStory();
+
+    void renderControl();
 	
 	void renderWin();
 	
@@ -62,6 +64,7 @@ private:
 	Mix_Music* music;
 	
 	SDL_Texture* pauseS;
+    SDL_Texture* controlS;
 	SDL_Texture* titleS;
 	SDL_Texture* storyS;
 	SDL_Texture* winS;

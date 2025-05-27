@@ -23,6 +23,12 @@ class SoundPlayer {
 
         // loop through vector of sound types and play each one
         void playSounds(vector<SoundType> sounds);
+        
+        // plays victory music
+        void playWin();
+
+        // plays lose music
+        void playLose();
 
     private:
 
@@ -34,6 +40,9 @@ class SoundPlayer {
 
         // play a specific sound
         void play(SoundType sound);
+
+        // if win/ lose music is playing
+        bool end;
 
 };
 
