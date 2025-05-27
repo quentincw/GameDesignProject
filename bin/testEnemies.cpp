@@ -296,6 +296,35 @@ int main(int argc, char** argv)
             if(checkCollision(&wall1, curProcess)){
                 moveInbounds(&wall1, curProcess);
             }
+        }*/
+
+        for(int i = 0; i < curProcesses.size(); i++){
+            curProcess = curProcesses[i];
+            curHitbox = curProcess->getHitbox();
+            if((curHitbox.x <= 0) || (curHitbox.y <= 0)){
+                curProcess->markForDeletion();
+            }
+            else if((curHitbox.x + curHitbox.width >= SCREEN_WIDTH) || (curHitbox.y + curHitbox.height >= SCREEN_HEIGHT)){
+                curProcess->markForDeletion();
+            }
+        }
+
+        if(checkCollision(&wall1, &ball1)){
+            //cout << "collision";
+            int code = moveInbounds(&wall1, &ball1);
+            if (code == 1 || code == 3){
+                ball1.bounceX(ball1.getHitbox().x);
+            }
+            else {
+                ball1.bounceY(ball1.getHitbox().y);
+            }
+        }
+
+        for(int i = 0; i < curProcesses.size(); i++){
+            curProcess = curProcesses[i];
+            if(checkCollision(&wall1, curProcess)){
+                moveInbounds(&wall1, curProcess);
+            }
         }
 
         // draw screen
