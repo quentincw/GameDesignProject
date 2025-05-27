@@ -32,13 +32,14 @@ void ProcessManager::updateProcesses(float deltaTime) {
     // update player
     player->Update(deltaTime);
 
+    // update AI
+    updateEnemyAI();
+
+
     // update everything else
     for(int i = 0; i < processList.size(); i++){
         processList[i]->Update(deltaTime);
     }
-
-    // update AI
-    updateEnemyAI();
 
     // add any children to the list
     findChildren();

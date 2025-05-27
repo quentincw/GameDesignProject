@@ -47,7 +47,9 @@ int main(int argc, char** argv) {
     //processManager.addProcess(processManager.getPlayer());
 
     // make game logic
-    GameLogic gameLogic(&processManager, &levelManager);
+    //GameLogic gameLogic(&processManager, &levelManager);
+    OldGameLogic gameLogic(&processManager, &levelManager);
+
 
     /*** Main Loop ***/
     bool running = true;

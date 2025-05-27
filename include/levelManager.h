@@ -48,6 +48,9 @@ private:
     random_device rd;
     mt19937 gen;
 
+    // flag for if the start room was cleared
+    bool startDelete;
+
     // takes a process list and a room. Finds valid locations inside the room to place the enemies
     void findValidSpots(vector<GameProcess*>& curList, Rectangle rectangle);
 
