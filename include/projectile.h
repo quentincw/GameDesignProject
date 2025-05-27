@@ -22,9 +22,6 @@ class Projectile : public GameProcess {
 
         // draws the object based on the camera's position
         virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
-        /*
-        // get the damage the projectile causes to the player on contact
-        int getDamage() const;*/
 
         // handles the interactions with other objects
         void handleInteraction(std::string tag) override;
@@ -33,9 +30,6 @@ class Projectile : public GameProcess {
         
         // the current speed of the projectile
         float xSpeed, ySpeed;
-
-        // the damage the projectile causes to the player
-        //int damage;
 };
 
 

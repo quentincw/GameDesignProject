@@ -22,12 +22,14 @@ Floor::Floor() {
 // small: 3-4 rooms
 // large: 2-3 rooms
 
-vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_rooms) {
+vector<vector<vector<vector<int>>>> Floor::gen(int level, int width, int height, int gen_rooms) {
     random_device rd;  // get random number
     mt19937 eng(rd()); // seed
     uniform_int_distribution<> distr(0, 100); // Define the range
 
     Room room;
+
+    cur_level = level;
 
     grid_width = width;
     grid_height = height;
@@ -78,8 +80,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
         if (room_h_min > room_height) room_h_min = room_height;
     }
 
-    room_width = 24;
-    room_height = 24;
+    room_width = 14;
+    room_height = 14;
     walk_pct = 100;
     dimensions.push_back({room_width, room_height, walk_pct});
 
@@ -192,6 +194,8 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
         grid[x][y] = room.gen(dimensions[r][0], dimensions[r][1], door_map[x][y], dimensions[r][2]);
         grid_col[x][y] = room.getTilemapCollision();
     }
+    boss_loc = layout[layout.size() - 1];
+    cout << "boss x: " << boss_loc[0] << " boss y: " << boss_loc[1] << endl;
     cout << "grid: " << grid.size() << " grid y: " << grid[0].size() << endl;
 
     for (int iy = 0; iy < grid_height; ++iy) {
@@ -270,6 +274,9 @@ vector<vector<vector<vector<int>>>> Floor::gen(int width, int height, int gen_ro
                 roomRectangle.y = render_grid[x][y].y;
                 roomRectangle.width = render_grid[x][y].w;
                 roomRectangle.height = render_grid[x][y].h;
+                if (boss_loc[0] == x && boss_loc[1] == y) {
+                    boss_loc = {int(roomRectangle.x), int(roomRectangle.y)};
+                }
                 roomDimensions.push_back(roomRectangle);
 
             }
@@ -368,6 +375,17 @@ SDL_Rect Floor::getCurRoom()
     return curRoom;
 }
 
+Rectangle Floor::getCurRoomRect()
+{
+    Rectangle rect;
+    SDL_Rect rect2 = getCurRoom();
+    rect.x = rect2.x;
+    rect.y = rect2.y;
+    rect.height = rect2.h;
+    rect.width = rect2.w;
+    return rect;
+}
+
 // returns the current room's position in the 2D array
 RoomPosition Floor::getRoomPos() {
     return curRoomPos;
@@ -384,4 +402,12 @@ vector<vector<int>> Floor::getRooms() {
 
 vector<vector<int>> Floor::getRoomsCol() {
     return rooms_col;
+}
+
+int Floor::getLevel() {
+    return cur_level;
+}
+
+vector<int> Floor::getBossLoc() {
+    return boss_loc;
 }

@@ -10,7 +10,6 @@
 #include "levelManager.h"
 #include "playerView.h"
 #include "gameLogic.h"
-#include "oldLogic.h"
 
 
 using namespace std;
@@ -50,9 +49,7 @@ int main(int argc, char** argv) {
     playerView.initialize();
 
     // make game logic
-    //GameLogic gameLogic(&processManager, &levelManager);
-    OldGameLogic gameLogic(&processManager, &levelManager);
-
+    GameLogic gameLogic(&processManager, &levelManager);
 
     /*** Main Loop ***/
     bool running = true;
@@ -61,6 +58,7 @@ int main(int argc, char** argv) {
     const int FPS = 60;
     const int TARGETMS = 1000/FPS;
 	int startMS, deltaMS;
+	auto player = dynamic_cast<Player1*>(processManager.getPlayer());
     // While application is running
     while( running )
     {
@@ -74,9 +72,12 @@ int main(int argc, char** argv) {
 		if (ret == -2) {
 			paused = !paused;
 		}
-		if (ret >=1 ) state+=ret;
+		if (ret >=1 ){
+			state+=ret;
+			state%=4;
+		}
 		
-		if (!paused){
+		if (!paused && state==2){
 			// update the player and current process list
 			processManager.updateProcesses(deltaMS);
 
@@ -85,13 +86,11 @@ int main(int argc, char** argv) {
 
 			// check if the player moved to a new room
 			levelManager.setCurrentRoom(&processManager);
+			
+			if (player->getHealth()<=0) state = -1;
 		}
 
-		playerView.render(state, levelManager.getCurrentFloor(), &processManager);
-		
-		if (paused){
-			playerView.renderPause();
-		}
+		playerView.render(levelManager.getCurrentFloor(), &processManager, state, paused);
 
 		// delta time calculation
 		deltaMS = SDL_GetTicks() - startMS;
