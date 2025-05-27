@@ -119,7 +119,6 @@ void LevelManager::genFloor(int level) {
         for (size_t j = 0; j < roomPos[i].size(); ++j) {
             // if there is not a gap in this spot
             if(roomPos[i][j] == 1) {
-                
                 // get the next rectangle
                 Rectangle curRect = rooms[count];
                 // cout << "RoomPos " << i << " " << j << ": " << curRect.x << " " << curRect.y << endl;
@@ -194,8 +193,7 @@ void LevelManager::genFloor(int level) {
             }
         }
     }
-
-    
+    //cout << "out of geen" << endl;
     // reverse y vectors
     for (size_t i = 0; i < roomPos.size(); ++i) {
         reverse(roomLists[i].begin(), roomLists[i].end());
@@ -376,9 +374,6 @@ void LevelManager::fillProcessList(vector<GameProcess*>& curList) {
             curList.push_back(enemy);
         }
     }
-    // temporary
-    HealthPickup* health = new HealthPickup(0,0,100,0,0);
-    curList.push_back(health);
 }
 
 
@@ -395,6 +390,7 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
     // get the current room
     RoomPosition newPos = curfloor->getRoomPos();
 
+
     // check if the player entered a different room
     if ((roomX != newPos.x) || (roomY != newPos.y)) {
 
@@ -409,12 +405,6 @@ void LevelManager::setCurrentRoom(ProcessManager* pm) {
 
 
         // load new list
-
-        // delete the list if it is the first room
-        if(startDelete == false){
-            roomLists[newPos.x][newPos.y].clear();
-            startDelete = true;
-        }
         pm->loadProcessList(roomLists[newPos.x][newPos.y]);
 
         // update current room
