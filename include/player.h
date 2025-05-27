@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <vector>
+#include "entity.h"
 using namespace std;
 
 class Player {
@@ -12,18 +13,19 @@ class Player {
     Player();
     
     // Methods
-    void move(vector<vector<vector<SDL_Rect>>> tilemap_collision);
+    void move(vector<vector<int>> tilemap_collision);
     void setPos(int x, int y);
     vector<int> getPos();
     void setVelX(int x);
     void setVelY(int y);
+	void Update(float deltaTime);
     
     private:
     int posX;
     int posY;
     int velX;
     int velY;
-    bool checkCollision(SDL_Rect rect);
+    bool checkCollision(int xs, int ys);
 
 };
 

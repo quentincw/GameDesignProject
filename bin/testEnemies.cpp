@@ -1,3 +1,7 @@
+int main(int argc, char** argv)
+{}
+
+/*
 //Using SDL and standard IO
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
@@ -10,9 +14,11 @@
 #include "roach.h"
 #include "spitter.h"
 #include "playerProjectile.h"
+#include "spitterProjectile.h"
 #include "processManager.h"
 #include "testWall.h"
 #include "gameObject.h"
+#include "Player1.h"
 
 using namespace std;
 
@@ -74,28 +80,27 @@ int moveInbounds(GameObject* rect1, GameObject* rect2){
 
 void projectileCollision(PlayerProjectile* ball){
 
-    /*
-    Circle hitbox = ball->getHitbox();
-    int radius = hitbox.radius;
-    int x = hitbox.x;
-    int y = hitbox.y;
-    // check for collision with top of screen
-    if (y - radius <= 0){
-        ball->bounceY(0 + radius);
-    }
-    // check for collision with bottom of the screen
-    else if(y + radius >= SCREEN_HEIGHT){
-        ball->bounceY(SCREEN_HEIGHT - radius);
-    }
-    // check for collision with left of screen
-    if (x - radius <= 0){
-        ball->bounceX(0 + radius);
-    }
-    // check for collision with right of the screen
-    else if(x + radius >= SCREEN_WIDTH){
-        ball->bounceX(SCREEN_WIDTH - radius);
-    }
-    */
+    //Circle hitbox = ball->getHitbox();
+    //int radius = hitbox.radius;
+    //int x = hitbox.x;
+    //int y = hitbox.y;
+    //// check for collision with top of screen
+    //if (y - radius <= 0){
+    //    ball->bounceY(0 + radius);
+    //}
+    //// check for collision with bottom of the screen
+    //else if(y + radius >= SCREEN_HEIGHT){
+    //    ball->bounceY(SCREEN_HEIGHT - radius);
+    //}
+    //// check for collision with left of screen
+    //if (x - radius <= 0){
+    //    ball->bounceX(0 + radius);
+    //}
+    //// check for collision with right of the screen
+    //else if(x + radius >= SCREEN_WIDTH){
+    //    ball->bounceX(SCREEN_WIDTH - radius);
+    //}
+
 
     Rectangle hitbox = ball->getHitbox();
     int height = hitbox.height;
@@ -126,8 +131,6 @@ void projectileCollision(PlayerProjectile* ball){
 
 int main(int argc, char** argv)
 {
-
-    /*** Initialization ***/
   
     // Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) csci437_error("SDL could not initialize!");
@@ -145,7 +148,7 @@ int main(int argc, char** argv)
 
 
     // create "player"
-    PlayerProjectile ball1(0, 0, 3.0f, 3.0f);
+    Player1 ball1(0, 0);
 
     // create process manager
     ProcessManager manager(&ball1);
@@ -177,7 +180,7 @@ int main(int argc, char** argv)
     bool curRoom = true;
 
     Spitter spitter2(30, 30);
-    Spitter spitter3(400, 400);
+    Spitter spitter3(700, 500);
     Spitter spitter4(1000, 30);
 
     room2.push_back(&spitter2);
@@ -188,7 +191,6 @@ int main(int argc, char** argv)
 
 
 
-    /*** Main Loop ***/
     bool running = true;
     SDL_Event e;
     const int FPS = 60;
@@ -226,18 +228,18 @@ int main(int argc, char** argv)
                             curRoom = true;
                         }
                         break;
-                    /*case SDLK_UP:
-                        roach1.UpdateAI(roach1.getXpos(), 100);
+                    case SDLK_UP:
+                        ball1.setSpeedY(-3);
                         break;
                     case SDLK_DOWN:
-                        roach1.UpdateAI(roach1.getXpos(), SCREEN_HEIGHT - 100);
+                        ball1.setSpeedY(3);
                         break;
                     case SDLK_RIGHT:
-                        roach1.UpdateAI(SCREEN_WIDTH - 100, roach1.getYpos());
+                        ball1.setSpeedX(3);
                         break;
                     case SDLK_LEFT:
-                        roach1.UpdateAI(100, roach1.getYpos());
-                        break;*/
+                        ball1.setSpeedX(-3);
+                        break;
                 }
             }
             else {
@@ -247,18 +249,52 @@ int main(int argc, char** argv)
 
         manager.updateProcesses(1);
 
-        projectileCollision(&ball1);
+        //projectileCollision(&ball1);
 
         curProcesses = manager.getProcessList();
-        /*
+        
+        //for(int i = 0; i < curProcesses.size(); i++){
+        //    curProcess = curProcesses[i];
+        //    curCircle = curProcess->getHitbox();
+        //    if((curCircle.x - curCircle.radius <= 0) || (curCircle.y - curCircle.radius <= 0)){
+        //        curProcess->markForDeletion();
+        //    }
+        //    else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
+        //        curProcess->markForDeletion();
+        //    }
+        //}
+
         for(int i = 0; i < curProcesses.size(); i++){
             curProcess = curProcesses[i];
-            curCircle = curProcess->getHitbox();
-            if((curCircle.x - curCircle.radius <= 0) || (curCircle.y - curCircle.radius <= 0)){
-                curProcess->markForDeletion();
+            curHitbox = curProcess->getHitbox();
+
+            if((curHitbox.x <= 0) || (curHitbox.y <= 0)){
+                if (auto projectile = dynamic_cast<SpitterProjectile*>(curProcess)){
+                        curProcess->markForDeletion();
+                    }
             }
-            else if((curCircle.x + curCircle.radius >= SCREEN_WIDTH) || (curCircle.y + curCircle.radius >= SCREEN_HEIGHT)){
-                curProcess->markForDeletion();
+            else if((curHitbox.x + curHitbox.width >= SCREEN_WIDTH) || (curHitbox.y + curHitbox.height >= SCREEN_HEIGHT)){
+                if (auto projectile = dynamic_cast<SpitterProjectile*>(curProcess)){
+                    curProcess->markForDeletion();
+                }
+            }
+        }
+
+        //if(checkCollision(&wall1, &ball1)){
+        //    //cout << "collision";
+        //    int code = moveInbounds(&wall1, &ball1);
+        //    if (code == 1 || code == 3){
+        //        ball1.bounceX(ball1.getHitbox().x);
+        //    }
+        //    else {
+        //        ball1.bounceY(ball1.getHitbox().y);
+        //    }
+        //}
+
+        for(int i = 0; i < curProcesses.size(); i++){
+            curProcess = curProcesses[i];
+            if(checkCollision(&wall1, curProcess)){
+                moveInbounds(&wall1, curProcess);
             }
         }*/
 
@@ -308,3 +344,4 @@ int main(int argc, char** argv)
     // Done.
     return 0;
 }
+*/

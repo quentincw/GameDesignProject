@@ -6,13 +6,7 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
-
-struct Rectangle {
-    int x;
-    int y;
-    int width;
-    int height;
-};
+#include "rectangle.h"
 
 struct Point {
     int x;
@@ -30,22 +24,34 @@ class GameObject {
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
 
+        // draws the object based on the camera's position
+        virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
+
         // get the hitbox of the game object
         Rectangle getHitbox() const;
 
         // sets the position of the rectangle
-        void setPosition(int x, int y);
+        void setPosition(float x, float y);
+
+        // getters and setters for last position
+        void setLastPosition(float x, float y);
+        float getLastX();
+        float getLastY();
 
         // calculates and returns the center point of the hitbox
         Point getCenter(Rectangle* rectangle) const;
 
-    
+        // reverts to previous position
+        void revertPosition();
+
     protected:
 
         // hitbox for game object
         Rectangle hitbox;
 
-        
+        // the last position
+        float lastX;
+        float lastY;  
 };
 
 

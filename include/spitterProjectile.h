@@ -20,9 +20,8 @@ class SpitterProjectile : public Projectile {
         // draws the object
         void Render(SDL_Renderer* renderer);
 
-        // handles the interactions with other objects
-        void handleInteractions(int tag);
-
+        // draws the object based on the camera's position
+        void RenderCam(SDL_Renderer* renderer, int camX, int camY);
 };
 
 

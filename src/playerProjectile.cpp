@@ -4,22 +4,21 @@
 #include "gameProcess.h"
 #include "projectile.h"
 #include "playerProjectile.h"
+#include <constants.h>
 
 // constructor
 PlayerProjectile::PlayerProjectile(int x, int y, float startXSpeed, float startYSpeed) : Projectile(x, y, startXSpeed, startYSpeed) {
 
-    radius = 15;
-    hitbox.height = 15;
-    hitbox.width = 15;
-    damage = 10;
-    tags.push_back("Player");
-    tags.push_back("Enemy");
+    radius = 8;
+    hitbox.height = 16;
+    hitbox.width = 16;
+    damage = 50;
+    interactions.insert("enemy");
 }
 
 // updates the object
 void PlayerProjectile::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Projectile::Update(deltaTime);
 }
 
 // draws the object
@@ -28,18 +27,19 @@ void PlayerProjectile::Render(SDL_Renderer* renderer) {
     filledCircleRGBA(renderer, point.x, point.y, radius, 0, 0, 255, 255);
 }
 
-// handles the interactions with other objects
-void PlayerProjectile::handleInteractions(int tag) {
-    switch (tag) {
-        case 1: //Wall X
-            bounceX(hitbox.x);
-            break;
-        case 2: // Wall Y
-            bounceY(hitbox.y);
-            break;
-    }
-}
+// draws the object based on the camera's position
+void PlayerProjectile::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
+    Point point = getCenter(&hitbox);
 
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/projectile.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_Rect dst = { point.x - camX - 8, point.y - camY - 8, TILE_SIZE / 4, TILE_SIZE / 4 };
+
+    SDL_RenderCopy(renderer, proj_texture, NULL, &dst);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 0, 0, 255, 100);
+}
 
 // projectile collided with top/bottom of obstacle
 void PlayerProjectile::bounceX(int newX){

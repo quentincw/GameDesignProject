@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "entity.h"
+#include "enemyConstants.h"
 
 class Enemy : public Entity {
 
@@ -13,27 +14,26 @@ class Enemy : public Entity {
         // constructor
         Enemy(int x, int y);
 
+        // destructor
+        virtual ~Enemy();
+
         // updates the object
         virtual void Update(float deltaTime) = 0;
 
         // draws the object
         virtual void Render(SDL_Renderer* renderer) = 0;
 
+        // draws the object based on the camera's position
+        virtual void RenderCam(SDL_Renderer* renderer, int camX, int camY) = 0;
+
         // updates the ai based on the player's position
         virtual void UpdateAI(Rectangle phitbox) = 0;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
-
-        // gets the damage an enemy does on contact
-        int getDamage() const;
-
-    protected:
-
-        // the damage an enemy does on contact
-        int damage;
-
-
+        void handleInteraction(std::string tag) override;
+		
+		// Plays random voiceline 1/odds times when an enemy dies
+		void deathSound(int odds);
 };
 
 
