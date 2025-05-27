@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "floor.h"
 #include "processManager.h"
+#include <random>
 using namespace std;
 
 class LevelManager {
@@ -15,26 +16,49 @@ public:
 
     // Methods
     void genFloor(int level);
-    // vector<vector<vector<SDL_Rect>>> getWalls();
-    //vector<vector<int>>getTilemap();
+
+    // generates the next level based on the level number
+    void genNextFloor(GameProcess* player);
 
     // checks if the player has moved to a different room and swaps process lists accordingly
     void setCurrentRoom(ProcessManager* pm);
 
     // returns the current floor
     Floor* getCurrentFloor();
+	
+	// get floor number
+	int getFloorNumber();
 
 
 private:
     // the current floor
-    Floor curfloor;
+    Floor* curfloor;
     // all of the process lists associated with rooms of current floor
     vector<vector<vector<GameProcess*>>> roomLists;
     // the coordinates of the current room
     int roomX, roomY;
 
-    // calculates the x,y positions and height, width of each room
-    void fillProcessLists();
+    // flag for deleting first room
+    bool startDelete;
+
+    // the current floor number (1, 2, 3)
+    int floorNumber;
+
+    // random number generators
+    random_device rd;
+    mt19937 gen;
+
+    // flag for if the start room was cleared
+    bool startDelete;
+
+    // takes a process list and a room. Finds valid locations inside the room to place the enemies
+    void findValidSpots(vector<GameProcess*>& curList, Rectangle rectangle);
+
+    // fills a process list based on a current floor number
+    void fillProcessList(vector<GameProcess*>& curList);
+
+    // fills a process list with a boss encounter
+    void fillProcessListBoss(vector<GameProcess*>& curList);
 
 
 };

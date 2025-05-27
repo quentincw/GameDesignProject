@@ -3,15 +3,14 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h>
 #include "gameObject.h"
 #include "gameProcess.h"
 
 // constructor
-GameProcess::GameProcess() : tags{}, childrenList{} {
-    tags.push_back("Wall");
+GameProcess::GameProcess() : tags{}, childrenList{}, soundList{} {
     deleteFlag = false;
     children = false;
+    sounds = false;
     radius = 0;
 }
 
@@ -28,6 +27,11 @@ bool GameProcess::hasChildren() const {
     return children;
 }
 
+// returns whether the process has sounds
+bool GameProcess::hasSounds() const {
+    return sounds;
+}
+
 // returns whether the process is marked for deletion
 bool GameProcess::getMarkForDeletion() const {
     return deleteFlag;
@@ -41,13 +45,21 @@ std::vector<GameProcess*> GameProcess::getChildren(){
     return childrenTemp;
 }
 
+// returns a vector of all the sounds of a process
+std::vector<SoundType> GameProcess::getSounds(){
+    sounds = false;
+    std::vector<SoundType> soundTemp = soundList;
+    soundList.clear();
+    return soundTemp;
+}
+
 // returns the vector of interactions
-std::vector<std::string> GameProcess::getInteractions() const {
+std::unordered_set<std::string> GameProcess::getInteractions() const {
     return interactions;
 }
 
 // returns a vector of tags associated with the process
-std::vector<std::string> GameProcess::getTags() const {
+std::unordered_set<std::string> GameProcess::getTags() const {
     return tags;
 }
 
@@ -58,3 +70,4 @@ int GameProcess::getDamage() const {
 
 void GameProcess::handleInteraction(const std::string tag) {
 }
+

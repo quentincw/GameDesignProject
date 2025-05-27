@@ -2,8 +2,8 @@
 #define RECTANGLE_H
 
 struct Rectangle {
-    int x;
-    int y;
+    float x;
+    float y;
     int width;
     int height;
 };

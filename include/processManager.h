@@ -26,17 +26,14 @@ class ProcessManager {
         // updates the list of processes
         void updateProcesses(float deltaTime);
 
-        // draws the object
-        void renderProcesses(SDL_Renderer* renderer);
-
-        // draws the objects based on the camera position
-        void renderProcessesCam(SDL_Renderer* renderer, int camX, int camY);
-
         // loads a process list from a room
         void loadProcessList(std::vector<GameProcess*> newList);
 
         // returns the process list
         std::vector<GameProcess*> getProcessList() const;
+
+        // iterate through the processList and get every sound
+        std::vector<SoundType> getSoundList();
 
         // adds a new process to the process list
         void addProcess(GameProcess* newProcess);
@@ -51,6 +48,9 @@ class ProcessManager {
 
         // list of all the processes
         std::vector<GameProcess*> processList;
+		
+		// list of all the sounds
+        std::vector<SoundType> soundList;
 
         // player object
         Player1* player;
@@ -63,9 +63,15 @@ class ProcessManager {
 
         // iterate through the processList for any that have children (add to process list)
         void findChildren();
+		
+		// iterate through the processList for any sounds (add to sound list)
+        void findSounds();
 
         // gives the player's position any enemies
         void updateEnemyAI();
+
+        // delete bloodstains if too many things in list
+        void manageSize();
 
 };
 

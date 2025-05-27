@@ -6,8 +6,9 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h>
 #include "gameObject.h"
+#include <unordered_set>
+#include "gameSounds.h"
 
 class GameProcess : public GameObject {
 
@@ -36,14 +37,20 @@ class GameProcess : public GameObject {
         // returns whether the process has children
         bool hasChildren() const;
 
+        // returns whether the process has children
+        bool hasSounds() const;
+
         // returns a vector of all the children of a process
         std::vector<GameProcess*> getChildren();
 
+        // returns a vector of all the sounds of a process
+        std::vector<SoundType> getSounds();
+
         // returns a vector of target tags the proccess can interact with
-        std::vector<std::string> getInteractions() const;
+        std::unordered_set<std::string> getInteractions() const;
 
         // returns the vector of tags of the process
-        std::vector<std::string> getTags() const;
+        std::unordered_set<std::string> getTags() const;
 
         // handles interaction with a given tag
         virtual void handleInteraction(std::string tag);
@@ -54,13 +61,13 @@ class GameProcess : public GameObject {
     protected:
 
         // list of tags associated with the process
-        std::vector<std::string> tags;
+        std::unordered_set<std::string> tags;
 
         // list of tags process can interact with
-        std::vector<std::string> interactions;
+        std::unordered_set<std::string> interactions;
 
-        // map of all possible interactions a process can have
-        //map<string, int> interactions;
+        // vector of all the sounds currently produced by a process
+        std::vector<SoundType> soundList;
 
         // the radius of the circle for rendering
         int radius;
@@ -73,6 +80,9 @@ class GameProcess : public GameObject {
 
         // vector of all the children of a process
         std::vector<GameProcess*> childrenList;
+
+        // flag for if a process has sounds
+        bool sounds;
 
         // the damage a process does on collision
         int damage;

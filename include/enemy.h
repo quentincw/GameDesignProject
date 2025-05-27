@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include "entity.h"
+#include "enemyConstants.h"
 
 class Enemy : public Entity {
 
@@ -30,6 +31,9 @@ class Enemy : public Entity {
 
         // handles the interactions with other objects
         void handleInteraction(std::string tag) override;
+		
+		// Plays random voiceline 1/odds times when an enemy dies
+		void deathSound(int odds);
 };
 
 
