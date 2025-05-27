@@ -11,6 +11,8 @@ Pickup::Pickup(int x, int y) : GameProcess() {
     pickupStats.health = 0;
     pickupStats.armor = 0;
     pickupStats.damage = 0;
+    damage = 0;
+    tags.insert("pickup");
 }
 
 // constructor
@@ -30,4 +32,7 @@ void Pickup::Update(float deltaTime) {
 // get the stats associated with the pickup
 Stats Pickup::getStats() const {
     return pickupStats;
+}
+
+void Pickup::handleInteraction(std::string tag) {
 }

@@ -19,11 +19,19 @@ class Floor {
     Floor();
     
     // Methods
-    vector<vector<vector<vector<int>>>> gen(int width, int height, int gen_rooms);
+    vector<vector<vector<vector<int>>>> gen(int level, int width, int height, int gen_rooms);
     void setCurRoom(int posX, int posY);
     SDL_Rect getCurRoom();
+
+    // returns a rectangle represing the current room
+    Rectangle getCurRoomRect();
+
     vector<vector<int>> getRooms();
     vector<vector<int>> getRoomsCol();
+
+    int getLevel();
+
+    vector<int> getBossLoc();
 
     // returns a 2D vector representing where each room is
     vector<vector<int>> getRoomsPos();
@@ -36,6 +44,8 @@ class Floor {
     
     private:
     // additional padding between rooms
+    int cur_level;
+    vector<int> boss_loc;
     SDL_Rect curRoom;
     vector<int> roomCoord;
     int pad;

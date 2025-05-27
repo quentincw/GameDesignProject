@@ -6,7 +6,6 @@
 #include <SDL2_gfxPrimitives.h>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h>
 #include "gameProcess.h"
 
 
@@ -16,7 +15,7 @@ class BloodStain : public GameProcess {
     public:
 
         // constructor for process
-        BloodStain(int x, int y, int height, int width);
+        BloodStain(int x, int y, int height, int width, int type);
 
         // draws the object
         void Render(SDL_Renderer* renderer);
@@ -29,8 +28,14 @@ class BloodStain : public GameProcess {
 
         // handles the interactions with other objects
         void handleInteractions(int tag);
+    
+    private:
+    
+        int currentSpriteIndex;
 
-
+        // 0 = green, 1 = red
+        int color;
+        
 };
 
 

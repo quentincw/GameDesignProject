@@ -6,6 +6,7 @@
 #include "enemy.h"
 #include "burrower.h"
 #include "spitterProjectile.h"
+#include <constants.h>
 
 
 // constructor
@@ -21,24 +22,26 @@ Burrower::Burrower(int x, int y) : Enemy(x, y) {
     burrowing = false;
     burrowDuration = 0;
     moveDuration = 0;
-    spitAmount = 0;
-    cooldown = 0;
+    spitAmount = 4;
+    cooldown = 100;
     spitSpeed = 4;
 }
 
 // updates the object
 void Burrower::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     if(burrowing) {
         burrowDuration = burrowDuration - 1;
+        interactions.erase("player");
+        tags.erase("enemy");
     }
     else {
         cooldown = cooldown - 1;
+        interactions.insert("player");
+        tags.insert("enemy");
     }
-
+    red -= 1;
     moveDuration = moveDuration - 1;
-
 }
 
 // draws the object
@@ -53,7 +56,42 @@ void Burrower::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
         return;
     }
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/burrower.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
+
+    static SDL_Rect spriteTextures[4] = {
+        {0, 0, 16, 16},
+        {16, 0, 16, 16},
+        {32, 0, 16, 16},
+        {48, 0, 16, 16}
+    };
+
+    static const int total_frames = 4;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        if (!burrowing) {
+            frame = (frame + 1) % total_frames;
+        }
+        startTicks = curTicks;
+    }
+
+    SDL_Rect dst = { point.x - camX - 32, point.y - camY - 50, TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopy(renderer, proj_texture, &spriteTextures[frame], &dst);
+    
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 139, 69, 19, 100);
 }
 
 // updates the ai based on the player's position
@@ -61,11 +99,14 @@ void Burrower::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		deathSound(3);
     }
 
     // stop burrowing if enough time has passed
     if((burrowing == true) && (burrowDuration <= 0)){
         burrowing = false;
+		soundList.push_back(SoundType::BURROWER_DIG);
+		sounds = true;
         // pause to give player time to react
         cooldown = 30;
         spitAmount = 3;
@@ -80,17 +121,19 @@ void Burrower::UpdateAI(Rectangle phitbox) {
             // burrow if all projectiles have been fired and cooldown ready
             if(spitAmount <= 0) {
                 burrowing = true;
+				soundList.push_back(SoundType::BURROWER_DIG);
+				sounds = true;
                 burrowDuration = 170;
             }
             // if the burrower has fired less than 3 projectiles
-            if(spitAmount > 0) {
+            else if(spitAmount > 0) {
                 spitProjectile(phitbox);
                 cooldown = 8;
                 spitAmount = spitAmount - 1;
-            }
-            // the burrower should remain exposed for a time
-            else {
-                cooldown = 100;
+                // the burrower should remain exposed for a time
+                if (spitAmount == 0) {
+                    cooldown = 100;
+                }
             }
         }
         return;
@@ -170,4 +213,8 @@ void Burrower::spitProjectile(Rectangle phitbox) {
     
     // set the flag for child to true
     children = true;
+	
+    // add sound for spitting
+    soundList.push_back(SoundType::SPIT_HIGH);
+    sounds = true;
 }

@@ -12,7 +12,7 @@ class GameDoor : public GameProcess {
     public:
 
         // default constructor
-        GameDoor(int x, int y, int height, int width);
+        GameDoor(int x, int y, int height, int width, int rotation);
 
         // updates the object
         void Update(float deltaTime);
@@ -29,6 +29,10 @@ class GameDoor : public GameProcess {
 
     protected:
 
+    private:
+
+        // determines the rotation of the rendered wall
+        int rot;
 
 
 };

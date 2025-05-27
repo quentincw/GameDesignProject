@@ -36,7 +36,7 @@ class Pickup : public GameProcess {
         Stats getStats() const;
 
         // handles the interactions with other objects
-        virtual void handleInteractions(int tag) = 0;
+        void handleInteraction(std::string tag) override;
 
     protected:
         

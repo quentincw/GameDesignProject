@@ -5,6 +5,7 @@
 #include "enemy.h"
 #include "spawner.h"
 #include "roach.h"
+#include <constants.h>
 
 
 // constructor
@@ -22,9 +23,9 @@ Spawner::Spawner(int x, int y) : Enemy(x, y) {
 
 // updates the object
 void Spawner::Update(float deltaTime) {
-    hitbox.x = hitbox.x + xSpeed;
-    hitbox.y = hitbox.y + ySpeed;
+    Entity::Update(deltaTime);
     cooldown = cooldown - 1;
+    red -= 1;
 }
 
 // draws the object
@@ -35,7 +36,55 @@ void Spawner::Render(SDL_Renderer* renderer) {
 // draws the object based on the camera's position
 void Spawner::RenderCam(SDL_Renderer* renderer, int camX, int camY) {
     Point point = getCenter(&hitbox);
-    filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 128, 128, 0, 255);
+
+    static SDL_Surface* proj_surface = SDL_LoadBMP( "../resource/enemies/spawner.bmp" );
+    static SDL_Texture* proj_texture = SDL_CreateTextureFromSurface( renderer, proj_surface );
+
+    SDL_SetTextureColorMod(proj_texture, 255, 255, 255);
+    if(red > 0) {
+        SDL_SetTextureColorMod(proj_texture, 255, 0, 0);
+    }
+
+    static SDL_Rect spriteTextures[4] = {
+        {0, 0, 16, 16},
+        {16, 0, 16, 16},
+        {32, 0, 16, 16},
+        {48, 0, 16, 16}
+    };
+
+    static const int total_frames = 4;
+    static const int fps = 12;
+    static int frame = 0;
+
+    static Uint64 startTicks = SDL_GetTicks();
+
+    Uint64 curTicks = SDL_GetTicks();
+    float deltaTime = curTicks - startTicks;
+    if (deltaTime > 1000 / fps) {
+        if (xSpeed != 0 || ySpeed != 0) {
+            frame = (frame + 1) % total_frames;
+        }
+        // use idle sprite
+        else {
+            frame = 0;
+        }
+        startTicks = curTicks;
+    }
+
+    static SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+    if (xSpeed < 0) {
+        flip = SDL_FLIP_NONE;
+    }
+    if (xSpeed > 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
+    SDL_Rect dst = { point.x - camX - 32, point.y - camY - 40, TILE_SIZE, TILE_SIZE };
+
+    SDL_RenderCopyEx(renderer, proj_texture, &spriteTextures[frame], &dst, NULL, NULL, flip);
+
+    // filledCircleRGBA(renderer, point.x - camX, point.y - camY, radius, 128, 128, 0, 100);
 }
 
 // updates the ai based on the player's position
@@ -43,6 +92,8 @@ void Spawner::UpdateAI(Rectangle phitbox) {
 
     if(deleteFlag == true){
         spawnBloodStain();
+		soundList.push_back(SoundType::BUG_DEATH1);
+		sounds = true;
     }
 
     if(cooldown <= 0){
